@@ -1,6 +1,6 @@
 package ui.graphing;
 
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import core.document.graph.IEdge;
 import core.document.graph.INode;
 import core.document.serialization.xml.XmlElement;
@@ -58,7 +58,7 @@ public class CellGroup<TNode extends INode<TNode>, TEdge extends IEdge<TNode>> e
     protected final SimpleObjectProperty<Color> fillColor;
 
     public CellGroup(String name, Graph<TNode, TEdge> graph) {
-        this.members = new ObservableListWrapper<>(new LinkedList<>());
+        this.members = FXCollections.observableList(new LinkedList<>());
         this.members.addListener(this::Handle_ListChanged);
         this.graph = graph;
 

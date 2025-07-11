@@ -1,7 +1,5 @@
 package core.document.serialization.xml;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -36,10 +34,10 @@ public class XmlElement extends XmlNode {
 
     @Override
     public String getValue() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException("Not implemented");
     }
     public void setValue(String value) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException("Not implemented");
     }
     @Override
     public Collection<XmlAttribute> getAttributes() {

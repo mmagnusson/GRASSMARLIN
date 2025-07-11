@@ -1,11 +1,10 @@
 package core.document;
 
-import com.sun.javafx.collections.ObservableListWrapper;
-import com.sun.javafx.collections.ObservableSetWrapper;
 import core.document.serialization.xml.Escaping;
 import core.logging.Logger;
 import core.logging.Severity;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import util.Cidr;
@@ -110,9 +109,9 @@ public class PhysicalDevice {
         private final SimpleBooleanProperty connected;
         private final SimpleBooleanProperty enabled;
 
-        private final ObservableSetWrapper<Integer> vlans;
-        private final ObservableListWrapper<Endpoint> endpoints;
-        private final ObservableListWrapper<String> subinterfaces;
+        private final ObservableSet<Integer> vlans;
+        private final ObservableList<Endpoint> endpoints;
+        private final ObservableList<String> subinterfaces;
 
         public Port(String name) {
             this.mac = new SimpleObjectProperty<>(null);
@@ -121,10 +120,10 @@ public class PhysicalDevice {
             this.trunk = new SimpleBooleanProperty(false);
             this.connected = new SimpleBooleanProperty(false);
             this.enabled = new SimpleBooleanProperty(true);
-            this.endpoints = new ObservableListWrapper<>(new LinkedList<>());
+            this.endpoints = FXCollections.observableList(new LinkedList<>());
             this.description = new SimpleStringProperty();
-            this.subinterfaces = new ObservableListWrapper<>(new LinkedList<>());
-            this.vlans = new ObservableSetWrapper<>(new LinkedHashSet<>());
+            this.subinterfaces = FXCollections.observableList(new LinkedList<>());
+            this.vlans = FXCollections.observableSet(new LinkedHashSet<>());
         }
 
         @Override
@@ -239,7 +238,7 @@ public class PhysicalDevice {
 
     // == PhysicalDevice ======================================================
     private final SimpleObjectProperty<VersionData> version;
-    private final ObservableListWrapper<Port> ports;
+    private final ObservableList<Port> ports;
     private final SimpleStringProperty name;
     private final SimpleStringProperty versionName;
     private final HashMap<Integer, VLan> vlans;
@@ -247,7 +246,7 @@ public class PhysicalDevice {
     public PhysicalDevice(String name) {
         this.version = new SimpleObjectProperty<>(null);
         this.versionName = new SimpleStringProperty(null);
-        this.ports = new ObservableListWrapper<>(new ArrayList<>(32));
+        this.ports = FXCollections.observableList(new ArrayList<>(32));
         this.name = new SimpleStringProperty(name);
         this.vlans = new HashMap<>();
     }

@@ -1,7 +1,7 @@
 package core;
 
-import com.sun.javafx.collections.ObservableMapWrapper;
 import javafx.beans.property.ReadOnlyMapWrapper;
+import javafx.collections.FXCollections;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -14,7 +14,7 @@ public final class Version {
     public static final int APPLICATION_REVISION = 26;
     public static final String FILENAME_USER_GUIDE = "GRASSMARLIN_User_Guide3.2.pdf";
 
-    public static final Map<String, List<String>> PATCH_NOTES = new ReadOnlyMapWrapper<>(new ObservableMapWrapper<>(new LinkedHashMap<String, List<String>>() {
+    public static final Map<String, List<String>> PATCH_NOTES = new ReadOnlyMapWrapper<>(FXCollections.observableMap(new LinkedHashMap<String, List<String>>() {
         {
             this.put("3.2.1", Arrays.asList(
                     "While porting the Fingerprinting engine to version 3.3, a few low-risk-high-impact optimizations were found which were backported to 3.2.1; fingerprinting throughput is roughly doubled as a result.",

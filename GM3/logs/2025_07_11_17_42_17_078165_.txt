@@ -1,0 +1,98 @@
+[2025-07-11T17:42:17.260Z] Information - Logging subsystem initialized.
+[2025-07-11T17:42:17.263600Z] DEBUG - GrassMarlin 3.2.1-r26
+[2025-07-11T17:42:17.265Z] Information - Loading Cidr -> GeoId Mapping from: /home/mmagnusson/code/GRASSMARLIN/GM3/data/cidr_to_geo_id.csv
+[2025-07-11T17:42:17.699Z] Information - Cidr -> GeoId Mapping load complete.
+[2025-07-11T17:42:17.700Z] Information - Loading GeoId -> Name Mapping from: /home/mmagnusson/code/GRASSMARLIN/GM3/data/geo_id_to_name.csv
+[2025-07-11T17:42:17.703Z] Information - GeoId -> Name Mapping load complete.
+[2025-07-11T17:42:17.781096Z] DEBUG - GeoIp lookup for country Id 6255148 failed: 62.208.62.224/27, 62.208.62.128/26, 194.196.194.0/23, 62.208.62.0/25, 62.208....
+[2025-07-11T17:42:17.815265Z] DEBUG - GeoIp lookup for country Id 6255147 failed: 199.40.206.0/24, 170.252.160.1, 199.40.204.0/24, 32.60.44.0/24, 203.92.218.0/...
+[2025-07-11T17:42:17.866549Z] DEBUG - Unable to locate flag file for Saint Martin(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Saint_Martin.png')
+[2025-07-11T17:42:17.867186Z] DEBUG - Unable to locate flag file for New Caledonia(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/New_Caledonia.png')
+[2025-07-11T17:42:17.867688Z] DEBUG - Unable to locate flag file for Palau(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Palau.png')
+[2025-07-11T17:42:17.868470Z] DEBUG - Unable to locate flag file for British Indian Ocean Territory(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/British_Indian_Ocean_Territory.png')
+[2025-07-11T17:42:17.868836Z] DEBUG - Unable to locate flag file for Mayotte(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Mayotte.png')
+[2025-07-11T17:42:17.869605Z] DEBUG - Unable to locate flag file for Guernsey(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Guernsey.png')
+[2025-07-11T17:42:17.870322Z] DEBUG - Unable to locate flag file for Curaçao(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Curaao.png')
+[2025-07-11T17:42:17.870795Z] DEBUG - Unable to locate flag file for Bonaire(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Bonaire.png')
+[2025-07-11T17:42:17.871219Z] DEBUG - Unable to locate flag file for Republic of the Congo(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Republic_of_the_Congo.png')
+[2025-07-11T17:42:17.871501Z] DEBUG - Unable to locate flag file for Congo(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Congo.png')
+[2025-07-11T17:42:17.872227Z] DEBUG - Unable to locate flag file for Macao(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Macao.png')
+[2025-07-11T17:42:17.873402Z] DEBUG - Unable to locate flag file for Bermuda(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Bermuda.png')
+[2025-07-11T17:42:17.873769Z] DEBUG - Unable to locate flag file for Saint-Barthélemy(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/SaintBarthlemy.png')
+[2025-07-11T17:42:17.874397Z] DEBUG - Unable to locate flag file for Tokelau(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Tokelau.png')
+[2025-07-11T17:42:17.874989Z] DEBUG - Unable to locate flag file for Turks and Caicos Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Turks_and_Caicos_Islands.png')
+[2025-07-11T17:42:17.875503Z] DEBUG - Unable to locate flag file for Cocos [Keeling] Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Cocos_Keeling_Islands.png')
+[2025-07-11T17:42:17.876043Z] DEBUG - Unable to locate flag file for Wallis and Futuna(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Wallis_and_Futuna.png')
+[2025-07-11T17:42:17.876466Z] DEBUG - Unable to locate flag file for Ivory Coast(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Ivory_Coast.png')
+[2025-07-11T17:42:17.877111Z] DEBUG - Unable to locate flag file for Saint Pierre and Miquelon(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Saint_Pierre_and_Miquelon.png')
+[2025-07-11T17:42:17.878360Z] DEBUG - Unable to locate flag file for U.S. Minor Outlying Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/US_Minor_Outlying_Islands.png')
+[2025-07-11T17:42:17.900590Z] DEBUG - Unable to locate flag file for Martinique(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Martinique.png')
+[2025-07-11T17:42:17.901302Z] DEBUG - Unable to locate flag file for Antarctica(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Antarctica.png')
+[2025-07-11T17:42:17.902215Z] DEBUG - Unable to locate flag file for Northern Mariana Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Northern_Mariana_Islands.png')
+[2025-07-11T17:42:17.902887Z] DEBUG - Unable to locate flag file for Montserrat(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Montserrat.png')
+[2025-07-11T17:42:17.903443Z] DEBUG - Unable to locate flag file for Saint Helena(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Saint_Helena.png')
+[2025-07-11T17:42:17.904240Z] DEBUG - Unable to locate flag file for Pitcairn Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Pitcairn_Islands.png')
+[2025-07-11T17:42:17.905624Z] DEBUG - Unable to locate flag file for Guam(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Guam.png')
+[2025-07-11T17:42:17.906272Z] DEBUG - Unable to locate flag file for Myanmar [Burma](expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Myanmar_Burma.png')
+[2025-07-11T17:42:17.907707Z] DEBUG - Unable to locate flag file for Palestine(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Palestine.png')
+[2025-07-11T17:42:17.908489Z] DEBUG - Unable to locate flag file for Cayman Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Cayman_Islands.png')
+[2025-07-11T17:42:17.909104Z] DEBUG - Unable to locate flag file for Western Sahara(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Western_Sahara.png')
+[2025-07-11T17:42:17.909640Z] DEBUG - Unable to locate flag file for São Tomé and Príncipe(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/So_Tom_and_Prncipe.png')
+[2025-07-11T17:42:17.910578Z] DEBUG - Unable to locate flag file for Sint Maarten(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Sint_Maarten.png')
+[2025-07-11T17:42:17.911250Z] DEBUG - Unable to locate flag file for U.S. Virgin Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/US_Virgin_Islands.png')
+[2025-07-11T17:42:17.911960Z] DEBUG - Unable to locate flag file for Anguilla(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Anguilla.png')
+[2025-07-11T17:42:17.912585Z] DEBUG - Unable to locate flag file for Guadeloupe(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Guadeloupe.png')
+[2025-07-11T17:42:17.913496Z] DEBUG - Unable to locate flag file for British Virgin Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/British_Virgin_Islands.png')
+[2025-07-11T17:42:17.914431Z] DEBUG - Unable to locate flag file for Svalbard and Jan Mayen(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Svalbard_and_Jan_Mayen.png')
+[2025-07-11T17:42:17.915093Z] DEBUG - Unable to locate flag file for Åland(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/land.png')
+[2025-07-11T17:42:17.915399Z] DEBUG - Unable to locate flag file for Jersey(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Jersey.png')
+[2025-07-11T17:42:17.915831Z] DEBUG - Unable to locate flag file for Angola(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Angola.png')
+[2025-07-11T17:42:17.916698Z] DEBUG - Unable to locate flag file for French Guiana(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/French_Guiana.png')
+[2025-07-11T17:42:17.917107Z] DEBUG - Unable to locate flag file for Réunion(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Runion.png')
+[2025-07-11T17:42:17.917385Z] DEBUG - Unable to locate flag file for Isle of Man(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Isle_of_Man.png')
+[2025-07-11T17:42:17.918140Z] DEBUG - Unable to locate flag file for Gambia(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Gambia.png')
+[2025-07-11T17:42:17.918881Z] DEBUG - Unable to locate flag file for American Samoa(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/American_Samoa.png')
+[2025-07-11T17:42:17.919248Z] DEBUG - Unable to locate flag file for Republic of Lithuania(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Republic_of_Lithuania.png')
+[2025-07-11T17:42:17.920323Z] DEBUG - Unable to locate flag file for South Sudan(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/South_Sudan.png')
+[2025-07-11T17:42:17.920766Z] DEBUG - Unable to locate flag file for South Georgia and the South Sandwich Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/South_Georgia_and_the_South_Sandwich_Islands.png')
+[2025-07-11T17:42:17.921167Z] DEBUG - Unable to locate flag file for Falkland Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Falkland_Islands.png')
+[2025-07-11T17:42:17.921851Z] DEBUG - Unable to locate flag file for French Southern Territories(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/French_Southern_Territories.png')
+[2025-07-11T17:42:17.922323Z] DEBUG - Unable to locate flag file for Hashemite Kingdom of Jordan(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Hashemite_Kingdom_of_Jordan.png')
+[2025-07-11T17:42:17.922647Z] DEBUG - Unable to locate flag file for Puerto Rico(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Puerto_Rico.png')
+[2025-07-11T17:42:17.929Z] Error - Unable to load MAC manufacturer reference: /usr/share/wireshark/manuf
+[2025-07-11T17:42:17.932256Z] DEBUG - Configuration:
+[2025-07-11T17:42:17.932717Z] DEBUG -   [WIRESHARK_EXEC]: 'null'
+[2025-07-11T17:42:17.933068Z] DEBUG -   [TEXT_EDITOR_EXEC]: 'null'
+[2025-07-11T17:42:17.933345Z] DEBUG -   [PDF_VIEWER_EXEC]: 'null'
+[2025-07-11T17:42:17.933665Z] DEBUG -   [DIR_INSTALL]: '.'
+[2025-07-11T17:42:17.934013Z] DEBUG -   [DIR_IMAGES_ICON]: 'images'
+[2025-07-11T17:42:17.934273Z] DEBUG -   [PATH_MANUFACTURER_DB]: '/usr/share/wireshark/manuf'
+[2025-07-11T17:42:17.935236Z] DEBUG -   [PATH_USERGUIDE]: 'data/reference/GRASSMARLIN_User_Guide3.2.pdf'
+[2025-07-11T17:42:17.936084Z] DEBUG -   [DIR_CORE_FINGERPRINTS]: 'data/fingerprint'
+[2025-07-11T17:42:17.936430Z] DEBUG -   [DIR_LIVE_CAPTURE]: '/home/mmagnusson/code/GRASSMARLIN/GM3/livecaptures'
+[2025-07-11T17:42:17.936770Z] DEBUG -   [DIR_LOGS]: '/home/mmagnusson/code/GRASSMARLIN/GM3/logs'
+[2025-07-11T17:42:17.937270Z] DEBUG -   [DIR_USER_FINGERPRINTS]: '/home/mmagnusson/code/GRASSMARLIN/GM3/fingerprints'
+[2025-07-11T17:42:18.098048Z] DEBUG -   [DIR_QUICKLIST]: '/home/mmagnusson/GrassMarlin/quicklist'
+[2025-07-11T17:42:18.098439Z] DEBUG -   [DIR_SESSIONS]: '/home/mmagnusson/GrassMarlin'
+[2025-07-11T17:42:18.098686Z] DEBUG -   [PCAP_FLAG_MODE]: '1'
+[2025-07-11T17:42:18.098939Z] DEBUG -   [PCAP_FLAG_SNAPLEN]: '0xFFFF'
+[2025-07-11T17:42:18.099176Z] DEBUG -   [PCAP_FLAG_TIMEOUT]: '30000'
+[2025-07-11T17:42:18.099416Z] DEBUG -   [PCAP_FLAG_CAPTURE_LIMIT]: '-1'
+[2025-07-11T17:42:18.099895Z] DEBUG -   [PATH_PCAP_FILTERS]: '/home/mmagnusson/code/GRASSMARLIN/GM3/PcapFilters.txt'
+[2025-07-11T17:42:18.100106Z] DEBUG -   [PCAP_FILTER_STRING]: ' '
+[2025-07-11T17:42:18.100354Z] DEBUG -   [PCAP_FILTER_TITLE]: 'ALLOW ALL TRAFFIC'
+[2025-07-11T17:42:18.100567Z] DEBUG -   [UI_VIEW_UPDATE_DELAY]: '1500'
+[2025-07-11T17:42:18.100834Z] DEBUG -   [COLOR_NODE_NEW]: '0000FF'
+[2025-07-11T17:42:18.101089Z] DEBUG -   [COLOR_NODE_MODIFIED]: '00FF00'
+[2025-07-11T17:42:18.101326Z] DEBUG -   [COLOR_NODE_BACKGROUND]: '000000'
+[2025-07-11T17:42:18.101524Z] DEBUG -   [COLOR_NODE_HIGHLIGHT]: 'FFFF00'
+[2025-07-11T17:42:18.101730Z] DEBUG -   [COLOR_NODE_TEXT]: 'FFFFFF'
+[2025-07-11T17:42:18.101937Z] DEBUG -   [LOGICAL_CREATE_DYNAMIC_SUBNETS]: 'true'
+[2025-07-11T17:42:18.102170Z] DEBUG -   [LOGICAL_DYNAMIC_SUBNET_BITS]: '24'
+[2025-07-11T17:42:18.102390Z] DEBUG -   [LAST_RUN_VERSION]: ''
+[2025-07-11T17:42:18.102601Z] DEBUG -   [SUPPRESS_UNCHANGED_VERSION_NOTES]: 'true'
+[2025-07-11T17:42:18.102831Z] DEBUG -   [FINGERPRINT_SAVEAS_LEAVES_OLD]: 'true'
+[2025-07-11T17:42:18.103Z] Warning - Unable to initialize JNetPCap; packet capture functionality will be disabled.
+[2025-07-11T17:42:18.103Z] Warning - Cannot locate Wireshark; please verify the value in the Tools -> Preferences menu.
+[2025-07-11T17:42:18.422Z] Warning - Unable to load Fingerprint at data/fingerprint/Review_Comments.txt
+[2025-07-11T17:42:18.543Z] Error - There was an error enumerating plugins: plugins

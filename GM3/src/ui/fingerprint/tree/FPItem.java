@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -40,7 +41,14 @@ public class FPItem extends TreeItem<String> {
         this.enabledProperty.bind(fpState.enabledProperty());
 
         HBox graphicsBox = new HBox(3);
-        Image checkImage = new Image(getClass().getResourceAsStream("/images/microsoft/112_Tick_Green_64x64_72.png"));
+        Image checkImage;
+        InputStream checkStream = getClass().getResourceAsStream("/images/microsoft/112_Tick_Green_64x64_72.png");
+        if (checkStream != null) {
+            checkImage = new Image(checkStream);
+        } else {
+            // Create a simple fallback image programmatically
+            checkImage = createFallbackImage();
+        }
         ImageView enabledView = new ImageView();
         enabledView.setFitHeight(16);
         enabledView.setFitWidth(16);
@@ -98,4 +106,15 @@ public class FPItem extends TreeItem<String> {
         return this.pathProperty;
     }
 
+    private Image createFallbackImage() {
+        // Create a simple colored rectangle for fallback
+        javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(16, 16);
+        javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setFill(javafx.scene.paint.Color.GREEN);
+        gc.fillRect(0, 0, 16, 16);
+        gc.setFill(javafx.scene.paint.Color.WHITE);
+        gc.fillText("✓", 4, 12);
+        
+        return canvas.snapshot(null, null);
+    }
 }

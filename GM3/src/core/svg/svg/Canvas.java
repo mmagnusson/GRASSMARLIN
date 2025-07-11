@@ -4,7 +4,8 @@ import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
-import sun.awt.image.IntegerComponentRaster;
+import java.awt.image.Raster;
+import java.awt.image.DataBufferInt;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -40,12 +41,15 @@ public class Canvas extends Entity {
             int ih = (int) source.getHeight();
 
             BufferedImage img = new BufferedImage(iw, ih, BufferedImage.TYPE_INT_ARGB);
-            IntegerComponentRaster icr = (IntegerComponentRaster) img.getRaster();
-            int offset = icr.getDataOffset(0);
-            int scan = icr.getScanlineStride();
-            int data[] = icr.getDataStorage();
+            
+            // Get the raster and data buffer
+            java.awt.image.Raster raster = img.getRaster();
+            java.awt.image.DataBufferInt dataBuffer = (java.awt.image.DataBufferInt) raster.getDataBuffer();
+            int[] data = dataBuffer.getData();
+            
+            // Read pixels from JavaFX image
             WritablePixelFormat<IntBuffer> pf = PixelFormat.getIntArgbInstance();
-            pr.getPixels(0, 0, iw, ih, pf, data, offset, scan);
+            pr.getPixels(0, 0, iw, ih, pf, data, 0, iw);
 
             ImageIO.write(img, "png", stream);
         } catch(IOException ex) {

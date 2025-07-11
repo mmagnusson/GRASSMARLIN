@@ -1,6 +1,5 @@
 package core.document.graph;
 
-import com.sun.javafx.binding.ExpressionHelper;
 import core.document.serialization.xml.XmlElement;
 import core.knowledgebase.GeoIp;
 import core.knowledgebase.Manufacturer;
@@ -24,7 +23,8 @@ public class LogicalNode implements INode<LogicalNode>, ObservableValue<LogicalN
     public static final String GROUP_CATEGORY = "Category";
 
 
-    private ExpressionHelper<LogicalNode> helper = null;
+    private final List<ChangeListener<? super LogicalNode>> changeListeners = new ArrayList<>();
+    private final List<InvalidationListener> invalidationListeners = new ArrayList<>();
 
     private final Cidr cidr;
     private final byte[] mac;
@@ -141,11 +141,21 @@ public class LogicalNode implements INode<LogicalNode>, ObservableValue<LogicalN
     public synchronized void addAnnotation(final Object fingerprint, final String field, final ComputedProperty value) {
         Set<ComputedProperty> container = getContainerForPath(fingerprint, field);
         container.add(value);
-        ExpressionHelper.fireValueChangedEvent(helper);
+        for (ChangeListener<? super LogicalNode> listener : changeListeners) {
+            listener.changed(this, this, this);
+        }
+        for (InvalidationListener listener : invalidationListeners) {
+            listener.invalidated(this);
+        }
     }
     public synchronized void addAnnotations(final Object fingerprint, final Map<String, ComputedProperty> annotations) {
         annotations.forEach((key, value) -> getContainerForPath(fingerprint, key).add(value));
-        ExpressionHelper.fireValueChangedEvent(helper);
+        for (ChangeListener<? super LogicalNode> listener : changeListeners) {
+            listener.changed(this, this, this);
+        }
+        for (InvalidationListener listener : invalidationListeners) {
+            listener.invalidated(this);
+        }
     }
     public synchronized void setAnnotation(Object fingerprint, String field, ComputedProperty value) {
         Set<ComputedProperty> container = getContainerForPath(fingerprint, field);
@@ -270,21 +280,21 @@ public class LogicalNode implements INode<LogicalNode>, ObservableValue<LogicalN
 
     @Override
     public void addListener(InvalidationListener listener) {
-        helper = ExpressionHelper.addListener(helper, this, listener);
+        invalidationListeners.add(listener);
     }
 
     @Override
     public void removeListener(InvalidationListener listener) {
-        helper = ExpressionHelper.removeListener(helper, listener);
+        invalidationListeners.remove(listener);
     }
 
     @Override
     public void addListener(ChangeListener<? super LogicalNode> listener) {
-        helper = ExpressionHelper.addListener(helper, this, listener);
+        changeListeners.add(listener);
     }
 
     @Override
     public void removeListener(ChangeListener<? super LogicalNode> listener) {
-        helper = ExpressionHelper.removeListener(helper, listener);
+        changeListeners.remove(listener);
     }
 }

@@ -1,6 +1,6 @@
 package ui.graphing;
 
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import core.document.graph.*;
 import core.document.serialization.xml.Escaping;
 import core.document.serialization.xml.XmlElement;
@@ -111,8 +111,8 @@ public abstract class Graph<TNode extends INode<TNode>, TEdge extends IEdge<TNod
     public Graph(NetworkGraph<TNode, TEdge> graphSource, String activeGroup) {
         this.graph = graphSource;
 
-        this.uiNodes = new ObservableListWrapper<>(new LinkedList<>());
-        this.uiEdges = new ObservableListWrapper<>(new LinkedList<>());
+        this.uiNodes = FXCollections.observableList(new LinkedList<>());
+        this.uiEdges = FXCollections.observableList(new LinkedList<>());
         this.activeGroup = new SimpleStringProperty(activeGroup);
 
         this.title = new SimpleStringProperty("Untitled Graph");

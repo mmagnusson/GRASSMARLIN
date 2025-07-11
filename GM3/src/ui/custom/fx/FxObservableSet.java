@@ -1,13 +1,14 @@
 package ui.custom.fx;
 
-import com.sun.javafx.collections.SetListenerHelper;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,7 +17,8 @@ import java.util.Set;
  */
 public class FxObservableSet<E> implements ObservableSet<E> {
     private final Set<E> backingSet;
-    private SetListenerHelper<E> listenerHelper;
+    private final List<SetChangeListener<? super E>> setChangeListeners = new ArrayList<>();
+    private final List<InvalidationListener> invalidationListeners = new ArrayList<>();
 
     public FxObservableSet() {
         this(new java.util.concurrent.ConcurrentSkipListSet<>());
@@ -103,12 +105,11 @@ public class FxObservableSet<E> implements ObservableSet<E> {
     }
 
     private void callObservers(SetChangeListener.Change<E> change) {
-        if(Platform.isFxApplicationThread()) {
-            SetListenerHelper.fireValueChangedEvent(listenerHelper, change);
-        } else {
-            Platform.runLater(
-                    () -> SetListenerHelper.fireValueChangedEvent(listenerHelper, change)
-            );
+        for (SetChangeListener<? super E> listener : setChangeListeners) {
+            listener.onChanged(change);
+        }
+        for (InvalidationListener listener : invalidationListeners) {
+            listener.invalidated(this);
         }
     }
 
@@ -117,7 +118,7 @@ public class FxObservableSet<E> implements ObservableSet<E> {
      */
     @Override
     public void addListener(InvalidationListener listener) {
-        listenerHelper = SetListenerHelper.addListener(listenerHelper, listener);
+        invalidationListeners.add(listener);
     }
 
     /**
@@ -125,7 +126,7 @@ public class FxObservableSet<E> implements ObservableSet<E> {
      */
     @Override
     public void removeListener(InvalidationListener listener) {
-        listenerHelper = SetListenerHelper.removeListener(listenerHelper, listener);
+        invalidationListeners.remove(listener);
     }
 
     /**
@@ -133,7 +134,7 @@ public class FxObservableSet<E> implements ObservableSet<E> {
      */
     @Override
     public void addListener(SetChangeListener<?super E> observer) {
-        listenerHelper = SetListenerHelper.addListener(listenerHelper, observer);
+        setChangeListeners.add(observer);
     }
 
     /**
@@ -141,7 +142,7 @@ public class FxObservableSet<E> implements ObservableSet<E> {
      */
     @Override
     public void removeListener(SetChangeListener<?super E> observer) {
-        listenerHelper = SetListenerHelper.removeListener(listenerHelper, observer);
+        setChangeListeners.remove(observer);
     }
 
     /**

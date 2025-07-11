@@ -1,6 +1,6 @@
 package ui.dialog;
 
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import core.document.graph.LogicalEdge;
 import core.document.graph.LogicalNode;
 import core.document.graph.NetworkGraph;
@@ -35,6 +35,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.collections.ObservableList;
 
 public class ConnectionDetailsDialogFx extends Dialog {
     protected class DetailLine {
@@ -100,7 +101,7 @@ public class ConnectionDetailsDialogFx extends Dialog {
     }
 
     private final SimpleObjectProperty<LogicalNode> root;
-    private ObservableListWrapper<DetailLine> content;
+    private ObservableList<DetailLine> content;
     private final NetworkGraph<LogicalNode, LogicalEdge> graph;
 
     private final ScalableChartWrapper chartControl;
@@ -111,7 +112,7 @@ public class ConnectionDetailsDialogFx extends Dialog {
 
         this.graph = graph;
 
-        content = new ObservableListWrapper<>(new ArrayList<>(1024));
+        content = FXCollections.observableList(new ArrayList<>(1024));
 
         chartControl = new ScalableChartWrapper();
 

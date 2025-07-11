@@ -1,6 +1,6 @@
 package ui.graphing.physical;
 
-import com.sun.javafx.collections.ObservableSetWrapper;
+import javafx.collections.FXCollections;
 import core.document.graph.PhysicalEdge;
 import core.document.graph.PhysicalNode;
 import core.document.serialization.xml.XmlElement;
@@ -65,7 +65,7 @@ public class EdgePhysicalCurved extends CurvedEdge<PhysicalNode> implements Cell
         FxStringProperty strDetails = new FxStringProperty();
         Set<Integer> vlans = new HashSet<>(edge.getSource().getVLans());
         vlans.retainAll(edge.getDestination().getVLans());
-        strDetails.bind(new FxStringFromCollectionBinding<>(new ObservableSetWrapper<>(vlans), Collectors.joining(", ", "VLans: [", "]"), i -> i.toString()));
+        strDetails.bind(new FxStringFromCollectionBinding<>(FXCollections.observableSet(vlans), Collectors.joining(", ", "VLans: [", "]"), i -> i.toString()));
         setDetails(strDetails);
     }
 

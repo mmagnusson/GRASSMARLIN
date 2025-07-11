@@ -4,7 +4,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritablePixelFormat;
-import sun.awt.image.IntegerComponentRaster;
+import java.awt.image.Raster;
+import java.awt.image.DataBufferInt;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -42,12 +43,15 @@ public class Image extends Entity {
             int ih = (int) bounds.getHeight();
 
             BufferedImage img = new BufferedImage(iw, ih, BufferedImage.TYPE_INT_ARGB);
-            IntegerComponentRaster icr = (IntegerComponentRaster) img.getRaster();
-            int offset = icr.getDataOffset(0);
-            int scan = icr.getScanlineStride();
-            int data[] = icr.getDataStorage();
+            
+            // Get the raster and data buffer
+            java.awt.image.Raster raster = img.getRaster();
+            java.awt.image.DataBufferInt dataBuffer = (java.awt.image.DataBufferInt) raster.getDataBuffer();
+            int[] data = dataBuffer.getData();
+            
+            // Read pixels from JavaFX image
             WritablePixelFormat<IntBuffer> pf = PixelFormat.getIntArgbInstance();
-            pr.getPixels((int)bounds.getMinX(), (int)bounds.getMinY(), iw, ih, pf, data, offset, scan);
+            pr.getPixels((int)bounds.getMinX(), (int)bounds.getMinY(), iw, ih, pf, data, 0, iw);
 
             ImageIO.write(img, "png", stream);
         } catch(IOException ex) {

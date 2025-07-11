@@ -1,6 +1,6 @@
 package core.document.graph;
 
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
 
 public class FilteredNetworkGraph extends LogicalGraph {
     protected final NetworkGraph<LogicalNode, LogicalEdge> root;
-    private final ObservableListWrapper<LogicalNode> nodesHidden;
+    private final ObservableList<LogicalNode> nodesHidden;
 
     public FilteredNetworkGraph(LogicalGraph root) {
         super(root.getCidrList());
         this.root = root;
 
-        nodesHidden  = new ObservableListWrapper<>(new LinkedList<>());
+        nodesHidden  = FXCollections.observableList(new LinkedList<>());
 
         root.nodesObservable.addListener(this::Handle_NodeListChanged);
         root.edgesObservable.addListener(this::Handle_EdgeListChanged);

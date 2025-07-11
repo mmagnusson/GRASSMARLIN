@@ -1,6 +1,5 @@
 package ui.custom.fx;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
@@ -12,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import javafx.collections.FXCollections;
 
 public class ColorPalette extends GridPane {
     protected class Sample extends Rectangle {
@@ -60,7 +60,7 @@ public class ColorPalette extends GridPane {
 
         selectedColor = new SimpleObjectProperty<>();
 
-        samples = new ObservableListWrapper<>(new LinkedList<>());
+        samples = FXCollections.observableList(new LinkedList<>());
         samples.addListener(this::Handle_SampleListChange);
 
         mapSamples = new HashMap<>();

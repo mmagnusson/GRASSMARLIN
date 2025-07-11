@@ -1,6 +1,6 @@
 package core.document;
 
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import core.document.graph.*;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
@@ -90,7 +90,7 @@ public class PhysicalTopology {
         }
     }
 
-    protected final ObservableListWrapper<PhysicalDevice> devices;
+    protected final ObservableList<PhysicalDevice> devices;
     protected final NetworkGraph<PhysicalNode, PhysicalEdge> graphPhysical;
     protected final AtomicBoolean pendingUpdate;
 
@@ -98,7 +98,7 @@ public class PhysicalTopology {
         pendingUpdate = new AtomicBoolean(false);
         this.graphPhysical = graphPhysical;
 
-        devices = new ObservableListWrapper<>(new CopyOnWriteArrayList<>());
+        devices = FXCollections.observableList(new CopyOnWriteArrayList<>());
         this.deviceListener = this::Handle_DeviceListModified;
         devices.addListener(this.deviceListener);
     }

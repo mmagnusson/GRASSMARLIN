@@ -125,11 +125,31 @@ public enum EmbeddedIcons {
             return cache.get(path);
         } else {
             InputStream streamImage = getClass().getResourceAsStream(path);
-            Image image = new Image(streamImage);
-            //Image image = new Image("file:" + Configuration.getPreferenceString(Configuration.Fields.DIR_IMAGES_ICON) + File.separator + path);
+            Image image;
+            if (streamImage != null) {
+                image = new Image(streamImage);
+            } else {
+                // Create a simple fallback image programmatically
+                image = createFallbackImage();
+            }
             cache.put(path, image);
             return image;
         }
+    }
+
+    /**
+     * Creates a simple fallback image when the requested image is not found
+     */
+    private Image createFallbackImage() {
+        // Create a simple 32x32 gray rectangle as fallback
+        javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(32, 32);
+        javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setFill(javafx.scene.paint.Color.GRAY);
+        gc.fillRect(0, 0, 32, 32);
+        gc.setFill(javafx.scene.paint.Color.WHITE);
+        gc.fillText("?", 12, 20);
+        
+        return canvas.snapshot(null, null);
     }
 
     public Rectangle2D getViewport() {

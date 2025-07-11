@@ -1,6 +1,6 @@
 package ui.dialog;
 
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import core.document.graph.INode;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -67,7 +67,7 @@ public class NodeDetailsDialogFx<TNode extends INode<TNode>> extends Dialog {
 
     public void setNode(TNode nodeNew) {
         titleProperty().bind(titleBase.concat(nodeNew.titleProperty()));
-        table.setItems(new ObservableListWrapper<>(nodeNew.getGroups().entrySet().stream()
+        table.setItems(FXCollections.observableList(nodeNew.getGroups().entrySet().stream()
                 .map(entry -> new Field(entry))
                 .collect(Collectors.toList())));
     }

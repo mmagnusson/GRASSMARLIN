@@ -1,6 +1,6 @@
 package ui.dialog;
 
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import core.Configuration;
 import core.logging.Logger;
 import core.logging.Severity;
@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import javafx.collections.ObservableList;
 
 public class FilterDialogFx extends Dialog<ButtonType> {
     protected static class PcapFilter {
@@ -94,10 +95,10 @@ public class FilterDialogFx extends Dialog<ButtonType> {
         }
     }
 
-    private ObservableListWrapper<PcapFilter> filters;
+    private ObservableList<PcapFilter> filters;
 
     public FilterDialogFx() {
-        filters = new ObservableListWrapper<>(new ArrayList<>(3));
+        filters = FXCollections.observableList(new ArrayList<>(3));
 
         initComponents();
     }

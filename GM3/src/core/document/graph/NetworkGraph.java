@@ -4,7 +4,7 @@
  */
 package core.document.graph;
 
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import core.document.Event;
 import core.document.ImportList;
 import javafx.application.Platform;
@@ -52,8 +52,8 @@ public class NetworkGraph<TNode extends INode<TNode>, TEdge extends IEdge<TNode>
         edges = new LinkedHashMap<>();
         nodes = new LinkedHashMap<>();
 
-        edgesObservable = new ObservableListWrapper<>(new CopyOnWriteArrayList<>());
-        nodesObservable = new ObservableListWrapper<>(new CopyOnWriteArrayList<>());
+        edgesObservable = FXCollections.observableList(new CopyOnWriteArrayList<>());
+        nodesObservable = FXCollections.observableList(new CopyOnWriteArrayList<>());
 
         taskRefreshUi = new RateLimitedTask(1000, () -> {  //Allow refresh at up to ~1
             this.commitUi();

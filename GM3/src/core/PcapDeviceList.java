@@ -1,8 +1,8 @@
 package core;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import core.logging.Logger;
 import core.logging.Severity;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
@@ -51,7 +51,7 @@ public abstract class PcapDeviceList {
     }
 
     public static ObservableList<DeviceEntry> get() {
-        ObservableListWrapper<DeviceEntry> result = new ObservableListWrapper<>(new CopyOnWriteArrayList<>());
+        ObservableList<DeviceEntry> result = FXCollections.observableList(new CopyOnWriteArrayList<>());
         // Ask the Pcap library for a list of devices.
         List<PcapIf> devices = new ArrayList<>();
         StringBuilder error = new StringBuilder();

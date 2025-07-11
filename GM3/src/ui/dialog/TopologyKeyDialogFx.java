@@ -1,10 +1,11 @@
 package ui.dialog;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -45,10 +46,10 @@ public class TopologyKeyDialogFx extends Dialog{
         }
     }
 
-    protected ObservableListWrapper<TopologyKeyEntry> legend;
+    protected ObservableList<TopologyKeyEntry> legend;
 
     public TopologyKeyDialogFx() {
-        legend = new ObservableListWrapper<>(new ArrayList<>());
+        legend = FXCollections.observableList(new ArrayList<>());
         legend.addAll(
                 new TopologyKeyEntry(EmbeddedIcons.Ics_Host, "Category", "PLC\nRTU\nMTU\nIED\nHMI\nICS_HOST"),
                 new TopologyKeyEntry(EmbeddedIcons.Vista_Firewall, "Category", "FIREWALL"),

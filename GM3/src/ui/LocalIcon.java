@@ -40,10 +40,29 @@ public class LocalIcon {
         return result;
     }
 
+    /**
+     * Create a LocalIcon for a classpath resource.
+     * @param classpathPath The path to the resource on the classpath (starting with /)
+     * @param isClasspath Flag indicating this is a classpath resource
+     * @return A LocalIcon object containing the requested resource.
+     */
+    public static LocalIcon forClasspath(String classpathPath) {
+        LocalIcon result = cache.get(classpathPath);
+        if(result == null) {
+            result = new LocalIcon(classpathPath, true);
+            cache.put(classpathPath, result);
+        }
+        return result;
+    }
+
     private Image image;
 
     protected LocalIcon(File src) {
         image = new Image("file:" + src.getAbsolutePath());
+    }
+
+    protected LocalIcon(String classpathPath, boolean isClasspath) {
+        image = new Image(classpathPath);
     }
 
     public ImageView getView(double size) {

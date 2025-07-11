@@ -1,6 +1,6 @@
 package ui.custom.fx;
 
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import core.logging.Severity;
 import core.svg.Svg;
 import javafx.collections.ObservableList;
@@ -69,7 +69,7 @@ public class ScalableChartWrapper extends GridPane {
 
     public ScalableChartWrapper() {
         this.chart = new ChartPacketBytesOverTime();
-        this.zoomHistory = new ObservableListWrapper<>(new LinkedList<>());
+        this.zoomHistory = FXCollections.observableList(new LinkedList<>());
         this.legend = new VBox();
         this.legendScroll = new ScrollPane(legend);
         this.polyHighlight = new Rectangle();

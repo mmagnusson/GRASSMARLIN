@@ -1,6 +1,6 @@
 package ui.graphing;
 
-import com.sun.javafx.collections.ObservableMapWrapper;
+import javafx.collections.FXCollections;
 import core.document.graph.IEdge;
 import core.document.graph.INode;
 import core.document.serialization.xml.XmlElement;
@@ -82,9 +82,9 @@ public class Visualization<TNode extends INode<TNode>, TEdge extends IEdge<TNode
     public Visualization(Graph<TNode, TEdge> graph) {
         super(graph);
 
-        lookupCells = new ObservableMapWrapper<>(new HashMap<>());
-        lookupGroups = new ObservableMapWrapper<>(new HashMap<>());
-        lookupEdges = new ObservableMapWrapper<>(new HashMap<>());
+        lookupCells = FXCollections.observableMap(new HashMap<>());
+        lookupGroups = FXCollections.observableMap(new HashMap<>());
+        lookupEdges = FXCollections.observableMap(new HashMap<>());
 
         canvas = new Canvas();
 

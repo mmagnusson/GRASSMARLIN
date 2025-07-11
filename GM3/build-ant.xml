@@ -57,12 +57,15 @@ where methods that are used in GRASSMARLIN are declared private).
         <fileset dir="resource/jaxb">
             <include name="**/*.jar" />
         </fileset>
+        <pathelement location="lib/jakarta.activation-1.2.2.jar"/>
     </path>
 
     <path id="lib.classpath">
         <fileset dir="${lib.dir}">
             <include name="*.jar"/>
         </fileset>
+        <pathelement location="lib/jakarta.xml.bind-api-2.3.3.jar"/>
+        <pathelement location="lib/jaxb-runtime-2.3.3.jar"/>
     </path>
 
     <path id="jar.classpath">

@@ -5,7 +5,6 @@
 
 package core.document;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import core.document.graph.*;
 import core.document.serialization.xml.XmlElement;
 import core.importmodule.ImportItem;
@@ -15,6 +14,7 @@ import core.logging.Logger;
 import core.logging.Severity;
 import javafx.application.Platform;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import ui.dialog.importmanager.ImportDialog;
 import util.Launcher;
@@ -109,7 +109,7 @@ public class Session {
 
     // == IMPORTS =============================================================
     private final core.document.ImportList listImports;
-    private final ObservableListWrapper<ImportDialog.PreliminaryImportItem> listPendingImports;
+    private final ObservableList<ImportDialog.PreliminaryImportItem> listPendingImports;
 
     public core.document.ImportList getImports() {
         return listImports;
@@ -156,7 +156,7 @@ public class Session {
         listImports.OnImportUpdated.addHandler((evt, args) -> AnnounceDocumentModified());
         listImports.OnListModified.addHandler((evt, args) -> AnnounceDocumentModified());
 
-        listPendingImports = new ObservableListWrapper<>(new ArrayList<>());
+        listPendingImports = FXCollections.observableList(new ArrayList<>());
     }
 
     public void addPendingImports(Collection<ImportDialog.PreliminaryImportItem> items) {
@@ -176,7 +176,7 @@ public class Session {
         AnnounceDocumentModified();
     }
     public ObservableList<ImportDialog.PreliminaryImportItem> getPendingImports() {
-        return new ReadOnlyListWrapper<>(listPendingImports);
+        return FXCollections.unmodifiableObservableList(listPendingImports);
     }
 
     public TaskDispatcher taskDispatcher() {

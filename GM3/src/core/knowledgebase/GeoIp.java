@@ -109,13 +109,22 @@ public abstract class GeoIp {
                 break;
         }
 
-        final String pathImage = ("images|logical|country|" + country + ".png").replace("|", File.separator);
-        final File fileImage = new File(pathImage);
-
-        if(!fileImage.exists()) {
-            return LocalIcon.forPath("images|logical|country|_Not_Found.png");
+        // Try to load from classpath first, then fallback to filesystem
+        final String classpathPath = "/images/logical/country/" + country + ".png";
+        final String filesystemPath = ("images|logical|country|" + country + ".png").replace("|", File.separator);
+        
+        // Check if the image exists on classpath
+        if (GeoIp.class.getResourceAsStream(classpathPath) != null) {
+            // Use classpath-based loading
+            return LocalIcon.forClasspath(classpathPath);
         } else {
-            return LocalIcon.forPath(pathImage);
+            // Fallback to filesystem-based loading
+            final File fileImage = new File(filesystemPath);
+            if(!fileImage.exists()) {
+                return LocalIcon.forPath("images|logical|country|_Not_Found.png");
+            } else {
+                return LocalIcon.forPath(filesystemPath);
+            }
         }
     }
 

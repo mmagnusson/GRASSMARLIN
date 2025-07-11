@@ -4,8 +4,8 @@
  */
 package core.logging;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.Instant;
@@ -55,7 +55,7 @@ public class Logger {
     }
 
     public Logger() {
-        history = new ObservableListWrapper<>(new ArrayList<>()) ;
+        history = FXCollections.observableList(new ArrayList<>());
     }
 
     public static void log(final Object i, final Severity a, final String o) {
