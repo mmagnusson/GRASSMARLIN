@@ -6,7 +6,7 @@ import ui.fingerprint.filters.Filter;
 import ui.fingerprint.payload.Endian;
 import ui.fingerprint.payload.Test;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.*;

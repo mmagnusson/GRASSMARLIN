@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import ui.fingerprint.FingerPrintGui;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 public class DestPortFilter implements Filter<Integer> {
     private final static int DEFAULT_PORT = 80;

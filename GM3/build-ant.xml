@@ -3,10 +3,15 @@
 team.  It is not intended to be used by others.  It is, however, provided as a
 reference for users that want one.
 
+MIGRATION NOTE (October 2025): The GRASSMARLIN code has been migrated from Java 8
+to Java 11+ with Jakarta EE 9+ (jakarta.xml.bind). The code now requires JDK 11
+or newer and uses Jakarta JAXB 3.0+ instead of the legacy javax.xml.bind.
+
 The GRASSMARLIN code requires source files to be generated for Fingerprinting.
 The gensrc-Fingerprinting target will do this.  Jaxb is used to turn the schema
 document into Java classes and Antlr is used to build a simple calculation
-parser.
+parser. NOTE: After generation, javax.xml.bind imports must be replaced with
+jakarta.xml.bind imports for compatibility.
 
 The "distribution" target will compile the code and prepare the application
 directory within "./build/app".  This prepares a copy of the application
@@ -21,10 +26,8 @@ part of the release.  The Windows installers are built using the WIX Toolset.
 Internal development is performed using the IntelliJ IDE.  This build process
 and file structure were designed to work within the IDE.  An appropriate
 JNetPcap library file should be located in the project root to execute or debug
-from within the IDE.  The source code makes extensive use of Java 1.8 features
-and requires a JDK of at least 1.8.66 (NOTE: I think it is 1.8.66 or newer; a
-slightly older build may work, however some earlier versions of 1.8 have issues
-where methods that are used in GRASSMARLIN are declared private).
+from within the IDE.  The source code now requires JDK 11 or newer (previously
+required Java 1.8.66+).
 -->
 <project name="Grassmarlin" default="distribution" basedir=".">
     <property name="build.dir" value="build"/>
@@ -57,15 +60,16 @@ where methods that are used in GRASSMARLIN are declared private).
         <fileset dir="resource/jaxb">
             <include name="**/*.jar" />
         </fileset>
-        <pathelement location="lib/jakarta.activation-1.2.2.jar"/>
+        <pathelement location="lib/jakarta.activation-api-2.1.0.jar"/>
     </path>
 
     <path id="lib.classpath">
         <fileset dir="${lib.dir}">
             <include name="*.jar"/>
         </fileset>
-        <pathelement location="lib/jakarta.xml.bind-api-2.3.3.jar"/>
-        <pathelement location="lib/jaxb-runtime-2.3.3.jar"/>
+        <pathelement location="lib/jakarta.xml.bind-api-3.0.1.jar"/>
+        <pathelement location="lib/jaxb-impl-3.0.2.jar"/>
+        <pathelement location="lib/jaxb-core-3.0.2.jar"/>
     </path>
 
     <path id="jar.classpath">
@@ -80,10 +84,10 @@ where methods that are used in GRASSMARLIN are declared private).
         <delete dir="${gen.dir}"/>
     </target>
 
-    <target name="compile" depends="gensrc-Fingerprinting" description="Compile sources to .class files">
+    <target name="compile" description="Compile sources to .class files">
         <mkdir dir="${build.classes.dir}"/>
 
-        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${build.classes.dir}" verbose="true" debug="true">
+        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${build.classes.dir}" verbose="true" debug="true" source="11" target="11">
             <src path="${gen.dir}"/>
             <classpath refid="lib.classpath"/>
         </javac>
@@ -113,7 +117,7 @@ where methods that are used in GRASSMARLIN are declared private).
         <!-- CsvImport -->
         <mkdir dir="${build.dir}/plugins/iadgov.csvimport" />
         <mkdir dir="${build.dir}/plugins/iadgov.csvimport/classes" />
-        <javac includeantruntime="false" srcdir="data/plugins/iadgov.csvimport" destdir="${build.dir}/plugins/iadgov.csvimport/classes" verbose="true" debug="false">
+        <javac includeantruntime="false" srcdir="data/plugins/iadgov.csvimport" destdir="${build.dir}/plugins/iadgov.csvimport/classes" verbose="true" debug="false" source="11" target="11">
             <classpath refid="jar.classpath" />
             <classpath refid="lib.classpath" />
         </javac>
@@ -122,7 +126,7 @@ where methods that are used in GRASSMARLIN are declared private).
         <!-- OfflinePcap -->
         <mkdir dir="${build.dir}/plugins/iadgov.offlinepcap" />
         <mkdir dir="${build.dir}/plugins/iadgov.offlinepcap/classes" />
-        <javac includeantruntime="false" srcdir="data/plugins/iadgov.offlinepcap" destdir="${build.dir}/plugins/iadgov.offlinepcap/classes" verbose="true" debug="true">
+        <javac includeantruntime="false" srcdir="data/plugins/iadgov.offlinepcap" destdir="${build.dir}/plugins/iadgov.offlinepcap/classes" verbose="true" debug="true" source="11" target="11">
             <classpath refid="jar.classpath" />
             <classpath refid="lib.classpath" />
         </javac>
@@ -131,7 +135,7 @@ where methods that are used in GRASSMARLIN are declared private).
         <!-- SessionEventTest -->
         <mkdir dir="${build.dir}/plugins/iadgov.sessioneventtest" />
         <mkdir dir="${build.dir}/plugins/iadgov.sessioneventtest/classes" />
-        <javac includeantruntime="false" srcdir="data/plugins/iadgov.sessioneventtest" destdir="${build.dir}/plugins/iadgov.sessioneventtest/classes" verbose="true" debug="true">
+        <javac includeantruntime="false" srcdir="data/plugins/iadgov.sessioneventtest" destdir="${build.dir}/plugins/iadgov.sessioneventtest/classes" verbose="true" debug="true" source="11" target="11">
             <classpath refid="jar.classpath" />
             <classpath refid="lib.classpath" />
         </javac>
@@ -140,7 +144,7 @@ where methods that are used in GRASSMARLIN are declared private).
         <!-- SvgExport -->
         <mkdir dir="${build.dir}/plugins/iadgov.svgexport" />
         <mkdir dir="${build.dir}/plugins/iadgov.svgexport/classes" />
-        <javac includeantruntime="false" srcdir="data/plugins/iadgov.svgexport" destdir="${build.dir}/plugins/iadgov.svgexport/classes" verbose="true" debug="true">
+        <javac includeantruntime="false" srcdir="data/plugins/iadgov.svgexport" destdir="${build.dir}/plugins/iadgov.svgexport/classes" verbose="true" debug="true" source="11" target="11">
             <classpath refid="jar.classpath" />
             <classpath refid="lib.classpath" />
         </javac>

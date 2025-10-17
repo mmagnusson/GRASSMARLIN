@@ -11,7 +11,6 @@ import ui.fingerprint.payload.Test;
 import util.parser.CalcLexer;
 import util.parser.CalcParser;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
@@ -33,6 +32,21 @@ public class PayloadFunctions {
     private static final Path bacnetPath = kbPath.resolve("BACnetVendors.htm");
     private static final Path enipDevicePath = kbPath.resolve("enipDevice.csv");
     private static final Path enipVendorPath = kbPath.resolve("enipVendors.csv");
+
+    /**
+     * Converts a byte array to a hex string. Replacement for DatatypeConverter.printHexBinary()
+     * which was removed in Java 11.
+     */
+    private static String bytesToHex(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder(bytes.length * 2);
+        for (byte b : bytes) {
+            sb.append(String.format("%02X", b));
+        }
+        return sb.toString();
+    }
 
 
     public static void anchorFunction(PacketData payload, CursorImpl cursor, Cursor cursorType, Position position, boolean relative, int offset) {
@@ -209,7 +223,7 @@ public class PayloadFunctions {
             if (ext.length > 0) {
                 switch (convert) {
                     case HEX:
-                        value = DatatypeConverter.printHexBinary(ext);
+                        value = bytesToHex(ext);
                         break;
                     case INTEGER:
                         value = new BigInteger(1, ext).toString();

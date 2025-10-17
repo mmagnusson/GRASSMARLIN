@@ -15,7 +15,7 @@ import org.jnetpcap.Pcap;
 import ui.GrassMarlinFx;
 import ui.fingerprint.FingerPrintGui;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;

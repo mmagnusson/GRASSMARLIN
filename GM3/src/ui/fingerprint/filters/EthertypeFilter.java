@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import ui.fingerprint.FingerPrintGui;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 public class EthertypeFilter implements Filter<Integer> {
     private final static int DEFAULT_VALUE = 0x0800; //IPv4

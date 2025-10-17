@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import ui.fingerprint.FingerPrintGui;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import java.math.BigInteger;
 
 public class MssFilter implements Filter<BigInteger> {

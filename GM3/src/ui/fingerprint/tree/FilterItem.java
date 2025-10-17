@@ -8,7 +8,7 @@ import ui.fingerprint.FingerPrintGui;
 import ui.fingerprint.editorPanes.FilterRow;
 import ui.fingerprint.filters.Filter;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 public class FilterItem extends TreeItem<String>{
 

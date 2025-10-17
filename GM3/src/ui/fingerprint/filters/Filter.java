@@ -4,7 +4,7 @@ package ui.fingerprint.filters;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.layout.HBox;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 /**
  *

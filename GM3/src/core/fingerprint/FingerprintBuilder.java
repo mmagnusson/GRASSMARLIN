@@ -6,7 +6,7 @@ import core.logging.Severity;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 import javax.xml.namespace.QName;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;

@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;

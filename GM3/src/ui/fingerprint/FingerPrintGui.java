@@ -45,7 +45,7 @@ import ui.fingerprint.tree.FilterGroupItem;
 import ui.fingerprint.tree.FilterItem;
 import ui.fingerprint.tree.PayloadItem;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
