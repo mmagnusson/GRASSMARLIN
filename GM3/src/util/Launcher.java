@@ -19,6 +19,7 @@ import jakarta.xml.bind.JAXBException;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -26,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -268,6 +270,10 @@ public class Launcher {
     private static boolean pluginsLoaded = false;
     private static final List<Plugin> plugins = new LinkedList<>();
     private static final Map<String, ClassLoader> loaderForPlugin = new HashMap<>();
+
+    /** Path to the trusted plugin hash manifest file. */
+    private static final Path PLUGIN_MANIFEST_PATH = Paths.get("plugins", "trusted-plugins.properties");
+
     public static ClassLoader loaderFor(final String namePlugin) {
         if(namePlugin == null || namePlugin.equals("")) {
             return Launcher.class.getClassLoader();
@@ -283,6 +289,51 @@ public class Launcher {
         }
         return null;
     }
+
+    /**
+     * Computes the SHA-256 hash of a file.
+     */
+    private static String computeSHA256(Path file) throws IOException, NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        try (InputStream is = Files.newInputStream(file)) {
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                digest.update(buffer, 0, bytesRead);
+            }
+        }
+        byte[] hashBytes = digest.digest();
+        StringBuilder sb = new StringBuilder(hashBytes.length * 2);
+        for (byte b : hashBytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Loads the trusted plugin hash manifest (plugins/trusted-plugins.properties).
+     * Format: pluginname.jar=sha256hash
+     * Returns null if the manifest file does not exist (verification disabled).
+     */
+    private static Map<String, String> loadTrustedPluginManifest() {
+        if (!Files.exists(PLUGIN_MANIFEST_PATH)) {
+            return null;
+        }
+        Map<String, String> manifest = new HashMap<>();
+        try {
+            Properties props = new Properties();
+            try (InputStream is = Files.newInputStream(PLUGIN_MANIFEST_PATH)) {
+                props.load(is);
+            }
+            for (String key : props.stringPropertyNames()) {
+                manifest.put(key, props.getProperty(key).trim().toLowerCase());
+            }
+        } catch (IOException ex) {
+            Logger.log(Launcher.class, Severity.Error, "Unable to read plugin manifest: " + ex.getMessage());
+        }
+        return manifest;
+    }
+
     public static synchronized void LoadPlugins() {
         // Loading already-loaded classes is bad.
         if(pluginsLoaded) {
@@ -290,10 +341,45 @@ public class Launcher {
         }
         pluginsLoaded = true;
 
+        final Map<String, String> trustedManifest = loadTrustedPluginManifest();
+        if (trustedManifest == null) {
+            Logger.log(Launcher.class, Severity.Warning,
+                    "Plugin manifest not found at " + PLUGIN_MANIFEST_PATH + ". " +
+                    "Create this file with SHA-256 hashes to enable plugin verification. " +
+                    "All plugins will be loaded WITHOUT verification.");
+        }
+
         try {
             for (Path pathPlugin : Files.newDirectoryStream(Paths.get("plugins"))) {
                 if(pathPlugin.toString().endsWith(".jar")) {
                     String nameFile = pathPlugin.getFileName().toString().replace(".jar", "");
+                    String jarFileName = pathPlugin.getFileName().toString();
+
+                    // Verify plugin integrity if manifest exists
+                    if (trustedManifest != null) {
+                        String expectedHash = trustedManifest.get(jarFileName);
+                        if (expectedHash == null) {
+                            Logger.log(Launcher.class, Severity.Error,
+                                    "Plugin '" + jarFileName + "' is not in the trusted manifest. Skipping.");
+                            continue;
+                        }
+                        try {
+                            String actualHash = computeSHA256(pathPlugin);
+                            if (!expectedHash.equals(actualHash)) {
+                                Logger.log(Launcher.class, Severity.Error,
+                                        "Plugin '" + jarFileName + "' failed integrity check! " +
+                                        "Expected: " + expectedHash + ", Got: " + actualHash + ". Skipping.");
+                                continue;
+                            }
+                            Logger.log(Launcher.class, Severity.Information,
+                                    "Plugin '" + jarFileName + "' passed integrity verification.");
+                        } catch (NoSuchAlgorithmException | IOException ex) {
+                            Logger.log(Launcher.class, Severity.Error,
+                                    "Unable to verify plugin '" + jarFileName + "': " + ex.getMessage() + ". Skipping.");
+                            continue;
+                        }
+                    }
+
                     ClassLoader loader = new URLClassLoader(new URL[] { pathPlugin.toUri().toURL() } );
                     loaderForPlugin.put(nameFile, loader);
                     try {

@@ -45,6 +45,7 @@ import ui.dialog.importmanager.ImportDialog;
 import ui.fingerprint.FingerPrintGui;
 import ui.graphing.Graph;
 import ui.graphing.graphs.*;
+import util.ExecutableValidator;
 import util.Launcher;
 import util.Plugin;
 
@@ -295,6 +296,10 @@ public class GrassMarlinFx extends Application{
                                 new ActiveMenuItem("Current _Log File", EmbeddedIcons.Vista_TextFile, (action) -> {
                                     try {
                                         String viewerLog = Configuration.getPreferenceString(Configuration.Fields.TEXT_EDITOR_EXEC);
+                                        if (!ExecutableValidator.isValidExecutablePath(viewerLog)) {
+                                            Logger.log(this, Severity.Error, "Text editor path failed validation: " + viewerLog);
+                                            return;
+                                        }
                                         String pathLog = Launcher.getLogFilePath();
                                         Runtime.getRuntime().exec(new String[] {
                                                 viewerLog,
@@ -551,6 +556,10 @@ public class GrassMarlinFx extends Application{
             String path = fileMisc.getAbsolutePath();
             String exec = Configuration.getPreferenceString(Configuration.Fields.PDF_VIEWER_EXEC);
             if (exec != null && !exec.isEmpty()) {
+                if (!ExecutableValidator.isValidExecutablePath(exec)) {
+                    Logger.log(this, Severity.Error, "PDF viewer path failed validation: " + exec);
+                    return;
+                }
                 // If the PDF Viewer path has been set, then use it, assuming that a single parameter for the PDF to open is accepted.
                 try {
                     Runtime.getRuntime().exec(new String[]{exec, path});

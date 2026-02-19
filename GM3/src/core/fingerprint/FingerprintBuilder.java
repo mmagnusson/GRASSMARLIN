@@ -63,12 +63,15 @@ public class FingerprintBuilder {
             marshaller = getContext().createMarshaller();
             marshaller.setProperty("jaxb.formatted.output", true);
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            // XXE protection on schema factory
+            schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
             URL xsd = FingerprintBuilder.class.getResource(xsdFile);
             try {
                 Schema schema = schemaFactory.newSchema(xsd);
                 marshaller.setSchema(schema);
             } catch (SAXException se) {
-                se.printStackTrace();
+                Logger.log(FingerprintBuilder.class, Severity.Error, "Unable to load fingerprint schema: " + se.getMessage());
             }
         }
 

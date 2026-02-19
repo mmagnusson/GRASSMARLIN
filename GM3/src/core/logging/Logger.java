@@ -13,10 +13,23 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/**
+ * Application logger that bridges to both the JavaFX UI log viewer and SLF4J.
+ *
+ * All log messages are:
+ * 1. Sent to the JavaFX ObservableList for the UI log viewer
+ * 2. Forwarded to SLF4J for structured file logging (via Logback)
+ *
+ * This dual-output approach preserves backward compatibility with the UI while
+ * adding proper structured logging, log rotation, and log injection protection.
+ */
 public class Logger {
     private final ObservableList<Message> history;
 
     private static final Logger globalEmitter;
+
+    // SLF4J logger for structured file output
+    private static final org.slf4j.Logger slf4jLogger = org.slf4j.LoggerFactory.getLogger("GRASSMARLIN");
 
     public static class Message {
 
@@ -32,7 +45,8 @@ public class Logger {
                 this.source = source.getClass();
             }
             this.severity = severity;
-            this.message = message;
+            // Sanitize message to prevent log injection (strip newlines and control chars)
+            this.message = message != null ? message.replaceAll("[\\r\\n\\t]", " ") : "";
             this.tsCreated = System.currentTimeMillis();
         }
 
@@ -61,6 +75,25 @@ public class Logger {
     public static void log(final Object i, final Severity a, final String o) {
         final Message msg = new Message(i, a, o);
 
+        // Forward to SLF4J for structured logging
+        String logMessage = "[" + msg.source.getSimpleName() + "] " + msg.message;
+        switch (a) {
+            case Error:
+                slf4jLogger.error(logMessage);
+                break;
+            case Warning:
+                slf4jLogger.warn(logMessage);
+                break;
+            case Information:
+            case Success:
+                slf4jLogger.info(logMessage);
+                break;
+            default:
+                slf4jLogger.debug(logMessage);
+                break;
+        }
+
+        // Update JavaFX UI log viewer
         try {
             //Even (especially) if we are in the FX Thread use a deferred add.
             Platform.runLater(() -> globalEmitter.history.add(msg));

@@ -1,6 +1,6 @@
 @echo off
 REM GRASSMARLIN Launcher for Windows
-REM Requires Java 11 or newer
+REM Requires Java 21 or newer (LTS)
 
 echo Starting GRASSMARLIN...
 echo.
@@ -9,7 +9,7 @@ REM Check if Java is available
 java -version >nul 2>&1
 if %errorlevel% neq 0 (
     echo ERROR: Java is not installed or not in PATH
-    echo Please install Java 11 or newer from:
+    echo Please install Java 21 LTS or newer from:
     echo   - https://adoptium.net/ (recommended)
     echo   - https://www.oracle.com/java/technologies/downloads/
     pause
@@ -44,7 +44,7 @@ echo Starting GRASSMARLIN GUI...
 echo.
 
 REM Set JavaFX module path for native libraries (required for Windows GUI)
-set JAVAFX_PATH=C:\javafx\javafx-sdk-11.0.2\lib
+set JAVAFX_PATH=C:\javafx\javafx-sdk-21\lib
 
 java --module-path "%JAVAFX_PATH%" --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.swing -jar build\app\GrassMarlin.jar -nopcap
 

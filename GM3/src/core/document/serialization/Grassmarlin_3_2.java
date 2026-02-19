@@ -32,6 +32,7 @@ import util.Cidr;
 import util.Launcher;
 import util.Mac;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +46,19 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class Grassmarlin_3_2 {
+
+    /**
+     * Creates a SAXParser with XXE protections enabled.
+     */
+    private static SAXParser createSecureSAXParser() throws ParserConfigurationException, SAXException {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        factory.setXIncludeAware(false);
+        return factory.newSAXParser();
+    }
 
     public static Grassmarlin_3_2 getInstance() {
         return new Grassmarlin_3_2();
@@ -153,7 +167,7 @@ public class Grassmarlin_3_2 {
     //<editor-fold defaultstate="collapsed" desc="Load Session">
     private void loadSession(InputSource source, Session session) throws IOException {
         try {
-            SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+            SAXParser parser = createSecureSAXParser();
 
             parser.parse(source, new SessionLoadHandler(session));
         } catch (SAXException | ParserConfigurationException e) {
@@ -313,11 +327,62 @@ public class Grassmarlin_3_2 {
         }
     }
 
+    /** Allowed package prefixes for classes loaded from session files. */
+    private static final List<String> ALLOWED_CLASS_PREFIXES = Arrays.asList(
+            "core.importmodule.",
+            "iadgov."
+    );
+
+    /**
+     * Validates that a class name is on the allowed list for session deserialization.
+     */
+    private static boolean isAllowedClassName(String className) {
+        if (className == null || className.isEmpty()) {
+            return false;
+        }
+        for (String prefix : ALLOWED_CLASS_PREFIXES) {
+            if (className.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @SuppressWarnings("unchecked")
     protected void addImport(Attributes attributes, ImportList listImports) {
         //TODO: If/when serialization of fingerprint lists is supported, deserialization of fingerprint list goes here
+        String typeName = attributes.getValue("type");
+        String pluginName = attributes.getValue("plugin");
+        String srcPath = attributes.getValue("src");
+
+        // Validate class name against allowed prefixes to prevent arbitrary class loading
+        if (!isAllowedClassName(typeName)) {
+            Logger.log(this, Severity.Error, "Rejected untrusted class name from session file: " + typeName);
+            return;
+        }
+
+        // Validate source path
+        if (srcPath == null || srcPath.isEmpty()) {
+            Logger.log(this, Severity.Error, "Missing source path in import element.");
+            return;
+        }
+
         try {
-            ImportItem item = ImportProcessors.newItem((Class<? extends ImportItem>)Launcher.loaderFor(attributes.getValue("plugin")).loadClass(attributes.getValue("type")), Paths.get(attributes.getValue("src")), null);
+            ClassLoader loader = Launcher.loaderFor(pluginName);
+            if (loader == null) {
+                Logger.log(this, Severity.Error, "No class loader found for plugin: " + pluginName);
+                return;
+            }
+            Class<?> loadedClass = loader.loadClass(typeName);
+            if (!ImportItem.class.isAssignableFrom(loadedClass)) {
+                Logger.log(this, Severity.Error, "Class " + typeName + " is not a valid ImportItem subclass.");
+                return;
+            }
+            ImportItem item = ImportProcessors.newItem((Class<? extends ImportItem>) loadedClass, Paths.get(srcPath), null);
+            if (item == null) {
+                Logger.log(this, Severity.Error, "Unable to instantiate import item: " + typeName);
+                return;
+            }
             item.recordTaskCompletion();
             listImports.add(item);
         } catch(ClassNotFoundException ex) {
@@ -385,7 +450,7 @@ public class Grassmarlin_3_2 {
     //<editor-fold defaultstate="collapsed" desc="Load Logical">
     private void loadLogical(InputSource source, Session session) throws IOException {
         try {
-            SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+            SAXParser parser = createSecureSAXParser();
 
             parser.parse(source, new LogicalLoadHandler(session));
         } catch (SAXException | ParserConfigurationException e) {
@@ -633,7 +698,7 @@ public class Grassmarlin_3_2 {
 
     private void loadPhysical(InputSource source, Session session) throws IOException{
         try {
-            SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+            SAXParser parser = createSecureSAXParser();
 
             parser.parse(source, new PhysicalLoadHandler(session));
         } catch (SAXException | ParserConfigurationException e) {
@@ -808,7 +873,7 @@ public class Grassmarlin_3_2 {
     //<editor-fold defaultstate="collapsed" desc="Load Mesh">
     private void loadMesh(InputSource source, Session session) throws IOException {
         try {
-            SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+            SAXParser parser = createSecureSAXParser();
 
             parser.parse(source, new MeshLoadHandler(session));
         } catch (SAXException | ParserConfigurationException e) {
@@ -919,7 +984,7 @@ public class Grassmarlin_3_2 {
     //<editor-fold defaultstate="collapsed" desc="Tabs">
     protected void loadTab(InputSource source, Session session, TabController tabs) throws  IOException {
         try {
-            SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+            SAXParser parser = createSecureSAXParser();
 
             parser.parse(source, new TabLoadHandler(session, tabs));
         } catch (ParserConfigurationException | SAXException e) {
@@ -1111,6 +1176,9 @@ public class Grassmarlin_3_2 {
                     if (inPhysicalGraph && inEdge && physicalGraphAttributes != null && edgeAttributes != null) {
                         restorePhysicalEdgeState(edgeAttributes, session.getPhysicalGraph().getRawEdgeList(), ((PhysicalGraph) currentVisualization));
                     }
+                    edgeAttributes = null;
+                    inEdge = false;
+                    break;
                 case "factory":
                     if (inFactory && factoryAttributes != null) {
                         if (inLogicalGraph) {

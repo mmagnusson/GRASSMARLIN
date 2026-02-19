@@ -24,6 +24,10 @@ public abstract class Wireshark {
             Logger.log(Wireshark.class, Severity.Error, "Unable to open Wireshark: Path not set.");
             return;
         }
+        if (!ExecutableValidator.isValidExecutablePath(pathWireshark)) {
+            Logger.log(Wireshark.class, Severity.Error, "Wireshark path failed validation: " + pathWireshark);
+            return;
+        }
         File fileWireshark = new File(pathWireshark);
         if(!fileWireshark.exists()) {
             Logger.log(Wireshark.class, Severity.Error, "Wireshark could not be located at the specified path.");

@@ -1,0 +1,161 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+group = 'gov.iad'
+version = '3.2.1'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+}
+
+// JavaFX configuration
+javafx {
+    version = '21.0.5'
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing', 'javafx.media']
+}
+
+dependencies {
+    // Jakarta JAXB (XML binding) - updated from 3.0.x
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
+    implementation 'jakarta.activation:jakarta.activation-api:2.1.3'
+
+    // ANTLR 4 runtime - updated from 4.5
+    implementation 'org.antlr:antlr4-runtime:4.13.2'
+
+    // Apache Commons - updated from severely outdated versions
+    // Commons IO: 2.4 -> 2.18.0 (fixes CVE-2024-47554, CVE-2021-29425)
+    implementation 'commons-io:commons-io:2.18.0'
+    // Commons Lang: 3.3.2 -> 3.17.0
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
+
+    // Gson for JSON parsing (replaces custom JsonParser)
+    implementation 'com.google.code.gson:gson:2.11.0'
+
+    // Pcap4J (replaces abandoned JNetPcap)
+    implementation 'org.pcap4j:pcap4j-core:1.8.2'
+    implementation 'org.pcap4j:pcap4j-packetfactory-static:1.8.2'
+
+    // SLF4J + Logback (for future logging migration)
+    implementation 'org.slf4j:slf4j-api:2.0.16'
+    runtimeOnly 'ch.qos.logback:logback-classic:1.5.12'
+
+    // JNetPcap local JAR (transitional - will be removed when Pcap4J migration is complete)
+    implementation files('lib/jnetpcap.jar')
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src', 'generated-sources']
+        }
+        resources {
+            srcDirs = ['src']
+            exclude '**/*.java'
+        }
+    }
+}
+
+application {
+    mainClass = 'util.Launcher'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'util.Launcher',
+            'Permission': 'High'
+        )
+    }
+
+    // Create a fat JAR (like the Ant build does)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    // Include resources
+    from('resource/images') { into 'images' }
+    from('resource/xsd') { into 'xsd' }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xlint:deprecation', '-Xlint:unchecked']
+}
+
+// Plugin compilation tasks
+task buildPlugins(dependsOn: jar) {
+    description = 'Build all plugin JARs'
+    group = 'build'
+
+    doLast {
+        def pluginNames = ['iadgov.csvimport', 'iadgov.offlinepcap', 'iadgov.svgexport', 'iadgov.sessioneventtest']
+        def pluginsOutputDir = file("${buildDir}/plugins")
+        pluginsOutputDir.mkdirs()
+
+        pluginNames.each { pluginName ->
+            def pluginSrcDir = file("data/plugins/${pluginName}")
+            if (pluginSrcDir.exists()) {
+                def pluginClassesDir = file("${buildDir}/plugin-classes/${pluginName}")
+                pluginClassesDir.mkdirs()
+
+                ant.javac(
+                    srcdir: pluginSrcDir,
+                    destdir: pluginClassesDir,
+                    source: '21',
+                    target: '21',
+                    includeantruntime: false,
+                    classpath: jar.archiveFile.get().asFile.absolutePath + File.pathSeparator + configurations.runtimeClasspath.asPath
+                )
+
+                ant.jar(
+                    destfile: "${pluginsOutputDir}/${pluginName}.jar",
+                    basedir: pluginClassesDir
+                )
+            }
+        }
+    }
+}
+
+// Distribution task matching the Ant build
+task distribution(dependsOn: [jar, buildPlugins]) {
+    description = 'Prepare application directory for distribution'
+    group = 'distribution'
+
+    doLast {
+        def appDir = file("${buildDir}/app")
+        appDir.mkdirs()
+
+        copy {
+            from jar.archiveFile
+            into appDir
+        }
+        copy {
+            from "${buildDir}/plugins"
+            into "${appDir}/plugins"
+        }
+        copy {
+            from 'images'
+            into "${appDir}/images"
+        }
+        copy {
+            from 'data/fingerprint'
+            into "${appDir}/data/fingerprint"
+        }
+        copy {
+            from('data') {
+                include '*.csv'
+            }
+            into "${appDir}/data"
+        }
+    }
+}

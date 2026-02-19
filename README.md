@@ -7,8 +7,8 @@ GRASSMARLIN provides IP network situational awareness of industrial control syst
 **GRASSMARLIN has been migrated from Java 8 to modern Java!**
 
 ### Requirements
-- **Java 11 or newer** (Java 11, 17 LTS, 21 LTS, or newer)
-- Previously required Java 8 only
+- **Java 21 LTS or newer** (recommended; Java 17 LTS minimum)
+- Previously required Java 8, then Java 11
 
 ### What Changed
 - Migrated from `javax.xml.bind` to `jakarta.xml.bind` (Jakarta EE 9+)
@@ -21,7 +21,7 @@ GRASSMARLIN provides IP network situational awareness of industrial control syst
 ```bash
 cd GM3
 
-# Build with Ant (requires Java 11+)
+# Build with Ant (requires Java 21+)
 ant -buildfile build-ant.xml jar
 
 # Run the application

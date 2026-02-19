@@ -87,7 +87,7 @@ required Java 1.8.66+).
     <target name="compile" description="Compile sources to .class files">
         <mkdir dir="${build.classes.dir}"/>
 
-        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${build.classes.dir}" verbose="true" debug="true" source="11" target="11">
+        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${build.classes.dir}" verbose="true" debug="false" source="21" target="21">
             <src path="${gen.dir}"/>
             <classpath refid="lib.classpath"/>
         </javac>
@@ -117,7 +117,7 @@ required Java 1.8.66+).
         <!-- CsvImport -->
         <mkdir dir="${build.dir}/plugins/iadgov.csvimport" />
         <mkdir dir="${build.dir}/plugins/iadgov.csvimport/classes" />
-        <javac includeantruntime="false" srcdir="data/plugins/iadgov.csvimport" destdir="${build.dir}/plugins/iadgov.csvimport/classes" verbose="true" debug="false" source="11" target="11">
+        <javac includeantruntime="false" srcdir="data/plugins/iadgov.csvimport" destdir="${build.dir}/plugins/iadgov.csvimport/classes" verbose="true" debug="false" source="21" target="21">
             <classpath refid="jar.classpath" />
             <classpath refid="lib.classpath" />
         </javac>
@@ -126,7 +126,7 @@ required Java 1.8.66+).
         <!-- OfflinePcap -->
         <mkdir dir="${build.dir}/plugins/iadgov.offlinepcap" />
         <mkdir dir="${build.dir}/plugins/iadgov.offlinepcap/classes" />
-        <javac includeantruntime="false" srcdir="data/plugins/iadgov.offlinepcap" destdir="${build.dir}/plugins/iadgov.offlinepcap/classes" verbose="true" debug="true" source="11" target="11">
+        <javac includeantruntime="false" srcdir="data/plugins/iadgov.offlinepcap" destdir="${build.dir}/plugins/iadgov.offlinepcap/classes" verbose="true" debug="true" source="21" target="21">
             <classpath refid="jar.classpath" />
             <classpath refid="lib.classpath" />
         </javac>
@@ -135,7 +135,7 @@ required Java 1.8.66+).
         <!-- SessionEventTest -->
         <mkdir dir="${build.dir}/plugins/iadgov.sessioneventtest" />
         <mkdir dir="${build.dir}/plugins/iadgov.sessioneventtest/classes" />
-        <javac includeantruntime="false" srcdir="data/plugins/iadgov.sessioneventtest" destdir="${build.dir}/plugins/iadgov.sessioneventtest/classes" verbose="true" debug="true" source="11" target="11">
+        <javac includeantruntime="false" srcdir="data/plugins/iadgov.sessioneventtest" destdir="${build.dir}/plugins/iadgov.sessioneventtest/classes" verbose="true" debug="true" source="21" target="21">
             <classpath refid="jar.classpath" />
             <classpath refid="lib.classpath" />
         </javac>
@@ -144,7 +144,7 @@ required Java 1.8.66+).
         <!-- SvgExport -->
         <mkdir dir="${build.dir}/plugins/iadgov.svgexport" />
         <mkdir dir="${build.dir}/plugins/iadgov.svgexport/classes" />
-        <javac includeantruntime="false" srcdir="data/plugins/iadgov.svgexport" destdir="${build.dir}/plugins/iadgov.svgexport/classes" verbose="true" debug="true" source="11" target="11">
+        <javac includeantruntime="false" srcdir="data/plugins/iadgov.svgexport" destdir="${build.dir}/plugins/iadgov.svgexport/classes" verbose="true" debug="true" source="21" target="21">
             <classpath refid="jar.classpath" />
             <classpath refid="lib.classpath" />
         </javac>

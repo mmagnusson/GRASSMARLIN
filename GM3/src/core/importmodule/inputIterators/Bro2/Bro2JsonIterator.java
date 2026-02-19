@@ -1,16 +1,18 @@
 package core.importmodule.inputIterators.Bro2;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import core.fingerprint.PMetaData;
 import core.fingerprint.PacketData;
 import core.importmodule.ImportItem;
 import core.logging.Logger;
 import core.logging.Severity;
 import util.Cidr;
-import util.JsonParser;
-import util.StringParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -22,6 +24,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class Bro2JsonIterator implements Iterator<PacketData> {
+
+    private static final Gson gson = new Gson();
+    private static final Type MAP_TYPE = new TypeToken<HashMap<String, Object>>(){}.getType();
 
     private final ImportItem source;
 
@@ -97,22 +102,23 @@ public class Bro2JsonIterator implements Iterator<PacketData> {
         }
 
         try {
-            HashMap<String, Object> lineParsed = JsonParser.readObject(new StringParser(lineText));
+            HashMap<String, Object> lineParsed = gson.fromJson(lineText, MAP_TYPE);
 
-            String[] timeComps = ((String)lineParsed.get("ts")).split("\\.");
+            String tsValue = String.valueOf(lineParsed.get("ts"));
+            String[] timeComps = tsValue.split("\\.");
             String timeString = timeComps[0] + (timeComps.length > 1 ? (timeComps[1] + "000").substring(0, 3) : "");
             long time = Long.parseLong(timeString);
-            int dstPort = Integer.parseInt((String)lineParsed.get("id.resp_p"));
-            int srcPort = Integer.parseInt((String)lineParsed.get("id.orig_p"));
-            short proto = parseProtocol((String)lineParsed.get("proto"));
+            int dstPort = Integer.parseInt(String.valueOf(lineParsed.get("id.resp_p")).replaceAll("\\.0$", ""));
+            int srcPort = Integer.parseInt(String.valueOf(lineParsed.get("id.orig_p")).replaceAll("\\.0$", ""));
+            short proto = parseProtocol(String.valueOf(lineParsed.get("proto")));
 
             int sizePacket = -1;
-            if (lineParsed.containsKey("orig_bytes")) {
-                sizePacket = Integer.parseInt((String) lineParsed.get("orig_bytes"));
+            if (lineParsed.containsKey("orig_bytes") && lineParsed.get("orig_bytes") != null) {
+                sizePacket = Integer.parseInt(String.valueOf(lineParsed.get("orig_bytes")).replaceAll("\\.0$", ""));
             }
 
-            Cidr srcIp = new Cidr(parseIp((String)lineParsed.get("id.orig_h")));
-            Cidr dstIp = new Cidr(parseIp((String)lineParsed.get("id.resp_h")));
+            Cidr srcIp = new Cidr(parseIp(String.valueOf(lineParsed.get("id.orig_h"))));
+            Cidr dstIp = new Cidr(parseIp(String.valueOf(lineParsed.get("id.resp_h"))));
 
             PMetaData meta = new PMetaData(source, time, idxLine, srcPort, dstPort, proto, srcIp, null, dstIp, null, -1, sizePacket, 2048, -1, -1, -1, -1, null);
 
@@ -123,10 +129,8 @@ public class Bro2JsonIterator implements Iterator<PacketData> {
             } catch (InterruptedException ie) {
                 // don't care
             }
-        } catch(IOException | NumberFormatException ex) {
+        } catch(JsonSyntaxException | NumberFormatException ex) {
             Logger.log(this, Severity.Warning, "There was an error processing a line in [" + this.inPath + "]: " + ex.getMessage());
-            System.out.println("Unable to process Bro2ConnJson line:");
-            System.out.println("> " + lineText);
         }
     }
 

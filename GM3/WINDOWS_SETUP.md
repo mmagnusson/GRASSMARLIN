@@ -2,19 +2,19 @@
 
 ## Prerequisites
 
-### 1. **Java 11 or Newer (Required)**
+### 1. **Java 21 LTS or Newer (Required)**
 
-GRASSMARLIN requires Java 11 or newer to run. Choose one:
+GRASSMARLIN requires Java 21 LTS or newer to run. Choose one:
 
 **Recommended: Eclipse Temurin (AdoptiumOpenJDK)**
 - Download: https://adoptium.net/
-- Select: Java 11, 17, or 21 LTS
+- Select: Java 21 LTS (recommended) or newer
 - Windows x64 installer (.msi)
 - Install and ensure "Add to PATH" is checked
 
 **Alternative: Oracle JDK**
 - Download: https://www.oracle.com/java/technologies/downloads/
-- Select Java 11 or newer
+- Select Java 21 or newer
 
 ### 2. **Verify Java Installation**
 
@@ -23,9 +23,9 @@ Open Command Prompt or PowerShell and run:
 java -version
 ```
 
-You should see version 11 or higher, e.g.:
+You should see version 21 or higher, e.g.:
 ```
-openjdk version "11.0.28" 2025-07-15
+openjdk version "21.0.4" 2024-07-16 LTS
 ```
 
 If Java is not found, restart your terminal or add Java to your PATH.
@@ -123,7 +123,7 @@ If the JAR doesn't exist, build it first:
 ## Troubleshooting
 
 ### **Error: "cannot find symbol" during build**
-- Ensure you have JDK 11+ (not just JRE)
+- Ensure you have JDK 21+ (not just JRE)
 - Set JAVA_HOME to point to JDK directory
 
 ### **Error: "UnsupportedClassVersionError"**
@@ -132,7 +132,7 @@ If the JAR doesn't exist, build it first:
 - Rebuild with your Java version
 
 ### **Application won't start**
-1. Check Java version: `java -version` (must be 11+)
+1. Check Java version: `java -version` (must be 21+)
 2. Verify JAR exists: `GM3\build\app\GrassMarlin.jar`
 3. Try offline mode: `java -jar build\app\GrassMarlin.jar -nopcap`
 4. Check logs in `GM3\logs\` directory
@@ -159,7 +159,7 @@ If the JAR doesn't exist, build it first:
 ## System Requirements
 
 - **OS**: Windows 11, 10, 8.1, 7 (64-bit or 32-bit)
-- **Java**: Java 11 or newer (11, 17 LTS, 21 LTS recommended)
+- **Java**: Java 21 LTS or newer (21 LTS recommended)
 - **RAM**: 4 GB minimum, 8 GB+ recommended for large PCAP files
 - **Disk**: 500 MB for application + space for captured data
 

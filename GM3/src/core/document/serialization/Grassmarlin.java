@@ -7,6 +7,7 @@ import org.xml.sax.SAXException;
 import ui.TabController;
 import ui.graphing.Graph;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.*;
@@ -27,10 +28,17 @@ public abstract class Grassmarlin {
         factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder_temp = null;
         try {
+            // XXE protection: disable external entities and DTDs
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            factory.setXIncludeAware(false);
+            factory.setExpandEntityReferences(false);
             builder_temp = factory.newDocumentBuilder();
         } catch(Exception ex) {
-            //This is bad.  we may not be able to log the error properly at this time.
-            //TODO: Better error handling in serialization
+            System.err.println("FATAL: Unable to initialize secure XML parser: " + ex.getMessage());
+            ex.printStackTrace();
         }
         builder = builder_temp;
 
@@ -70,9 +78,8 @@ public abstract class Grassmarlin {
 
     // == LOAD ================================================================
     public static boolean LoadState(Path source, Session doc, TabController tabs) throws IOException {
-        try {
+        try (ZipFile inFile = new ZipFile(source.toFile())) {
             doc.setSavePath(source);
-            ZipFile inFile = new ZipFile(source.toFile());
             ZipEntry manifestEntry = inFile.getEntry("manifest.xml");
             org.w3c.dom.Document docManifest =  builder.parse(inFile.getInputStream(manifestEntry));
 
