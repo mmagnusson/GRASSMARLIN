@@ -1,0 +1,208 @@
+2026-02-20 22:10:25,886 [INFO] [Launcher] GrassMarlin 3.2.1-r26
+2026-02-20 22:10:25,909 [INFO] [GeoIp] Loading Cidr -> GeoId Mapping from: /home/mmagnusson/code/GRASSMARLIN/GM3/data/cidr_to_geo_id.csv
+2026-02-20 22:10:27,121 [INFO] [GeoIp] Cidr -> GeoId Mapping load complete.
+2026-02-20 22:10:27,123 [INFO] [GeoIp] Loading GeoId -> Name Mapping from: /home/mmagnusson/code/GRASSMARLIN/GM3/data/geo_id_to_name.csv
+2026-02-20 22:10:27,134 [INFO] [GeoIp] GeoId -> Name Mapping load complete.
+2026-02-20 22:10:27,283 [WARN] [GeoIp] GeoIp lookup for country Id 6255148 failed: 62.208.62.224/27, 62.208.62.128/26, 194.196.194.0/23, 62.208.62.0/25, 62.208....
+2026-02-20 22:10:27,324 [WARN] [GeoIp] GeoIp lookup for country Id 6255147 failed: 199.40.206.0/24, 170.252.160.1, 199.40.204.0/24, 32.60.44.0/24, 203.92.218.0/...
+2026-02-20 22:10:27,390 [WARN] [GeoIp] Unable to locate flag file for Saint Martin(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Saint_Martin.png')
+2026-02-20 22:10:27,391 [WARN] [GeoIp] Unable to locate flag file for New Caledonia(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/New_Caledonia.png')
+2026-02-20 22:10:27,392 [WARN] [GeoIp] Unable to locate flag file for Palau(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Palau.png')
+2026-02-20 22:10:27,394 [WARN] [GeoIp] Unable to locate flag file for British Indian Ocean Territory(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/British_Indian_Ocean_Territory.png')
+2026-02-20 22:10:27,395 [WARN] [GeoIp] Unable to locate flag file for Mayotte(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Mayotte.png')
+2026-02-20 22:10:27,396 [WARN] [GeoIp] Unable to locate flag file for Guernsey(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Guernsey.png')
+2026-02-20 22:10:27,398 [WARN] [GeoIp] Unable to locate flag file for Curaçao(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Curaao.png')
+2026-02-20 22:10:27,399 [WARN] [GeoIp] Unable to locate flag file for Bonaire(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Bonaire.png')
+2026-02-20 22:10:27,400 [WARN] [GeoIp] Unable to locate flag file for Republic of the Congo(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Republic_of_the_Congo.png')
+2026-02-20 22:10:27,401 [WARN] [GeoIp] Unable to locate flag file for Congo(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Congo.png')
+2026-02-20 22:10:27,403 [WARN] [GeoIp] Unable to locate flag file for Macao(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Macao.png')
+2026-02-20 22:10:27,405 [WARN] [GeoIp] Unable to locate flag file for Bermuda(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Bermuda.png')
+2026-02-20 22:10:27,406 [WARN] [GeoIp] Unable to locate flag file for Saint-Barthélemy(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/SaintBarthlemy.png')
+2026-02-20 22:10:27,407 [WARN] [GeoIp] Unable to locate flag file for Tokelau(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Tokelau.png')
+2026-02-20 22:10:27,408 [WARN] [GeoIp] Unable to locate flag file for Turks and Caicos Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Turks_and_Caicos_Islands.png')
+2026-02-20 22:10:27,409 [WARN] [GeoIp] Unable to locate flag file for Cocos [Keeling] Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Cocos_Keeling_Islands.png')
+2026-02-20 22:10:27,411 [WARN] [GeoIp] Unable to locate flag file for Wallis and Futuna(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Wallis_and_Futuna.png')
+2026-02-20 22:10:27,412 [WARN] [GeoIp] Unable to locate flag file for Ivory Coast(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Ivory_Coast.png')
+2026-02-20 22:10:27,413 [WARN] [GeoIp] Unable to locate flag file for Saint Pierre and Miquelon(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Saint_Pierre_and_Miquelon.png')
+2026-02-20 22:10:27,415 [WARN] [GeoIp] Unable to locate flag file for U.S. Minor Outlying Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/US_Minor_Outlying_Islands.png')
+2026-02-20 22:10:27,417 [WARN] [GeoIp] Unable to locate flag file for Martinique(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Martinique.png')
+2026-02-20 22:10:27,418 [WARN] [GeoIp] Unable to locate flag file for Antarctica(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Antarctica.png')
+2026-02-20 22:10:27,420 [WARN] [GeoIp] Unable to locate flag file for Northern Mariana Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Northern_Mariana_Islands.png')
+2026-02-20 22:10:27,421 [WARN] [GeoIp] Unable to locate flag file for Montserrat(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Montserrat.png')
+2026-02-20 22:10:27,422 [WARN] [GeoIp] Unable to locate flag file for Saint Helena(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Saint_Helena.png')
+2026-02-20 22:10:27,423 [WARN] [GeoIp] Unable to locate flag file for Pitcairn Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Pitcairn_Islands.png')
+2026-02-20 22:10:27,425 [WARN] [GeoIp] Unable to locate flag file for Guam(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Guam.png')
+2026-02-20 22:10:27,426 [WARN] [GeoIp] Unable to locate flag file for Myanmar [Burma](expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Myanmar_Burma.png')
+2026-02-20 22:10:27,429 [WARN] [GeoIp] Unable to locate flag file for Palestine(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Palestine.png')
+2026-02-20 22:10:27,430 [WARN] [GeoIp] Unable to locate flag file for Cayman Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Cayman_Islands.png')
+2026-02-20 22:10:27,431 [WARN] [GeoIp] Unable to locate flag file for Western Sahara(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Western_Sahara.png')
+2026-02-20 22:10:27,433 [WARN] [GeoIp] Unable to locate flag file for São Tomé and Príncipe(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/So_Tom_and_Prncipe.png')
+2026-02-20 22:10:27,434 [WARN] [GeoIp] Unable to locate flag file for Sint Maarten(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Sint_Maarten.png')
+2026-02-20 22:10:27,435 [WARN] [GeoIp] Unable to locate flag file for U.S. Virgin Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/US_Virgin_Islands.png')
+2026-02-20 22:10:27,436 [WARN] [GeoIp] Unable to locate flag file for Anguilla(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Anguilla.png')
+2026-02-20 22:10:27,437 [WARN] [GeoIp] Unable to locate flag file for Guadeloupe(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Guadeloupe.png')
+2026-02-20 22:10:27,438 [WARN] [GeoIp] Unable to locate flag file for British Virgin Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/British_Virgin_Islands.png')
+2026-02-20 22:10:27,440 [WARN] [GeoIp] Unable to locate flag file for Svalbard and Jan Mayen(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Svalbard_and_Jan_Mayen.png')
+2026-02-20 22:10:27,441 [WARN] [GeoIp] Unable to locate flag file for Åland(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/land.png')
+2026-02-20 22:10:27,442 [WARN] [GeoIp] Unable to locate flag file for Jersey(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Jersey.png')
+2026-02-20 22:10:27,443 [WARN] [GeoIp] Unable to locate flag file for Angola(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Angola.png')
+2026-02-20 22:10:27,446 [WARN] [GeoIp] Unable to locate flag file for French Guiana(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/French_Guiana.png')
+2026-02-20 22:10:27,447 [WARN] [GeoIp] Unable to locate flag file for Réunion(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Runion.png')
+2026-02-20 22:10:27,449 [WARN] [GeoIp] Unable to locate flag file for Isle of Man(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Isle_of_Man.png')
+2026-02-20 22:10:27,450 [WARN] [GeoIp] Unable to locate flag file for Gambia(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Gambia.png')
+2026-02-20 22:10:27,452 [WARN] [GeoIp] Unable to locate flag file for American Samoa(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/American_Samoa.png')
+2026-02-20 22:10:27,452 [WARN] [GeoIp] Unable to locate flag file for Republic of Lithuania(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Republic_of_Lithuania.png')
+2026-02-20 22:10:27,455 [WARN] [GeoIp] Unable to locate flag file for South Sudan(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/South_Sudan.png')
+2026-02-20 22:10:27,456 [WARN] [GeoIp] Unable to locate flag file for South Georgia and the South Sandwich Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/South_Georgia_and_the_South_Sandwich_Islands.png')
+2026-02-20 22:10:27,456 [WARN] [GeoIp] Unable to locate flag file for Falkland Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Falkland_Islands.png')
+2026-02-20 22:10:27,458 [WARN] [GeoIp] Unable to locate flag file for French Southern Territories(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/French_Southern_Territories.png')
+2026-02-20 22:10:27,459 [WARN] [GeoIp] Unable to locate flag file for Hashemite Kingdom of Jordan(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Hashemite_Kingdom_of_Jordan.png')
+2026-02-20 22:10:27,460 [WARN] [GeoIp] Unable to locate flag file for Puerto Rico(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Puerto_Rico.png')
+2026-02-20 22:10:27,620 [ERROR] [Manufacturer] Unable to load MAC manufacturer reference: /usr/share/wireshark/manuf
+2026-02-20 22:10:27,651 [INFO] [Launcher] Configuration:
+2026-02-20 22:10:27,652 [INFO] [Launcher]   [WIRESHARK_EXEC]: 'null'
+2026-02-20 22:10:27,653 [INFO] [Launcher]   [TEXT_EDITOR_EXEC]: 'null'
+2026-02-20 22:10:27,654 [INFO] [Launcher]   [PDF_VIEWER_EXEC]: 'null'
+2026-02-20 22:10:27,655 [INFO] [Launcher]   [DIR_INSTALL]: '.'
+2026-02-20 22:10:27,655 [INFO] [Launcher]   [DIR_IMAGES_ICON]: 'images'
+2026-02-20 22:10:27,656 [INFO] [Launcher]   [PATH_MANUFACTURER_DB]: '/usr/share/wireshark/manuf'
+2026-02-20 22:10:27,657 [INFO] [Launcher]   [PATH_USERGUIDE]: 'data/reference/GRASSMARLIN_User_Guide3.2.pdf'
+2026-02-20 22:10:27,658 [INFO] [Launcher]   [DIR_CORE_FINGERPRINTS]: 'data/fingerprint'
+2026-02-20 22:10:27,659 [INFO] [Launcher]   [DIR_LIVE_CAPTURE]: '/home/mmagnusson/code/GRASSMARLIN/GM3/livecaptures'
+2026-02-20 22:10:27,660 [INFO] [Launcher]   [DIR_LOGS]: '/home/mmagnusson/code/GRASSMARLIN/GM3/logs'
+2026-02-20 22:10:27,660 [INFO] [Launcher]   [DIR_USER_FINGERPRINTS]: '/home/mmagnusson/code/GRASSMARLIN/GM3/fingerprints'
+2026-02-20 22:10:28,189 [INFO] [Launcher]   [DIR_QUICKLIST]: '/home/mmagnusson/GrassMarlin/quicklist'
+2026-02-20 22:10:28,190 [INFO] [Launcher]   [DIR_SESSIONS]: '/home/mmagnusson/GrassMarlin'
+2026-02-20 22:10:28,192 [INFO] [Launcher]   [PCAP_FLAG_MODE]: '1'
+2026-02-20 22:10:28,192 [INFO] [Launcher]   [PCAP_FLAG_SNAPLEN]: '0xFFFF'
+2026-02-20 22:10:28,193 [INFO] [Launcher]   [PCAP_FLAG_TIMEOUT]: '30000'
+2026-02-20 22:10:28,194 [INFO] [Launcher]   [PCAP_FLAG_CAPTURE_LIMIT]: '-1'
+2026-02-20 22:10:28,196 [INFO] [Launcher]   [PATH_PCAP_FILTERS]: '/home/mmagnusson/code/GRASSMARLIN/GM3/PcapFilters.txt'
+2026-02-20 22:10:28,197 [INFO] [Launcher]   [PCAP_FILTER_STRING]: ' '
+2026-02-20 22:10:28,198 [INFO] [Launcher]   [PCAP_FILTER_TITLE]: 'ALLOW ALL TRAFFIC'
+2026-02-20 22:10:28,199 [INFO] [Launcher]   [UI_VIEW_UPDATE_DELAY]: '1500'
+2026-02-20 22:10:28,200 [INFO] [Launcher]   [COLOR_NODE_NEW]: '0000FF'
+2026-02-20 22:10:28,201 [INFO] [Launcher]   [COLOR_NODE_MODIFIED]: '00FF00'
+2026-02-20 22:10:28,202 [INFO] [Launcher]   [COLOR_NODE_BACKGROUND]: '000000'
+2026-02-20 22:10:28,203 [INFO] [Launcher]   [COLOR_NODE_HIGHLIGHT]: 'FFFF00'
+2026-02-20 22:10:28,204 [INFO] [Launcher]   [COLOR_NODE_TEXT]: 'FFFFFF'
+2026-02-20 22:10:28,205 [INFO] [Launcher]   [LOGICAL_CREATE_DYNAMIC_SUBNETS]: 'true'
+2026-02-20 22:10:28,206 [INFO] [Launcher]   [LOGICAL_DYNAMIC_SUBNET_BITS]: '24'
+2026-02-20 22:10:28,207 [INFO] [Launcher]   [LAST_RUN_VERSION]: '3.2.1'
+2026-02-20 22:10:28,209 [INFO] [Launcher]   [SUPPRESS_UNCHANGED_VERSION_NOTES]: 'false'
+2026-02-20 22:10:28,210 [INFO] [Launcher]   [FINGERPRINT_SAVEAS_LEAVES_OLD]: 'true'
+2026-02-20 22:10:28,467 [INFO] Pcap4J successfully loaded a native pcap library: libpcap version 1.10.4 (with TPACKET_V3)
+2026-02-20 22:10:28,690 [INFO] [org/pcap4j/pcap4j.properties] Could not get value by org.pcap4j.af.inet, use default value: 2
+2026-02-20 22:10:28,690 [INFO] [org/pcap4j/pcap4j.properties] Could not get value by org.pcap4j.af.inet6, use default value: 10
+2026-02-20 22:10:28,691 [INFO] [org/pcap4j/pcap4j.properties] Could not get value by org.pcap4j.af.packet, use default value: 17
+2026-02-20 22:10:28,691 [INFO] [org/pcap4j/pcap4j.properties] Could not get value by org.pcap4j.af.link, use default value: 18
+2026-02-20 22:10:28,749 [INFO] 12 NIF(s) found.
+2026-02-20 22:10:28,750 [WARN] [String[]] Cannot locate Wireshark; please verify the value in the Tools -> Preferences menu.
+2026-02-20 22:10:29,711 [WARN] [Launcher] Unable to load Fingerprint at data/fingerprint/Review_Comments.txt
+2026-02-20 22:10:30,228 [WARN] [Launcher] Plugin manifest not found at plugins/trusted-plugins.properties. Create this file with SHA-256 hashes to enable plugin verification. All plugins will be loaded WITHOUT verification.
+2026-02-20 22:10:30,230 [ERROR] [Launcher] There was an error enumerating plugins: plugins
+2026-02-20 22:10:33,644 [INFO] 12 NIF(s) found.
+2026-02-20 22:11:19,320 [ERROR] [GrassMarlinFx] Unable to start live pcap: Cannot invoke "core.importmodule.ImportProcessors$ProcessorWrapper.getProcessor()" because the return value of "core.importmodule.ImportProcessors.processorForPath(java.nio.file.Path)" is null
+2026-02-20 22:11:27,323 [ERROR] [GrassMarlinFx] Unable to start live pcap: Cannot invoke "core.importmodule.ImportProcessors$ProcessorWrapper.getProcessor()" because the return value of "core.importmodule.ImportProcessors.processorForPath(java.nio.file.Path)" is null
+2026-02-20 22:12:11,257 [ERROR] [GrassMarlinFx] Unable to start live pcap: Cannot invoke "core.importmodule.ImportProcessors$ProcessorWrapper.getProcessor()" because the return value of "core.importmodule.ImportProcessors.processorForPath(java.nio.file.Path)" is null
+2026-02-20 22:18:15,776 [INFO] [Session] Beginning Import of [core.importmodule.inputIterators.cisco.ImportCiscoShow: test-pcap.pcap]
+2026-02-20 22:18:15,862 [WARN] [CiscoFileIterator] Unable to identify any commands in Cisco file: /home/mmagnusson/Downloads/test-pcap.pcap
+2026-02-20 22:18:15,865 [INFO] [ImportCiscoShow] [core.importmodule.inputIterators.cisco.ImportCiscoShow: test-pcap.pcap]: Import has completed.
+2026-02-20 22:53:03,114 [INFO] [Launcher] GrassMarlin 3.2.1-r26
+2026-02-20 22:53:03,133 [INFO] [GeoIp] Loading Cidr -> GeoId Mapping from: /home/mmagnusson/code/GRASSMARLIN/GM3/data/cidr_to_geo_id.csv
+2026-02-20 22:53:04,585 [INFO] [GeoIp] Cidr -> GeoId Mapping load complete.
+2026-02-20 22:53:04,587 [INFO] [GeoIp] Loading GeoId -> Name Mapping from: /home/mmagnusson/code/GRASSMARLIN/GM3/data/geo_id_to_name.csv
+2026-02-20 22:53:04,594 [INFO] [GeoIp] GeoId -> Name Mapping load complete.
+2026-02-20 22:53:04,763 [WARN] [GeoIp] GeoIp lookup for country Id 6255148 failed: 62.208.62.224/27, 62.208.62.128/26, 194.196.194.0/23, 62.208.62.0/25, 62.208....
+2026-02-20 22:53:04,812 [WARN] [GeoIp] GeoIp lookup for country Id 6255147 failed: 199.40.206.0/24, 170.252.160.1, 199.40.204.0/24, 32.60.44.0/24, 203.92.218.0/...
+2026-02-20 22:53:04,901 [WARN] [GeoIp] Unable to locate flag file for Saint Martin(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Saint_Martin.png')
+2026-02-20 22:53:04,903 [WARN] [GeoIp] Unable to locate flag file for New Caledonia(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/New_Caledonia.png')
+2026-02-20 22:53:04,905 [WARN] [GeoIp] Unable to locate flag file for Palau(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Palau.png')
+2026-02-20 22:53:04,908 [WARN] [GeoIp] Unable to locate flag file for British Indian Ocean Territory(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/British_Indian_Ocean_Territory.png')
+2026-02-20 22:53:04,910 [WARN] [GeoIp] Unable to locate flag file for Mayotte(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Mayotte.png')
+2026-02-20 22:53:04,912 [WARN] [GeoIp] Unable to locate flag file for Guernsey(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Guernsey.png')
+2026-02-20 22:53:04,914 [WARN] [GeoIp] Unable to locate flag file for Curaçao(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Curaao.png')
+2026-02-20 22:53:04,915 [WARN] [GeoIp] Unable to locate flag file for Bonaire(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Bonaire.png')
+2026-02-20 22:53:04,917 [WARN] [GeoIp] Unable to locate flag file for Republic of the Congo(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Republic_of_the_Congo.png')
+2026-02-20 22:53:04,918 [WARN] [GeoIp] Unable to locate flag file for Congo(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Congo.png')
+2026-02-20 22:53:04,921 [WARN] [GeoIp] Unable to locate flag file for Macao(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Macao.png')
+2026-02-20 22:53:04,925 [WARN] [GeoIp] Unable to locate flag file for Bermuda(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Bermuda.png')
+2026-02-20 22:53:04,926 [WARN] [GeoIp] Unable to locate flag file for Saint-Barthélemy(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/SaintBarthlemy.png')
+2026-02-20 22:53:04,928 [WARN] [GeoIp] Unable to locate flag file for Tokelau(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Tokelau.png')
+2026-02-20 22:53:04,930 [WARN] [GeoIp] Unable to locate flag file for Turks and Caicos Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Turks_and_Caicos_Islands.png')
+2026-02-20 22:53:04,931 [WARN] [GeoIp] Unable to locate flag file for Cocos [Keeling] Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Cocos_Keeling_Islands.png')
+2026-02-20 22:53:04,933 [WARN] [GeoIp] Unable to locate flag file for Wallis and Futuna(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Wallis_and_Futuna.png')
+2026-02-20 22:53:04,934 [WARN] [GeoIp] Unable to locate flag file for Ivory Coast(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Ivory_Coast.png')
+2026-02-20 22:53:04,936 [WARN] [GeoIp] Unable to locate flag file for Saint Pierre and Miquelon(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Saint_Pierre_and_Miquelon.png')
+2026-02-20 22:53:04,940 [WARN] [GeoIp] Unable to locate flag file for U.S. Minor Outlying Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/US_Minor_Outlying_Islands.png')
+2026-02-20 22:53:04,944 [WARN] [GeoIp] Unable to locate flag file for Martinique(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Martinique.png')
+2026-02-20 22:53:04,946 [WARN] [GeoIp] Unable to locate flag file for Antarctica(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Antarctica.png')
+2026-02-20 22:53:04,948 [WARN] [GeoIp] Unable to locate flag file for Northern Mariana Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Northern_Mariana_Islands.png')
+2026-02-20 22:53:04,949 [WARN] [GeoIp] Unable to locate flag file for Montserrat(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Montserrat.png')
+2026-02-20 22:53:04,950 [WARN] [GeoIp] Unable to locate flag file for Saint Helena(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Saint_Helena.png')
+2026-02-20 22:53:04,953 [WARN] [GeoIp] Unable to locate flag file for Pitcairn Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Pitcairn_Islands.png')
+2026-02-20 22:53:04,956 [WARN] [GeoIp] Unable to locate flag file for Guam(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Guam.png')
+2026-02-20 22:53:04,958 [WARN] [GeoIp] Unable to locate flag file for Myanmar [Burma](expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Myanmar_Burma.png')
+2026-02-20 22:53:04,962 [WARN] [GeoIp] Unable to locate flag file for Palestine(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Palestine.png')
+2026-02-20 22:53:04,965 [WARN] [GeoIp] Unable to locate flag file for Cayman Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Cayman_Islands.png')
+2026-02-20 22:53:04,967 [WARN] [GeoIp] Unable to locate flag file for Western Sahara(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Western_Sahara.png')
+2026-02-20 22:53:04,970 [WARN] [GeoIp] Unable to locate flag file for São Tomé and Príncipe(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/So_Tom_and_Prncipe.png')
+2026-02-20 22:53:04,972 [WARN] [GeoIp] Unable to locate flag file for Sint Maarten(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Sint_Maarten.png')
+2026-02-20 22:53:04,973 [WARN] [GeoIp] Unable to locate flag file for U.S. Virgin Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/US_Virgin_Islands.png')
+2026-02-20 22:53:04,975 [WARN] [GeoIp] Unable to locate flag file for Anguilla(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Anguilla.png')
+2026-02-20 22:53:04,977 [WARN] [GeoIp] Unable to locate flag file for Guadeloupe(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Guadeloupe.png')
+2026-02-20 22:53:04,980 [WARN] [GeoIp] Unable to locate flag file for British Virgin Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/British_Virgin_Islands.png')
+2026-02-20 22:53:04,983 [WARN] [GeoIp] Unable to locate flag file for Svalbard and Jan Mayen(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Svalbard_and_Jan_Mayen.png')
+2026-02-20 22:53:04,985 [WARN] [GeoIp] Unable to locate flag file for Åland(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/land.png')
+2026-02-20 22:53:04,986 [WARN] [GeoIp] Unable to locate flag file for Jersey(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Jersey.png')
+2026-02-20 22:53:04,989 [WARN] [GeoIp] Unable to locate flag file for Angola(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Angola.png')
+2026-02-20 22:53:04,996 [WARN] [GeoIp] Unable to locate flag file for French Guiana(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/French_Guiana.png')
+2026-02-20 22:53:04,998 [WARN] [GeoIp] Unable to locate flag file for Réunion(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Runion.png')
+2026-02-20 22:53:05,000 [WARN] [GeoIp] Unable to locate flag file for Isle of Man(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Isle_of_Man.png')
+2026-02-20 22:53:05,003 [WARN] [GeoIp] Unable to locate flag file for Gambia(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Gambia.png')
+2026-02-20 22:53:05,005 [WARN] [GeoIp] Unable to locate flag file for American Samoa(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/American_Samoa.png')
+2026-02-20 22:53:05,006 [WARN] [GeoIp] Unable to locate flag file for Republic of Lithuania(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Republic_of_Lithuania.png')
+2026-02-20 22:53:05,009 [WARN] [GeoIp] Unable to locate flag file for South Sudan(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/South_Sudan.png')
+2026-02-20 22:53:05,011 [WARN] [GeoIp] Unable to locate flag file for South Georgia and the South Sandwich Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/South_Georgia_and_the_South_Sandwich_Islands.png')
+2026-02-20 22:53:05,012 [WARN] [GeoIp] Unable to locate flag file for Falkland Islands(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Falkland_Islands.png')
+2026-02-20 22:53:05,015 [WARN] [GeoIp] Unable to locate flag file for French Southern Territories(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/French_Southern_Territories.png')
+2026-02-20 22:53:05,017 [WARN] [GeoIp] Unable to locate flag file for Hashemite Kingdom of Jordan(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Hashemite_Kingdom_of_Jordan.png')
+2026-02-20 22:53:05,018 [WARN] [GeoIp] Unable to locate flag file for Puerto Rico(expected '/home/mmagnusson/code/GRASSMARLIN/GM3/images/logical/country/Puerto_Rico.png')
+2026-02-20 22:53:05,090 [ERROR] [Manufacturer] Unable to load MAC manufacturer reference: /usr/share/wireshark/manuf
+2026-02-20 22:53:05,130 [INFO] [Launcher] Configuration:
+2026-02-20 22:53:05,131 [INFO] [Launcher]   [WIRESHARK_EXEC]: 'null'
+2026-02-20 22:53:05,133 [INFO] [Launcher]   [TEXT_EDITOR_EXEC]: 'null'
+2026-02-20 22:53:05,135 [INFO] [Launcher]   [PDF_VIEWER_EXEC]: 'null'
+2026-02-20 22:53:05,137 [INFO] [Launcher]   [DIR_INSTALL]: '.'
+2026-02-20 22:53:05,138 [INFO] [Launcher]   [DIR_IMAGES_ICON]: 'images'
+2026-02-20 22:53:05,139 [INFO] [Launcher]   [PATH_MANUFACTURER_DB]: '/usr/share/wireshark/manuf'
+2026-02-20 22:53:05,141 [INFO] [Launcher]   [PATH_USERGUIDE]: 'data/reference/GRASSMARLIN_User_Guide3.2.pdf'
+2026-02-20 22:53:05,143 [INFO] [Launcher]   [DIR_CORE_FINGERPRINTS]: 'data/fingerprint'
+2026-02-20 22:53:05,144 [INFO] [Launcher]   [DIR_LIVE_CAPTURE]: '/home/mmagnusson/code/GRASSMARLIN/GM3/livecaptures'
+2026-02-20 22:53:05,146 [INFO] [Launcher]   [DIR_LOGS]: '/home/mmagnusson/code/GRASSMARLIN/GM3/logs'
+2026-02-20 22:53:05,147 [INFO] [Launcher]   [DIR_USER_FINGERPRINTS]: '/home/mmagnusson/code/GRASSMARLIN/GM3/fingerprints'
+2026-02-20 22:53:05,906 [INFO] [Launcher]   [DIR_QUICKLIST]: '/home/mmagnusson/GrassMarlin/quicklist'
+2026-02-20 22:53:05,908 [INFO] [Launcher]   [DIR_SESSIONS]: '/home/mmagnusson/GrassMarlin'
+2026-02-20 22:53:05,909 [INFO] [Launcher]   [PCAP_FLAG_MODE]: '1'
+2026-02-20 22:53:05,910 [INFO] [Launcher]   [PCAP_FLAG_SNAPLEN]: '0xFFFF'
+2026-02-20 22:53:05,911 [INFO] [Launcher]   [PCAP_FLAG_TIMEOUT]: '30000'
+2026-02-20 22:53:05,913 [INFO] [Launcher]   [PCAP_FLAG_CAPTURE_LIMIT]: '-1'
+2026-02-20 22:53:05,914 [INFO] [Launcher]   [PATH_PCAP_FILTERS]: '/home/mmagnusson/code/GRASSMARLIN/GM3/PcapFilters.txt'
+2026-02-20 22:53:05,916 [INFO] [Launcher]   [PCAP_FILTER_STRING]: ' '
+2026-02-20 22:53:05,918 [INFO] [Launcher]   [PCAP_FILTER_TITLE]: 'ALLOW ALL TRAFFIC'
+2026-02-20 22:53:05,919 [INFO] [Launcher]   [UI_VIEW_UPDATE_DELAY]: '1500'
+2026-02-20 22:53:05,920 [INFO] [Launcher]   [COLOR_NODE_NEW]: '0000FF'
+2026-02-20 22:53:05,921 [INFO] [Launcher]   [COLOR_NODE_MODIFIED]: '00FF00'
+2026-02-20 22:53:05,922 [INFO] [Launcher]   [COLOR_NODE_BACKGROUND]: '000000'
+2026-02-20 22:53:05,923 [INFO] [Launcher]   [COLOR_NODE_HIGHLIGHT]: 'FFFF00'
+2026-02-20 22:53:05,924 [INFO] [Launcher]   [COLOR_NODE_TEXT]: 'FFFFFF'
+2026-02-20 22:53:05,925 [INFO] [Launcher]   [LOGICAL_CREATE_DYNAMIC_SUBNETS]: 'true'
+2026-02-20 22:53:05,927 [INFO] [Launcher]   [LOGICAL_DYNAMIC_SUBNET_BITS]: '24'
+2026-02-20 22:53:05,928 [INFO] [Launcher]   [LAST_RUN_VERSION]: '3.2.1'
+2026-02-20 22:53:05,929 [INFO] [Launcher]   [SUPPRESS_UNCHANGED_VERSION_NOTES]: 'false'
+2026-02-20 22:53:05,930 [INFO] [Launcher]   [FINGERPRINT_SAVEAS_LEAVES_OLD]: 'true'
+2026-02-20 22:53:06,275 [INFO] Pcap4J successfully loaded a native pcap library: libpcap version 1.10.4 (with TPACKET_V3)
+2026-02-20 22:53:06,390 [INFO] [org/pcap4j/pcap4j.properties] Could not get value by org.pcap4j.af.inet, use default value: 2
+2026-02-20 22:53:06,391 [INFO] [org/pcap4j/pcap4j.properties] Could not get value by org.pcap4j.af.inet6, use default value: 10
+2026-02-20 22:53:06,391 [INFO] [org/pcap4j/pcap4j.properties] Could not get value by org.pcap4j.af.packet, use default value: 17
+2026-02-20 22:53:06,392 [INFO] [org/pcap4j/pcap4j.properties] Could not get value by org.pcap4j.af.link, use default value: 18
