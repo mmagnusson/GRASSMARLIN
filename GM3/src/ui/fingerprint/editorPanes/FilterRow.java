@@ -14,6 +14,8 @@ import ui.fingerprint.filters.Filter;
 import ui.fingerprint.filters.Filter.FilterType;
 import ui.fingerprint.tree.FilterItem;
 
+import core.logging.Logger;
+import core.logging.Severity;
 import jakarta.xml.bind.JAXBElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -75,8 +77,7 @@ public class FilterRow {
                 }
                 parent.add(input, 1, this.row);
             } catch (IllegalAccessException | InstantiationException e) {
-                //TODO proper error handling
-                e.printStackTrace();
+                Logger.log(this, Severity.Error, "Error instantiating filter: " + e.getMessage());
             }
         });
 
@@ -88,8 +89,7 @@ public class FilterRow {
                 filter = type.getImplementingClass().newInstance();
                 addListener(filter);
             } catch (IllegalAccessException | InstantiationException e) {
-                //TODO proper error handling
-                e.printStackTrace();
+                Logger.log(this, Severity.Error, "Error initializing default filter: " + e.getMessage());
             }
 
         }

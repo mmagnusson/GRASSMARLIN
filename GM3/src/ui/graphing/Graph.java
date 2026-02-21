@@ -50,8 +50,8 @@ public abstract class Graph<TNode extends INode<TNode>, TEdge extends IEdge<TNod
 
         @Override
         public boolean equals(Object other) {
-            if(other instanceof NodeWrapper) {
-                return node.equals(((NodeWrapper<?>)other).node);
+            if(other instanceof NodeWrapper<?> otherWrapper) {
+                return node.equals(otherWrapper.node);
             }
             return false;
         }

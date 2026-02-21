@@ -47,8 +47,7 @@ public class FilterGroupEditPane extends GridPane {
         } else {
             for (int i = 0; i < boundItem.getChildren().size(); i++) {
                 TreeItem<String> child = boundItem.getChildren().get(i);
-                if (child instanceof FilterItem) {
-                    FilterItem filter = ((FilterItem) child);
+                if (child instanceof FilterItem filter) {
                     filter.getRow().insert(this, i);
                     this.add(getButtons(), 2, i);
                 }

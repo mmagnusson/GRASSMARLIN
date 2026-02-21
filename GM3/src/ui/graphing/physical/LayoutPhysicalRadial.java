@@ -1,6 +1,8 @@
 package ui.graphing.physical;
 
 import core.document.graph.*;
+import core.logging.Logger;
+import core.logging.Severity;
 import ui.graphing.Cell;
 import ui.graphing.CellGroup;
 import ui.graphing.Edge;
@@ -111,40 +113,40 @@ public class LayoutPhysicalRadial implements ui.graphing.Layout<PhysicalNode, Ph
         boolean hasProblematicSwitch = false;
 
         for(String nameGroup : getDeviceGroups(visualization)) {
-            System.out.println("Evaluating group: " + nameGroup);
+            Logger.log(this, Severity.Information, "Evaluating group: " + nameGroup);
             CellGroup<PhysicalNode, ? extends IEdge<PhysicalNode>> visualGroup = deviceFactory.getGroup(PhysicalNode.GROUP_OWNER, nameGroup);
 
-            if(visualGroup instanceof GroupSwitch) {
-                System.out.println(" > Group is a switch");
-                lstGroups.add(new GroupArc((GroupSwitch) visualGroup));
+            if(visualGroup instanceof GroupSwitch groupSwitch) {
+                Logger.log(this, Severity.Information, " > Group is a switch");
+                lstGroups.add(new GroupArc(groupSwitch));
                 diameterSwitch = Math.max(diameterSwitch, visualGroup.getLayoutBounds().getWidth());
-            } else if(visualGroup instanceof GroupComputer) {
-                System.out.println(" > Group is a Computer");
-                lstWorkstations.add((GroupComputer) visualGroup);
+            } else if(visualGroup instanceof GroupComputer groupComputer) {
+                Logger.log(this, Severity.Information, " > Group is a Computer");
+                lstWorkstations.add(groupComputer);
             } else if(visualGroup instanceof GroupCloud) {
-                System.out.println(" > Group is a Cloud");
+                Logger.log(this, Severity.Information, " > Group is a Cloud");
                 List<Cell<PhysicalNode>> members = (visualGroup).getMembers();
                 if(members.size() != 2) {
-                    System.out.println(" > PROBLEM: Cloud does not have 2 members.");
+                    Logger.log(this, Severity.Warning, " > PROBLEM: Cloud does not have 2 members.");
                     cntProblems++;
                     continue;
                 }
-                if(members.get(0).getNode() instanceof PhysicalCloud && members.get(1).getNode() instanceof PhysicalCloud) {
-                    if(((PhysicalCloud)members.get(0).getNode()).getSubtype().equals("Switches")) {
+                if(members.get(0).getNode() instanceof PhysicalCloud cloud0 && members.get(1).getNode() instanceof PhysicalCloud) {
+                    if(cloud0.getSubtype().equals("Switches")) {
                         lstGroups.add(new GroupArc(visualGroup.nameProperty().get(), members.get(0), members.get(1)));
                     } else {
                         lstGroups.add(new GroupArc(visualGroup.nameProperty().get(), members.get(1), members.get(0)));
                     }
                 } else {
-                    System.out.println(" > PROBLEM: Neither member of a cloud is a PhysicalCloud");
+                    Logger.log(this, Severity.Warning, " > PROBLEM: Neither member of a cloud is a PhysicalCloud");
                     cntProblems++;
                 }
-            } else if(visualGroup instanceof LayoutManagedGroup) {
+            } else if(visualGroup instanceof LayoutManagedGroup layoutManagedGroup) {
                 //No idea what this is, but it is a distinct case from the else below, although closely related.
-                ((LayoutManagedGroup) visualGroup).offsetXProperty().set(0);
-                ((LayoutManagedGroup) visualGroup).offsetYProperty().set(0);
+                layoutManagedGroup.offsetXProperty().set(0);
+                layoutManagedGroup.offsetYProperty().set(0);
 
-                System.out.println(" > PROBLEM: Group is an unknown LayoutManagedGroup");
+                Logger.log(this, Severity.Warning, " > PROBLEM: Group is an unknown LayoutManagedGroup");
                 cntProblems++;
             } else {
                 // No idea what this is; it probably shouldn't exist.
@@ -153,26 +155,26 @@ public class LayoutPhysicalRadial implements ui.graphing.Layout<PhysicalNode, Ph
                     cell.setLayoutY(0);
                 }
 
-                System.out.println(" > PROBLEM: Group is of unknown type");
+                Logger.log(this, Severity.Warning, " > PROBLEM: Group is of unknown type");
                 cntProblems++;
             }
         }
 
         for(GroupComputer workstation : lstWorkstations) {
-            System.out.println("Evaluating WORKSTATION " + workstation.nameProperty().get());
+            Logger.log(this, Severity.Information, "Evaluating WORKSTATION " + workstation.nameProperty().get());
             if(workstation.getMembers().isEmpty()) {
-                System.out.println(" > PROBLEM: Workstation is empty.");
+                Logger.log(this, Severity.Warning, " > PROBLEM: Workstation is empty.");
                 cntProblems++;
                 continue;
             }
             Cell<PhysicalNode> cell = workstation.getMembers().get(0);
             if(cell.getEdges().isEmpty()) {
-                System.out.println(" > PROBLEM: Workstation has no edges.");
+                Logger.log(this, Severity.Warning, " > PROBLEM: Workstation has no edges.");
                 cntProblems++;
                 continue;
             }
             if(cell.getEdges().size() != 1) {
-                System.out.println(" > PROBLEM: Workstation has more than 1 edge.");
+                Logger.log(this, Severity.Warning, " > PROBLEM: Workstation has more than 1 edge.");
                 cntProblems++;
             }
             Edge<PhysicalNode> edge = cell.getEdges().get(0);
@@ -183,14 +185,14 @@ public class LayoutPhysicalRadial implements ui.graphing.Layout<PhysicalNode, Ph
                 owner = edge.getTarget().getNode().getGroups().get(PhysicalNode.GROUP_OWNER);
             }
             if(owner == null) {
-                System.out.println(" > PROBLEM: owner is null");
+                Logger.log(this, Severity.Warning, " > PROBLEM: owner is null");
                 cntProblems++;
             } else {
                 for(GroupArc arc : lstGroups) {
-                    System.out.println("   + Comparing " + arc.getName() + " to " + owner);
+                    Logger.log(this, Severity.Information, "   + Comparing " + arc.getName() + " to " + owner);
                     if(arc.getName().equals(owner)) {
                         arc.workstations.add(workstation);
-                        System.out.println(" > Workstation is assigned to arc " + arc.getName());
+                        Logger.log(this, Severity.Information, " > Workstation is assigned to arc " + arc.getName());
                         break;
                     }
                 }

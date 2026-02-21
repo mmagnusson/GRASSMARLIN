@@ -210,9 +210,7 @@ public class FingerPrintGui extends Application {
             }
         } while (exists);
 
-        if (payload.getParent() instanceof FPItem) {
-            FPItem fp = ((FPItem) payload.getParent());
-
+        if (payload.getParent() instanceof FPItem fp) {
             boolean added = this.document.newFilterGroup(fp.getName(), fp.pathProperty().get(), payload.getName(), defaultName);
             if (added) {
                 FilterGroupItem fg = new FilterGroupItem(defaultName);
@@ -231,17 +229,13 @@ public class FingerPrintGui extends Application {
 
                 Pane editPane;
 
-                if (selected instanceof FPItem) {
-                    FPItem fp = (FPItem) selected;
+                if (selected instanceof FPItem fp) {
                     editPane = new FingerprintInfoPane(fp, this);
-                } else if (selected instanceof PayloadItem) {
-                    PayloadItem payload = (PayloadItem) selected;
+                } else if (selected instanceof PayloadItem payload) {
                     editPane = PayloadEditorPane.getInstance(payload, this);
-                } else if (selected instanceof FilterItem) {
-                    FilterItem fi = (FilterItem) selected;
+                } else if (selected instanceof FilterItem fi) {
                     editPane = new FilterEditPane(fi, this);
-                } else if (selected instanceof FilterGroupItem) {
-                    FilterGroupItem fgi = ((FilterGroupItem) selected);
+                } else if (selected instanceof FilterGroupItem fgi) {
                     editPane = new FilterGroupEditPane(fgi, this);
                 } else {
                     Pane empty = new Pane();
@@ -254,13 +248,13 @@ public class FingerPrintGui extends Application {
                 }
 
                 Node conditionPane = content.getItems().get(1);
-                if (conditionPane instanceof BorderPane) {
-                    ((BorderPane) conditionPane).setCenter(editPane);
+                if (conditionPane instanceof BorderPane borderPane) {
+                    borderPane.setCenter(editPane);
                 }
             } else if (change.wasRemoved()) {
                 Node conditionPane = content.getItems().get(1);
-                if (conditionPane instanceof  BorderPane) {
-                    ((BorderPane) conditionPane).setCenter(new Pane());
+                if (conditionPane instanceof BorderPane borderPane) {
+                    borderPane.setCenter(new Pane());
                 }
 
                 this.selectedDirtyProperty.unbind();
@@ -282,9 +276,8 @@ public class FingerPrintGui extends Application {
     private void handleKeyPressed(KeyEvent event) {
         TreeItem<String> selected = this.tree.getSelectionModel().getSelectedItem();
         if (null != selected && event.getCode() == KeyCode.DELETE) {
-            if (selected instanceof FPItem) {
+            if (selected instanceof FPItem fp) {
                 boolean close = true;
-                FPItem fp = ((FPItem) selected);
                 if (fp.dirtyProperty().get()) {
                     Dialog<ButtonType> saveDialog = this.getSaveOnCloseDialog(fp.getName(), fp.pathProperty().get());
                     Optional<ButtonType> choice = saveDialog.showAndWait();
@@ -334,8 +327,7 @@ public class FingerPrintGui extends Application {
                         }
                     }
                 }
-            } else if (selected instanceof PayloadItem) {
-                PayloadItem pl = ((PayloadItem) selected);
+            } else if (selected instanceof PayloadItem pl) {
                 FPItem fp = getFPItem(pl);
                 if (this.document.delPayload(fp.getName(), fp.pathProperty().get(), pl.getName())) {
                     SelectionModel<TreeItem<String>> selectionModel = this.tree.getSelectionModel();
@@ -362,8 +354,7 @@ public class FingerPrintGui extends Application {
                     }
                 }
 
-            }  else if (selected instanceof FilterGroupItem) {
-                FilterGroupItem group = ((FilterGroupItem) selected);
+            }  else if (selected instanceof FilterGroupItem group) {
                 FPItem fp = getFPItem(group);
                 if (this.document.delFilterGroup(fp.getName(), fp.pathProperty().get(), getPayloadItem(group).getName(), group.getName())) {
                     SelectionModel<TreeItem<String>> selectionModel = this.tree.getSelectionModel();
@@ -385,8 +376,7 @@ public class FingerPrintGui extends Application {
                         }
                     }
                 }
-            } else if (selected instanceof FilterItem) {
-                FilterItem filter = ((FilterItem) selected);
+            } else if (selected instanceof FilterItem filter) {
                 SelectionModel<TreeItem<String>> selectionModel = this.tree.getSelectionModel();
                 if (this.deleteFilter(filter)) {
                     TreeItem<String> parent = filter.getParent();
@@ -487,8 +477,7 @@ public class FingerPrintGui extends Application {
                     setGraphic(null);
                 } else if (!item.isEmpty()) {
                     TreeItem<String> treeItem = this.getTreeItem();
-                    if (treeItem instanceof FPItem) {
-                        FPItem fpItem = (FPItem) treeItem;
+                    if (treeItem instanceof FPItem fpItem) {
                         this.setBinding(Bindings.when(fpItem.pathProperty().isNotNull()).then(Bindings.concat("    ", fpItem.pathProperty())).otherwise(""));
                         // only need to do this if the name has actually changed
                         if (!fpItem.getName().equals(item)) {
@@ -500,8 +489,7 @@ public class FingerPrintGui extends Application {
                                 fpItem.setName(item);
                             }
                         }
-                    } else if (treeItem instanceof PayloadItem) {
-                        PayloadItem payloadItem = (PayloadItem) treeItem;
+                    } else if (treeItem instanceof PayloadItem payloadItem) {
                         // only need to do this if the name has actually changed
                         if (!payloadItem.getName().equals(item)) {
                             FPItem fp = getFPItem(payloadItem);
@@ -514,8 +502,7 @@ public class FingerPrintGui extends Application {
                                 payloadItem.setName(item);
                             }
                         }
-                    } else if (treeItem instanceof FilterGroupItem) {
-                        FilterGroupItem fgItem = (FilterGroupItem) treeItem;
+                    } else if (treeItem instanceof FilterGroupItem fgItem) {
                         // only need to do this if the name has actually changed
                         if (!fgItem.getName().equals(item)) {
                             FPItem fp = getFPItem(fgItem);
@@ -539,14 +526,14 @@ public class FingerPrintGui extends Application {
 
         newCell.treeItemProperty().addListener((observable, oldValue, newValue) -> {
             if (null != newValue) {
-                if (newValue instanceof FPItem) {
-                    newCell.setContextMenu(getFingerprintCM((FPItem) newValue));
-                } else if (newValue instanceof PayloadItem) {
-                    newCell.setContextMenu(getPayloadCM((PayloadItem) newValue));
-                } else if (newValue instanceof FilterGroupItem) {
-                    newCell.setContextMenu(getGroupCM((FilterGroupItem) newValue));
-                } else if (newValue instanceof FilterItem) {
-                    newCell.setContextMenu(getFilterCM((FilterItem) newValue));
+                if (newValue instanceof FPItem fpItem) {
+                    newCell.setContextMenu(getFingerprintCM(fpItem));
+                } else if (newValue instanceof PayloadItem payloadItem) {
+                    newCell.setContextMenu(getPayloadCM(payloadItem));
+                } else if (newValue instanceof FilterGroupItem fgItem) {
+                    newCell.setContextMenu(getGroupCM(fgItem));
+                } else if (newValue instanceof FilterItem filterItem) {
+                    newCell.setContextMenu(getFilterCM(filterItem));
                     newCell.setEditable(false);
                 }
             }
@@ -657,10 +644,10 @@ public class FingerPrintGui extends Application {
             deleted = true;
             TreeItem<String> parent = filter.getParent();
             parent.getChildren().forEach(child -> {
-                if (child instanceof FilterItem) {
-                    Integer newIndex = newIndices.get(((FilterItem) child).getIndex());
+                if (child instanceof FilterItem filterChild) {
+                    Integer newIndex = newIndices.get(filterChild.getIndex());
                     if (newIndex != null) {
-                        ((FilterItem) child).setIndex(newIndex);
+                        filterChild.setIndex(newIndex);
                     }
                 }
             });
@@ -674,84 +661,84 @@ public class FingerPrintGui extends Application {
     }
 
     public FPItem getFPItem(TreeItem<String> item) {
-        if (item instanceof FPItem) {
-            return ((FPItem) item);
-        } else if (item instanceof PayloadItem) {
-            return getFPItem((PayloadItem) item);
-        } else if (item instanceof FilterGroupItem) {
-            return getFPItem((FilterGroupItem) item);
-        } else if (item instanceof FilterItem) {
-            return getFPItem((FilterItem) item);
+        if (item instanceof FPItem fpItem) {
+            return fpItem;
+        } else if (item instanceof PayloadItem payloadItem) {
+            return getFPItem(payloadItem);
+        } else if (item instanceof FilterGroupItem fgItem) {
+            return getFPItem(fgItem);
+        } else if (item instanceof FilterItem filterItem) {
+            return getFPItem(filterItem);
         } else {
             throw new IllegalArgumentException("Unknown tree item type");
         }
     }
 
     public PayloadItem getPayloadItem(TreeItem<String> item) {
-        if (item instanceof PayloadItem) {
-            return ((PayloadItem) item);
-        } else if (item instanceof FilterGroupItem) {
-            return getPayloadItem((FilterGroupItem) item);
-        } else if (item instanceof FilterItem) {
-            return getPayloadItem((FilterItem) item);
+        if (item instanceof PayloadItem payloadItem) {
+            return payloadItem;
+        } else if (item instanceof FilterGroupItem fgItem) {
+            return getPayloadItem(fgItem);
+        } else if (item instanceof FilterItem filterItem) {
+            return getPayloadItem(filterItem);
         } else {
             throw new IllegalArgumentException("Unknown tree item type");
         }
     }
 
     public FilterGroupItem getGroupItem(TreeItem<String> item) {
-        if (item instanceof FilterGroupItem) {
-            return ((FilterGroupItem) item);
-        } else if (item instanceof FilterItem) {
-            return getGroupItem((FilterItem) item);
+        if (item instanceof FilterGroupItem fgItem) {
+            return fgItem;
+        } else if (item instanceof FilterItem filterItem) {
+            return getGroupItem(filterItem);
         } else {
             throw new IllegalArgumentException("Unknown tree item type");
         }
     }
 
     public FPItem getFPItem(PayloadItem item) {
-        if (item.getParent() instanceof FPItem) {
-            return ((FPItem) item.getParent());
+        if (item.getParent() instanceof FPItem fpItem) {
+            return fpItem;
         } else {
             return null;
         }
     }
 
     public FPItem getFPItem(FilterGroupItem item) {
-        if (item.getParent().getParent() instanceof  FPItem) {
-            return ((FPItem) item.getParent().getParent());
+        if (item.getParent().getParent() instanceof FPItem fpItem) {
+            return fpItem;
         } else {
             return null;
         }
     }
 
     public FPItem getFPItem(FilterItem item) {
-        if (item.getParent().getParent().getParent() instanceof  FPItem) {
-            return ((FPItem) item.getParent().getParent().getParent());
+        if (item.getParent().getParent().getParent() instanceof FPItem fpItem) {
+            return fpItem;
         } else {
             return null;
         }
     }
 
     public PayloadItem getPayloadItem(FilterGroupItem item) {
-        if (item.getParent() instanceof PayloadItem) {
-            return ((PayloadItem) item.getParent());
+        if (item.getParent() instanceof PayloadItem payloadItem) {
+            return payloadItem;
         } else {
             return null;
         }
     }
 
     public PayloadItem getPayloadItem(FilterItem item) {
-        if (item.getParent().getParent() instanceof PayloadItem) {
-            return ((PayloadItem) item.getParent().getParent());
+        if (item.getParent().getParent() instanceof PayloadItem payloadItem) {
+            return payloadItem;
         } else {
             return null;
         }
     }
 
     public FilterGroupItem getGroupItem(FilterItem item) {
-        if (item.getParent() instanceof FilterGroupItem) {
-            return ((FilterGroupItem) item.getParent());
+        if (item.getParent() instanceof FilterGroupItem fgItem) {
+            return fgItem;
         } else {
             return null;
         }

@@ -184,7 +184,7 @@ public class BroFileIterator implements Iterator<PacketData> {
                     try {
                         packetQueue.put(data);
                     } catch (InterruptedException e) {
-                        // program must be closing or something
+                        Thread.currentThread().interrupt();
                     }
                 }
                 if (recvBytes > 0) {
@@ -195,7 +195,7 @@ public class BroFileIterator implements Iterator<PacketData> {
                     try {
                         packetQueue.put(data);
                     } catch (InterruptedException e) {
-                        // program must be closing or something
+                        Thread.currentThread().interrupt();
                     }
                 }
             }

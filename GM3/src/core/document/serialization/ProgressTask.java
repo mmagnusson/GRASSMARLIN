@@ -1,6 +1,8 @@
 package core.document.serialization;
 
 
+import core.logging.Logger;
+import core.logging.Severity;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -79,7 +81,7 @@ public abstract class ProgressTask extends Dialog<ButtonType> {
                     Platform.runLater(this::handleSuccess);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.log(this, Severity.Error, "Task execution failed: " + e.getMessage());
                 if (Platform.isFxApplicationThread()) {
                     this.handleFailure();
                 } else {

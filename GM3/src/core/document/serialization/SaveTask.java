@@ -63,7 +63,9 @@ public class SaveTask extends ProgressTask {
             try {
                 // want to make sure that thread is actually dead
                 this.taskThread.join();
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
             try {
                 zos.close();
             } catch (ClosedChannelException cce) {

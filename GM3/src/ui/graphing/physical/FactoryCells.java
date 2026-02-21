@@ -17,12 +17,12 @@ public class FactoryCells implements Visualization.INodeCellFactory<PhysicalNode
 
     @Override
     public Cell<PhysicalNode> uiFor(PhysicalNode node) {
-        if(node instanceof PhysicalPort) {
-            return new CellPort((PhysicalPort)node);
-        } else if(node instanceof PhysicalCloud) {
-            return new CellCloud((PhysicalCloud)node);
-        } else if(node instanceof PhysicalNic) {
-            return new CellNic((PhysicalNic)node);
+        if(node instanceof PhysicalPort port) {
+            return new CellPort(port);
+        } else if(node instanceof PhysicalCloud cloud) {
+            return new CellCloud(cloud);
+        } else if(node instanceof PhysicalNic nic) {
+            return new CellNic(nic);
         } else {
             return null;
         }

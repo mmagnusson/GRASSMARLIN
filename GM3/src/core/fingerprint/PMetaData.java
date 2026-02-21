@@ -1,7 +1,6 @@
 package core.fingerprint;
 
 import core.importmodule.ImportItem;
-import org.jnetpcap.protocol.tcpip.Tcp;
 import util.Cidr;
 
 import java.util.Collections;
@@ -29,10 +28,10 @@ public class PMetaData {
     public final long seqNum;
     public final int ttl;
     public final int windowNum;
-    public final Set<Tcp.Flag> flags;
+    public final Set<String> flags;
 
     public PMetaData(ImportItem source, long time, long frame, int sourcePort, int destPort, short transportProtocol, Cidr sourceIp, byte[] sourceMac, Cidr destIp, byte[] destMac, long ack,
-                     long dSize, int ethertype, int mss, long seqNum, int ttl, int windowNum, Set<Tcp.Flag> flags) {
+                     long dSize, int ethertype, int mss, long seqNum, int ttl, int windowNum, Set<String> flags) {
 
         this.source = source;
         this.time = time;

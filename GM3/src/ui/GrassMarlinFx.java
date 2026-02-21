@@ -300,7 +300,7 @@ public class GrassMarlinFx extends Application{
                                             Logger.log(this, Severity.Error, "Text editor path failed validation: " + viewerLog);
                                             return;
                                         }
-                                        String pathLog = Launcher.getLogFilePath();
+                                        String pathLog = "logs/grassmarlin.log";
                                         Runtime.getRuntime().exec(new String[] {
                                                 viewerLog,
                                                 pathLog
@@ -371,8 +371,7 @@ public class GrassMarlinFx extends Application{
                                         editorGui.start(editorWindow);
                                         editorWindow.show();
                                     } catch (Exception e) {
-                                        e.printStackTrace();
-                                        Logger.log(this, Severity.Error, "Error opening Fingerprint Editor");
+                                        Logger.log(this, Severity.Error, "Error opening Fingerprint Editor: " + e.getMessage());
                                     }
                                 }),
                                 new SeparatorMenuItem(),

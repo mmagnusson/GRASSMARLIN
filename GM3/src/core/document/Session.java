@@ -116,8 +116,8 @@ public class Session {
     }
 
     public void ProcessImport(ImportItem importNew) {
-        if(importNew instanceof LivePCAPImport) {
-            getImports().add( ((LivePCAPImport)importNew).getSource() );
+        if(importNew instanceof LivePCAPImport livePcap) {
+            getImports().add( livePcap.getSource() );
         } else {
             getImports().add(importNew);
         }

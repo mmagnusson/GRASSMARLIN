@@ -1,5 +1,7 @@
 package util;
 
+import core.logging.Logger;
+import core.logging.Severity;
 import javafx.application.Platform;
 
 import java.util.Timer;
@@ -25,7 +27,7 @@ public class RateLimitedTask {
                 RateLimitedTask.this.fnTask.run();
                 scheduled = false;
             } catch(Exception ex) {
-                ex.printStackTrace();
+                Logger.log(RateLimitedTask.class, Severity.Error, "Rate-limited task execution failed: " + ex.getMessage());
             }
         }
     }

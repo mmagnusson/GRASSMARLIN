@@ -50,8 +50,7 @@ public abstract class AbstractBidirectionalEdge<TNode> implements IEdge<TNode>, 
     // == Object
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof AbstractBidirectionalEdge) {
-            AbstractBidirectionalEdge rhs = (AbstractBidirectionalEdge)obj;
+        if(obj instanceof AbstractBidirectionalEdge rhs) {
             return ((this.source.equals(rhs.source) && rhs.source.equals(this.source) && this.destination.equals(rhs.destination) && rhs.destination.equals(this.destination))
                     ||
                     (this.source.equals(rhs.destination) && rhs.destination.equals(this.source) && this.destination.equals(rhs.source) && rhs.source.equals(this.destination)));

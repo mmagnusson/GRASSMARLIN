@@ -127,7 +127,7 @@ public class Bro2JsonIterator implements Iterator<PacketData> {
             try {
                 this.packetQueue.put(data);
             } catch (InterruptedException ie) {
-                // don't care
+                Thread.currentThread().interrupt();
             }
         } catch(JsonSyntaxException | NumberFormatException ex) {
             Logger.log(this, Severity.Warning, "There was an error processing a line in [" + this.inPath + "]: " + ex.getMessage());

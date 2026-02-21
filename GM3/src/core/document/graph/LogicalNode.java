@@ -193,8 +193,8 @@ public class LogicalNode implements INode<LogicalNode>, ObservableValue<LogicalN
         if(other == null) {
             return false;
         }
-        if(other instanceof LogicalNode) {
-            return cidr.equals(((LogicalNode)other).cidr);
+        if(other instanceof LogicalNode otherNode) {
+            return cidr.equals(otherNode.cidr);
         }
         return false;
     }

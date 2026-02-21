@@ -1,5 +1,8 @@
 package util;
 
+import core.logging.Logger;
+import core.logging.Severity;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -18,17 +21,17 @@ public class SetConfiguration {
                 String[] tokens = arg.split("(-d|=|\")");
                 if(tokens.length >= 3) {
                     if(properties.containsKey(tokens[1])) {
-                        System.out.println("Defining [" + tokens[1] + "] := [" + tokens[2] + "]");
+                        Logger.log(SetConfiguration.class, Severity.Information, "Defining [" + tokens[1] + "] := [" + tokens[2] + "]");
                         properties.put(tokens[1], tokens[2]);
                     } else {
-                        System.out.println("Unknown Property: [" + tokens[1] + "] (" + tokens[2] + ")");
+                        Logger.log(SetConfiguration.class, Severity.Information, "Unknown Property: [" + tokens[1] + "] (" + tokens[2] + ")");
                     }
                 }
             }
         }
 
         for(Entry<String, String> entry : properties.entrySet()) {
-            System.out.println("Setting: [" + entry.getKey() + "] -> [" + entry.getValue() + "]");
+            Logger.log(SetConfiguration.class, Severity.Information, "Setting: [" + entry.getKey() + "] -> [" + entry.getValue() + "]");
             java.util.prefs.Preferences.systemRoot().put(entry.getKey(), entry.getValue());
         }
     }

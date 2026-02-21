@@ -114,8 +114,7 @@ public class DetailsDialog extends Dialog<DetailsDialog> {
                 this.role = roleBox.getValue();
                 this.details = new HashMap<>();
                 detailsBox.getChildren().forEach(row -> {
-                    if (row instanceof DetailRow) {
-                        DetailRow detailRow = (DetailRow) row;
+                    if (row instanceof DetailRow detailRow) {
                         if (detailRow.getName() != null && detailRow.getValue().isNotEmpty().get()){
                             this.details.put(detailRow.getName(), detailRow.getValue().get());
                         }
@@ -189,8 +188,8 @@ public class DetailsDialog extends Dialog<DetailsDialog> {
         @Override
         public void requestFocus() {
             this.getChildren().forEach(child -> {
-                if (child instanceof HBox) {
-                    ((HBox)child).getChildren().forEach(child2 -> {
+                if (child instanceof HBox hBox) {
+                    hBox.getChildren().forEach(child2 -> {
                         if (child2 instanceof TextField) {
                             child2.requestFocus();
                         }

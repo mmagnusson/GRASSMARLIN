@@ -1,7 +1,5 @@
 package core.protocol;
 
-import org.jnetpcap.protocol.tcpip.Udp;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashMap;
@@ -51,29 +49,7 @@ public class Zep {
 
     }
 
-    public static boolean isZEPProtocol(Udp udp) {
-        return udp.source() == ZEP_PORTS && udp.destination() == ZEP_PORTS;
-    }
-
     public static boolean isZEPProtocol(int srcPort, int dstPort) { return srcPort == ZEP_PORTS && dstPort == ZEP_PORTS; }
-
-    public boolean hasProtocol(Udp udp) {
-        boolean match = Zep.isZEPProtocol(udp);
-        if (match) {
-            this.buffer = ByteBuffer.allocate(udp.getPayloadLength());
-            udp.transferPayloadTo(this.buffer);
-            this.buffer.order(ByteOrder.LITTLE_ENDIAN);
-            this.accessor = new BufferAccessor(this.buffer);
-            this.version = this.accessor.getByte(FIELDS.VERSION);
-            this.v1 = this.version == 1;
-            if (!v1) {
-                data = this.getType() != TYPE_ACK; // all packets are data unless they are ACK packets.
-            } else {
-                data = false;
-            }
-        }
-        return match;
-    }
 
     public void fromArray(byte[] buffer) {
         this.buffer = ByteBuffer.wrap(buffer);
@@ -141,10 +117,6 @@ public class Zep {
 
     public int getVersion() {
         return this.version;
-    }
-
-    public boolean isProtocol(Udp udp) {
-        return Zep.isZEPProtocol(udp);
     }
 
     public String getPreamble() {

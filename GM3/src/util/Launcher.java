@@ -8,15 +8,13 @@ import core.knowledgebase.GeoIp;
 import core.knowledgebase.Manufacturer;
 import core.logging.Logger;
 import core.logging.Severity;
-import javafx.collections.ListChangeListener;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import org.jnetpcap.Pcap;
+import org.pcap4j.core.Pcaps;
 import ui.GrassMarlinFx;
 import ui.fingerprint.FingerPrintGui;
 
 import jakarta.xml.bind.JAXBException;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,9 +26,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -50,8 +45,7 @@ public class Launcher {
     }
 
     public static void main(String[] args) {
-        InitializeLogging();
-        RecordLogMessage(Version.APPLICATION_TITLE + "-r" + Version.APPLICATION_REVISION);
+        Logger.log(Launcher.class, Severity.Information, Version.APPLICATION_TITLE + "-r" + Version.APPLICATION_REVISION);
 
         GeoIp.Initialize("data/cidr_to_geo_id.csv", "data/geo_id_to_name.csv");
         try {
@@ -82,12 +76,10 @@ public class Launcher {
 
         if(allowPcap) {
             try {
-                // If jnetpcap can't be found then loadLibrary will result in an exception
-                System.loadLibrary("jnetpcap");
-                Pcap.libVersion();
+                // Check that Pcap4J and the native pcap library are available
+                Pcaps.findAllDevs();
             } catch (Error | Exception var3) {
-                //We won't be able to do offline pcap either, but there are no hooks (yet) to prevent this.
-                Logger.log(Launcher.class, Severity.Warning, "Unable to initialize JNetPCap; packet capture functionality will be disabled.");
+                Logger.log(Launcher.class, Severity.Warning, "Unable to initialize Pcap4J; packet capture functionality will be disabled.");
                 allowPcap = false;
             }
         }
@@ -103,7 +95,9 @@ public class Launcher {
         final Path systemFingerprintPath = FingerPrintGui.getSystemFingerprintDir();
 
         try {
-            Files.list(userFingerprintPath).forEach(path -> {
+            Files.list(userFingerprintPath)
+                    .filter(path -> path.toString().toLowerCase().endsWith(".xml"))
+                    .forEach(path -> {
                 try {
                     fpDoc.load(path);
                 } catch (final JAXBException je) {
@@ -115,7 +109,9 @@ public class Launcher {
         }
 
         try {
-            Files.list(systemFingerprintPath).forEach(path -> {
+            Files.list(systemFingerprintPath)
+                    .filter(path -> path.toString().toLowerCase().endsWith(".xml"))
+                    .forEach(path -> {
                 try {
                     fpDoc.load(path);
                 } catch (final JAXBException je) {
@@ -154,7 +150,6 @@ public class Launcher {
 
         GrassMarlinFx.launchFx(allowPcap, args);
 
-        TerminateLogging();
         //JavaFx leaves some lingering threads, this forces an application exit.
         System.exit(0);
     }
@@ -164,9 +159,9 @@ public class Launcher {
     }
 
     public static void ReportConfigurationSettings() {
-        RecordLogMessage("Configuration:");
+        Logger.log(Launcher.class, Severity.Information, "Configuration:");
         for(final Configuration.Fields field : Configuration.Fields.values()) {
-            RecordLogMessage(String.format("  [%s]: '%s'",
+            Logger.log(Launcher.class, Severity.Information, String.format("  [%s]: '%s'",
                     field.toString(),
                     Configuration.getPreferenceString(field)));
         }
@@ -198,81 +193,13 @@ public class Launcher {
         }
     }
 
-    private static Path pathLogFile = null;
-    private static BufferedWriter writerLogFile = null;
-    public static String getLogFilePath() {
-        return pathLogFile.toAbsolutePath().toString();
-    }
-    public static void InitializeLogging() {
-        // Use the current timestamp with non-numeric characters replaced by underscores.
-        String nameFile = Instant.now().atZone(ZoneId.of("Z")).format(DateTimeFormatter.ISO_INSTANT).replaceAll("\\D+", "_") + ".txt";
-        pathLogFile = Paths.get(Configuration.getPreferenceString(Configuration.Fields.DIR_LOGS), nameFile);
-
-        try {
-            writerLogFile = Files.newBufferedWriter(pathLogFile);
-            //Write a line to the file to ensure that isn't generating errors, either.
-            RecordLogMessage(new Logger.Message(Launcher.class, Severity.Information, "Logging subsystem initialized."));
-
-            //Start listening for alerts.
-            Logger.getMessageHistory().addListener(Launcher::Handle_writeLogMessageToDisk);
-        } catch (IOException ex) {
-            Logger.log(Launcher.class, Severity.Error, "This session cannot be logged to disk: " + ex.getMessage());
-        }
-    }
-    private static void Handle_writeLogMessageToDisk(final ListChangeListener.Change<? extends Logger.Message> c) {
-        while(c.next()) {
-            for(final Logger.Message msg : c.getAddedSubList()) {
-                Launcher.RecordLogMessage(msg);
-            }
-        }
-    }
-    public static void TerminateLogging() {
-        if(writerLogFile != null) {
-            try {
-                writerLogFile.flush();
-                writerLogFile.close();
-            } catch (final Exception ex) {
-                System.err.println("Error shutting down logging subsystem: " + ex.getMessage());
-            } finally {
-                writerLogFile = null;
-            }
-        }
-    }
-    public static void RecordLogMessage(final String message) {
-        RecordLogMessage(message, true);
-    }
-    public static void RecordLogMessage(final String message, final boolean echoToConsole) {
-        if(writerLogFile != null) {
-            String line = String.format("[%s] DEBUG - %s\r\n", Instant.now().atZone(ZoneId.of("Z")).format(DateTimeFormatter.ISO_INSTANT), message);
-            try {
-                writerLogFile.write(line);
-                writerLogFile.flush();
-            } catch(final IOException ex) {
-                System.err.println("Unable to write message message to disk:\n" + line);
-            }
-            if(echoToConsole) {
-                System.out.println(message);
-            }
-        }
-    }
-    public static void RecordLogMessage(final Logger.Message message) {
-        if(writerLogFile != null) {
-            String line = String.format("[%s] %s - %s\r\n", Instant.ofEpochMilli(message.tsCreated).atZone(ZoneId.of("Z")).format(DateTimeFormatter.ISO_INSTANT), message.severity, message.message);
-            try {
-                writerLogFile.write(line);
-                writerLogFile.flush();
-            } catch(final IOException ex) {
-                System.err.println("Unable to write message message to disk:\n" + line);
-            }
-        }
-    }
-
     private static boolean pluginsLoaded = false;
     private static final List<Plugin> plugins = new LinkedList<>();
     private static final Map<String, ClassLoader> loaderForPlugin = new HashMap<>();
 
     /** Path to the trusted plugin hash manifest file. */
-    private static final Path PLUGIN_MANIFEST_PATH = Paths.get("plugins", "trusted-plugins.properties");
+    private static final Path PLUGIN_MANIFEST_PATH = Paths.get(
+            Configuration.getPreferenceString(Configuration.Fields.DIR_INSTALL), "plugins", "trusted-plugins.properties");
 
     public static ClassLoader loaderFor(final String namePlugin) {
         if(namePlugin == null || namePlugin.equals("")) {
@@ -350,7 +277,8 @@ public class Launcher {
         }
 
         try {
-            for (Path pathPlugin : Files.newDirectoryStream(Paths.get("plugins"))) {
+            Path pluginsDir = Paths.get(Configuration.getPreferenceString(Configuration.Fields.DIR_INSTALL), "plugins");
+            for (Path pathPlugin : Files.newDirectoryStream(pluginsDir)) {
                 if(pathPlugin.toString().endsWith(".jar")) {
                     String nameFile = pathPlugin.getFileName().toString().replace(".jar", "");
                     String jarFileName = pathPlugin.getFileName().toString();
@@ -380,7 +308,7 @@ public class Launcher {
                         }
                     }
 
-                    ClassLoader loader = new URLClassLoader(new URL[] { pathPlugin.toUri().toURL() } );
+                    URLClassLoader loader = new URLClassLoader(new URL[] { pathPlugin.toUri().toURL() } );
                     loaderForPlugin.put(nameFile, loader);
                     try {
                         Class<?> clazz = loader.loadClass(nameFile + ".Plugin");
@@ -397,6 +325,19 @@ public class Launcher {
         } catch(IOException ex) {
             Logger.log(Launcher.class, Severity.Error, "There was an error enumerating plugins: " + ex.getMessage());
         }
+
+        // Register shutdown hook to close all plugin class loaders
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            for (ClassLoader cl : loaderForPlugin.values()) {
+                if (cl instanceof URLClassLoader ucl) {
+                    try {
+                        ucl.close();
+                    } catch (IOException e) {
+                        // Best-effort cleanup during shutdown
+                    }
+                }
+            }
+        }, "plugin-classloader-cleanup"));
     }
 
     public static <T> List<T> enumeratePlugins(final Class<T> clazz) {

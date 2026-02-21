@@ -258,7 +258,7 @@ public class ZoomableScrollPane extends Pane {
             Point ptBottomRight = new Point(-Double.MAX_VALUE);
 
             cells.stream().filter(node -> node instanceof Cell).forEach(node -> {
-                Cell cell = (Cell) node;
+                Cell<?> cell = (Cell<?>) node;
                 if(!Double.isNaN(cell.getLayoutX())) {
                     ptTopLeft.x = Double.min(ptTopLeft.x, cell.getLayoutX());
                     if(!Double.isNaN(cell.getWidth())) {
@@ -310,8 +310,7 @@ public class ZoomableScrollPane extends Pane {
             CellLayer cells = canvas.getCellLayer();
 
             for(Node node : cells.getChildren()) {
-                if(node instanceof Cell) {
-                    Cell cell = (Cell)node;
+                if(node instanceof Cell<?> cell) {
 
                     // Start from the top left, normalized against the bounds.
                     double x = cell.getLayoutX() - boundsWorld.getMinX();

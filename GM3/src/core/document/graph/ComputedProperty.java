@@ -24,8 +24,7 @@ public class ComputedProperty {
 
     @Override
     public boolean equals(Object other) {
-        if(other instanceof ComputedProperty) {
-            ComputedProperty o = (ComputedProperty)other;
+        if(other instanceof ComputedProperty o) {
             return value.equals(o.value) && confidence == o.confidence;
         } else {
             return false;

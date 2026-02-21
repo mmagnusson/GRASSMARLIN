@@ -2,6 +2,8 @@ package ui.graphing.logical;
 
 import core.document.graph.IEdge;
 import core.document.graph.INode;
+import core.logging.Logger;
+import core.logging.Severity;
 import javafx.geometry.Point2D;
 import ui.graphing.Cell;
 import ui.graphing.Edge;
@@ -399,7 +401,7 @@ public class LayoutForceDirectedGroups<TNode extends INode<TNode>, TEdge extends
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.log(this, Severity.Error, "Error during force-directed layout: " + ex.getMessage());
         }
     }
 

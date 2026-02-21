@@ -4,6 +4,8 @@ import core.fingerprint3.Fingerprint;
 import core.logging.Logger;
 import core.logging.Severity;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 
 import javax.xml.XMLConstants;
 import jakarta.xml.bind.*;
@@ -64,8 +66,12 @@ public class FingerprintBuilder {
             marshaller.setProperty("jaxb.formatted.output", true);
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             // XXE protection on schema factory
-            schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-            schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+            try {
+                schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+            } catch (SAXNotRecognizedException | SAXNotSupportedException e) {
+                Logger.log(FingerprintBuilder.class, Severity.Warning, "Could not set XXE protection on schema factory: " + e.getMessage());
+            }
             URL xsd = FingerprintBuilder.class.getResource(xsdFile);
             try {
                 Schema schema = schemaFactory.newSchema(xsd);

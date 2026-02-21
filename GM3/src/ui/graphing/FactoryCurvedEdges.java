@@ -30,8 +30,8 @@ public class FactoryCurvedEdges<TNode extends INode<TNode>, TEdge extends IEdge<
         return new CurvedEdge<>(source, destination);
     }
     protected void ConfigureNewEdge(Edge<TNode> edgeNew) {
-        if(edgeNew instanceof CurvedEdge) {
-            ((CurvedEdge<TNode>)edgeNew).bindVisualProperties(miUseCurves.selectedProperty(), miShowDetails.selectedProperty());
+        if(edgeNew instanceof CurvedEdge<TNode> curvedEdge) {
+            curvedEdge.bindVisualProperties(miUseCurves.selectedProperty(), miShowDetails.selectedProperty());
         }
     }
 

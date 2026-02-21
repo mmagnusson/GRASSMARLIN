@@ -7,7 +7,6 @@ import core.importmodule.ImportItem;
 import core.importmodule.LogicalProcessor;
 import core.logging.Logger;
 import core.logging.Severity;
-import org.jnetpcap.protocol.tcpip.Tcp;
 import util.Cidr;
 
 import java.io.BufferedReader;

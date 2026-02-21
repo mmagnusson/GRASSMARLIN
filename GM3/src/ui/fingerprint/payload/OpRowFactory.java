@@ -40,23 +40,17 @@ public class OpRowFactory {
     public static OpRow get(Object op) {
         OpRow newRow = null;
 
-        if (op instanceof Return) {
-            Return ret = ((Return) op);
+        if (op instanceof Return ret) {
             newRow = new ReturnRow(ret.getDetails(), ret.getExtract(), ret.getDirection(), ret.getConfidence());
-        } else if (op instanceof MatchFunction) {
-            MatchFunction match = ((MatchFunction) op);
+        } else if (op instanceof MatchFunction match) {
             newRow = new MatchRow(match);
-        } else if (op instanceof ByteTestFunction) {
-            ByteTestFunction test = ((ByteTestFunction) op);
+        } else if (op instanceof ByteTestFunction test) {
             newRow = new ByteTestRow(test);
-        } else if (op instanceof ByteJumpFunction) {
-            ByteJumpFunction jump = ((ByteJumpFunction) op);
+        } else if (op instanceof ByteJumpFunction jump) {
             newRow = new ByteJumpRow(jump);
-        } else if (op instanceof IsDataAtFunction) {
-            IsDataAtFunction at = ((IsDataAtFunction) op);
+        } else if (op instanceof IsDataAtFunction at) {
             newRow = new IsDataAtRow(at);
-        } else if (op instanceof Anchor) {
-            Anchor anchor = ((Anchor) op);
+        } else if (op instanceof Anchor anchor) {
             newRow = new AnchorRow(anchor);
         }
 

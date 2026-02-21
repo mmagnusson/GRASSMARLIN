@@ -2,6 +2,7 @@ package core.importmodule;
 
 import core.fingerprint3.Fingerprint;
 import core.importmodule.inputIterators.cisco.ImportCiscoShow;
+import core.importmodule.inputIterators.pcap.PCAPImport;
 import core.logging.Logger;
 import core.logging.Severity;
 
@@ -39,8 +40,7 @@ public class ImportProcessors {
         //Built-in import support for:
         registerProcessor(Bro2Import.class, "Bro2", ".00");
         registerProcessor(Bro2JsonImport.class, "Bro2Json", ".json");
-        //Replacing the defaults with the plugin.
-        //registerProcessor(PCAPImport.class, "Pcap[Ng] (Core)", ".pcap", ".pcapng");
+        registerProcessor(PCAPImport.class, "Pcap", ".pcap", ".pcapng");
         registerProcessor(ImportCiscoShow.class, "Cisco", ".log");
     }
 

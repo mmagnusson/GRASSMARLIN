@@ -67,17 +67,17 @@ public class Mac {
 
     @Override
     public boolean equals(Object other) {
-        if(other instanceof Mac) {
+        if(other instanceof Mac otherMac) {
             if(value == null) {
-                return ((Mac)other).value == null;
+                return otherMac.value == null;
             } else {
-                if(((Mac)other).value == null) {
+                if(otherMac.value == null) {
                     return false;
                 }
             }
 
             for(int idx = 0; idx < 6; idx++) {
-                if(value[idx] != ((Mac)other).value[idx]) {
+                if(value[idx] != otherMac.value[idx]) {
                     return false;
                 }
             }

@@ -18,8 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
-import org.jnetpcap.Pcap;
-import org.jnetpcap.PcapBpfProgram;
+import org.pcap4j.core.*;
 import ui.EmbeddedIcons;
 import ui.GrassMarlinFx;
 
@@ -259,77 +258,22 @@ public class FilterDialogFx extends Dialog<ButtonType> {
             return false;
         }
         if(filter.isEmpty()) {
-            // The old check was to ask with a single space as the string; but we know that is valid.
             return true;
         }
 
-        PcapBpfProgram test = null;
+        PcapHandle handle = null;
         try {
-            test = new PcapBpfProgram();
-            /* check the manual, device type of "1" should be safe to use for all expressions */
-            Pcap pcap = Pcap.openDead(1, Pcap.DEFAULT_SNAPLEN);
-            /* 1 = always 1 + read manual, -128 is 255.255.255.0 hashed */
-            int res = pcap.compile(test, filter, 1, -128);
-
-            /* anything but -1 means success */
-            return res != -1;
+            handle = Pcaps.openDead(org.pcap4j.packet.namednumber.DataLinkType.EN10MB, 65535);
+            handle.setFilter(filter, BpfProgram.BpfCompileMode.OPTIMIZE);
+            return true;
+        } catch (PcapNativeException | NotOpenException ex) {
+            return false;
         } catch (Error ex) {
-            //Ignore the error and say it isn't valid.
             return false;
         } finally {
-            try {
-                Pcap.freecode(test);
-            } catch (Exception | Error ex) {
-                //Ignore the error since this is just a test
+            if (handle != null) {
+                try { handle.close(); } catch (Exception ignored) {}
             }
         }
-    }
-
-    /**
-     * Checks high level BPF code.
-     *
-     * @param filterString String containing a BPF expression.
-     * @param errCB A callback which returns the messages of the errors
-     * generated here, no exception are thrown or logged this method is meant to
-     * fail.
-     * @return True if the expression is valid, else false
-     */
-    @SuppressWarnings("unchecked")
-    @Deprecated
-    public static boolean testFilter(String filterString, Consumer<String> errCB) {
-
-        if( filterString.isEmpty() ) {
-            filterString = " ";
-        }
-        try {
-            try {
-                PcapBpfProgram test = new PcapBpfProgram();
-                /* check the manual, device type of "1" should be safe to use for all expressions */
-                Pcap pcap = Pcap.openDead(1, Pcap.DEFAULT_SNAPLEN);
-                /* 1 = always 1 + read manual, -128 is 255.255.255.0 hashed */
-                int res = pcap.compile(test, filterString, 1, -128);
-
-                try {
-                    Pcap.freecode(test);
-                } catch (Exception | Error ex) {
-                    //Ignore the error since this is just a test
-                }
-
-                if (errCB != null && !pcap.getErr().isEmpty()) {
-                    errCB.accept(pcap.getErr());
-                }
-                /* anything but -1 means success */
-                return res != -1;
-            } catch (Error e) {
-                if (errCB != null) {
-                    errCB.accept(e.getLocalizedMessage());
-                }
-            }
-        } catch (Exception ex) {
-            if (errCB != null) {
-                errCB.accept(ex.getLocalizedMessage());
-            }
-        }
-        return false;
     }
 }

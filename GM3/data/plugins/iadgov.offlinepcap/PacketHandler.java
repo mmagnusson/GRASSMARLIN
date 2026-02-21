@@ -6,7 +6,7 @@ import core.fingerprint.PacketData;
 import core.importmodule.ImportItem;
 import core.protocol.IEEE_802_15_4;
 import core.protocol.Zep;
-import org.jnetpcap.nio.JBuffer;
+import core.protocol.PayloadBuffer;
 import util.Cidr;
 
 import java.lang.InterruptedException;
@@ -24,6 +24,7 @@ public class PacketHandler {
         this.packetQueue = packetQueue;
     }
 
+    @SuppressWarnings("unused")
     private final HashMap<Integer, byte[]> fragments = new HashMap<>();
 
     /**
@@ -148,7 +149,7 @@ public class PacketHandler {
         // Transport Layer (Itemize Tcp and Udp with metadata-only handling of other packets)
         final int portSource;
         final int portDest;
-        final JBuffer temp;
+        final PayloadBuffer temp;
         final PMetaData meta;
 
         switch(protocol) {
@@ -160,13 +161,13 @@ public class PacketHandler {
 
                 if(idxLastIpByte - (startCurrentHeader + cbTcpHeaders) == 0) {
                     //Hack to allow 0-byte TCP packets
-                    temp = new JBuffer(1);
+                    temp = new PayloadBuffer(1);
                     cbPayload = 0;
                 } else {
                     final byte[] contents = new byte[idxLastIpByte - (startCurrentHeader + cbTcpHeaders)];
                     bufPayload.position(startCurrentHeader + cbTcpHeaders);
                     bufPayload.get(contents);
-                    temp = new JBuffer(contents);
+                    temp = new PayloadBuffer(contents);
                     cbPayload = contents.length;
                 }
                 meta = new PMetaData(source, msSinceEpoch, idxFrame, portSource, portDest, protocol,
@@ -219,7 +220,7 @@ public class PacketHandler {
                     }
                 }
                 if (contents.length > 0) {
-                    temp = new JBuffer(contents);
+                    temp = new PayloadBuffer(contents);
                 } else {
                     temp = null;
                 }

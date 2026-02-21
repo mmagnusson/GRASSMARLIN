@@ -1,5 +1,7 @@
 package ui.dialog;
 
+import core.logging.Logger;
+import core.logging.Severity;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
@@ -104,7 +106,7 @@ public class ColorPickerDialogFx extends Dialog<ButtonType> {
             sliderSaturation.setValue(color.getSaturation());
             sliderBrightness.setValue(color.getBrightness());
         } catch(Exception ex) {
-            ex.printStackTrace();
+            Logger.log(this, Severity.Error, "Error setting preview color: " + ex.getMessage());
         } finally {
             AllowEvents = true;
         }

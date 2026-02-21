@@ -50,8 +50,8 @@ public abstract class GraphTreeItem<TNode extends INode<TNode>, TEdge extends IE
             TreeItem<String> parent = getParent();
             if(parent != null && parent.getParent() != null) {
                 if(parent.getChildren().size() == 1) {
-                    if(parent instanceof GraphTreeItem) {
-                        ((GraphTreeItem<?, ?>)parent).delete();
+                    if(parent instanceof GraphTreeItem<?, ?> graphTreeParent) {
+                        graphTreeParent.delete();
                     } else {
                         parent.getParent().getChildren().remove(parent);
                     }
@@ -60,8 +60,8 @@ public abstract class GraphTreeItem<TNode extends INode<TNode>, TEdge extends IE
         }
         @Override
         public int compareTo(GraphTreeItem<TNode, TEdge> rhs) {
-            if(rhs instanceof GraphTreeNodeItem) {
-                return node.compareTo( ((GraphTreeNodeItem<TNode, TEdge>)rhs).node );
+            if(rhs instanceof GraphTreeNodeItem<TNode, TEdge> nodeItem) {
+                return node.compareTo( nodeItem.node );
             } else {
                 return super.compareTo(rhs);
             }

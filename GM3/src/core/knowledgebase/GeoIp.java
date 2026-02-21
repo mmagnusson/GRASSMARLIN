@@ -4,7 +4,6 @@ import core.logging.Logger;
 import core.logging.Severity;
 import ui.LocalIcon;
 import util.Cidr;
-import util.Launcher;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -44,13 +43,13 @@ public abstract class GeoIp {
                 if(source.length() > 80) {
                     source = source.substring(0, 77) + "...";
                 }
-                Launcher.RecordLogMessage("GeoIp lookup for country Id " + id + " failed: " + source);
+                Logger.log(GeoIp.class, Severity.Warning, "GeoIp lookup for country Id " + id + " failed: " + source);
             }
         });
         nameFromId.values().stream().forEach(country -> {
             File pathImage = new File(("images|logical|country|" + country.replace(" ", "_").replaceAll("[^a-zA-Z_]", "") + ".png").replace("|", File.separator));
             if(!pathImage.exists()) {
-                Launcher.RecordLogMessage("Unable to locate flag file for " + country + "(expected '" + pathImage.getAbsolutePath() + "')");
+                Logger.log(GeoIp.class, Severity.Warning, "Unable to locate flag file for " + country + "(expected '" + pathImage.getAbsolutePath() + "')");
             }
         });
     }
@@ -101,7 +100,12 @@ public abstract class GeoIp {
     }
 
     public static LocalIcon getFlagIcon(Cidr ip) {
-        String country = getCountryName(ip).replace(" ", "_").replaceAll("[^a-zA-Z_]", "");
+        String countryRaw = getCountryName(ip);
+        if (countryRaw == null) {
+            final String fallbackPath = ("images|logical|country|_Not_Found.png").replace("|", File.separator);
+            return LocalIcon.forPath(fallbackPath);
+        }
+        String country = countryRaw.replace(" ", "_").replaceAll("[^a-zA-Z_]", "");
         //Adjust for various special cases...  which probably won't be done until we get a new GeoIP database.
         switch(country) {
             case "So_Tom_and_Prncipe":

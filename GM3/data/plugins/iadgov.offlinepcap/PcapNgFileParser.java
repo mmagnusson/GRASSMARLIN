@@ -8,7 +8,6 @@ import core.logging.Logger;
 import core.logging.Severity;
 import core.protocol.IEEE_802_15_4;
 import core.protocol.Zep;
-import org.jnetpcap.nio.JBuffer;
 import util.Cidr;
 
 import java.io.IOException;

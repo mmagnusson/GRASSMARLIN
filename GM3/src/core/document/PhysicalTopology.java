@@ -52,9 +52,7 @@ public class PhysicalTopology {
             if(other == null) {
                 return false;
             }
-            if(other instanceof DirectConnection) {
-                DirectConnection rhs = (DirectConnection)other;
-
+            if(other instanceof DirectConnection rhs) {
                 //Reference equality is safe because the connections are made between a fixed set of objects.
                 return (mac1 == rhs.mac1 && mac2 == rhs.mac2) || (mac1 == rhs.mac2 || mac2 == rhs.mac1);
             } else {
@@ -281,10 +279,10 @@ public class PhysicalTopology {
 
             for(Mac mac : cloud) {
                 PhysicalNode node = nodeFromMac.get(mac);
-                if(!(node instanceof PhysicalPort)) {
-                    node.getVLans().addAll(vlans);
+                if(node instanceof PhysicalPort portNode) {
+                    portNode.getConnectedVlans().addAll(vlans);
                 } else {
-                    ((PhysicalPort)node).getConnectedVlans().addAll(vlans);
+                    node.getVLans().addAll(vlans);
                 }
             }
         }
@@ -304,8 +302,8 @@ public class PhysicalTopology {
             if(cloud.size() == 1) {
                 Mac mac = cloud.iterator().next();
                 PhysicalNode node = nodeFromMac.get(mac);
-                if(node instanceof PhysicalPort) {  //This should always be true, but it doesn't hurt to validate before casting.
-                    ((PhysicalPort)node).unknownConnectionProperty().set(true);
+                if(node instanceof PhysicalPort portNode) {  //This should always be true, but it doesn't hurt to validate before casting.
+                    portNode.unknownConnectionProperty().set(true);
                 }
             } else {
                 int idxCurrent = ++idxCloud;

@@ -91,9 +91,9 @@ public class GroupSwitch extends LayoutManagedGroup<PhysicalNode, PhysicalEdge> 
             return new PortGroup(
                     name,
                     new FilteredList<>(contents, cellPort ->
-                            (cellPort instanceof CellPort)
+                            (cellPort instanceof CellPort cp)
                             &&
-                            ((CellPort)cellPort).getPort().groupProperty().get().equals(name)
+                            cp.getPort().groupProperty().get().equals(name)
                     )
             );
         }
@@ -117,8 +117,8 @@ public class GroupSwitch extends LayoutManagedGroup<PhysicalNode, PhysicalEdge> 
             if (ports.size() > 0) {
                 ArrayList<Cell> portsToDisplay = new ArrayList<>(ports);
                 portsToDisplay.sort((o1, o2) -> {
-                    if (o1 instanceof CellPort && o2 instanceof CellPort) {
-                        return Integer.compare(((CellPort) o1).getPort().indexProperty().get(), ((CellPort) o2).getPort().indexProperty().get());
+                    if (o1 instanceof CellPort cp1 && o2 instanceof CellPort cp2) {
+                        return Integer.compare(cp1.getPort().indexProperty().get(), cp2.getPort().indexProperty().get());
                     } else {
                         return o1.getNode().titleProperty().get().compareTo(o2.getNode().titleProperty().get());
                     }
@@ -132,9 +132,9 @@ public class GroupSwitch extends LayoutManagedGroup<PhysicalNode, PhysicalEdge> 
                     child.layoutXProperty().bind(offsetX.add(position.getX()));
                     child.layoutYProperty().bind(offsetY.add(position.getY()));
 
-                    if (child instanceof CellPort) {
+                    if (child instanceof CellPort cellPort) {
                         //Anything where the Y position is >= 0 should be inverted.
-                        ((CellPort) child).invertedProperty().set(position.getY() >= 0.0);
+                        cellPort.invertedProperty().set(position.getY() >= 0.0);
                     }
 
                     widthNew = Double.max(widthNew, position.getX() + IMAGE_WIDTH);
@@ -218,8 +218,7 @@ public class GroupSwitch extends LayoutManagedGroup<PhysicalNode, PhysicalEdge> 
 
     @Override
     protected void memberAdded(final Cell<PhysicalNode> member) {
-        if (member instanceof CellPort) {
-            CellPort portNew = (CellPort) member;
+        if (member instanceof CellPort portNew) {
 
             String nameGroup = portNew.getPort().groupProperty().get();
 

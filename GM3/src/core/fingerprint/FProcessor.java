@@ -6,6 +6,8 @@ import ui.fingerprint.filters.Filter;
 import ui.fingerprint.payload.Endian;
 import ui.fingerprint.payload.Test;
 
+import core.logging.Logger;
+import core.logging.Severity;
 import jakarta.xml.bind.JAXBElement;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -133,7 +135,7 @@ public class FProcessor {
                 try {
                     this.filter(fp, data).forEach(pl -> this.fingerprint(fp, pl, data));
                 } catch(Exception ex) {
-                    ex.printStackTrace();
+                    Logger.log(this, Severity.Error, "Fingerprint processing error: " + ex.getMessage());
                 }
             });
     }
@@ -293,12 +295,10 @@ public class FProcessor {
 
     private void executeOps(String fpName, List<Object> opList, PacketData data, CursorImpl cursor) {
         for (Object op : opList) {
-            if (op instanceof Return) {
-                Return ret = ((Return) op);
+            if (op instanceof Return ret) {
                 processReturn(ret, data, cursor, fpName);
             } else if (data.hasPayload()) {
-                if (op instanceof MatchFunction) {
-                    MatchFunction match = ((MatchFunction) op);
+                if (op instanceof MatchFunction match) {
 
                     byte[] content = null;
                     if (match.getContent() != null) {
@@ -314,8 +314,7 @@ public class FProcessor {
                         }
                     }
 
-                } else if (op instanceof ByteTestFunction) {
-                    ByteTestFunction testFunc = ((ByteTestFunction) op);
+                } else if (op instanceof ByteTestFunction testFunc) {
 
                     Test test = getTest(testFunc);
                     boolean passed = false;
@@ -328,8 +327,7 @@ public class FProcessor {
                     if (passed && testFunc.getAndThen() != null) {
                         executeOps(fpName, testFunc.getAndThen().getMatchOrByteTestOrIsDataAt(), data, cursor);
                     }
-                } else if (op instanceof ByteJumpFunction) {
-                    ByteJumpFunction jump = ((ByteJumpFunction) op);
+                } else if (op instanceof ByteJumpFunction jump) {
 
                     Endian endian = jump.getEndian() != null ? Endian.valueOf(jump.getEndian()) : Endian.getDefault();
 
@@ -342,16 +340,14 @@ public class FProcessor {
                     if (jump.getAndThen() != null) {
                         executeOps(fpName, jump.getAndThen().getMatchOrByteTestOrIsDataAt(), data, cursor);
                     }
-                } else if (op instanceof IsDataAtFunction) {
-                    IsDataAtFunction at = ((IsDataAtFunction) op);
+                } else if (op instanceof IsDataAtFunction at) {
 
                     boolean isData = PayloadFunctions.isDataAtFunction(data, cursor, at.getOffset(), at.isRelative());
 
                     if (isData && at.getAndThen() != null) {
                         executeOps(fpName, at.getAndThen().getMatchOrByteTestOrIsDataAt(), data, cursor);
                     }
-                } else if (op instanceof Anchor) {
-                    Anchor anchor = ((Anchor) op);
+                } else if (op instanceof Anchor anchor) {
 
                     int offset = anchor.getOffset() != null ? anchor.getOffset() : 0;
 

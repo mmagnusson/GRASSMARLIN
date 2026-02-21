@@ -1,5 +1,7 @@
 package ui.graphing;
 
+import core.logging.Logger;
+import core.logging.Severity;
 import javafx.collections.FXCollections;
 import core.document.graph.IEdge;
 import core.document.graph.INode;
@@ -189,7 +191,7 @@ public class CellGroup<TNode extends INode<TNode>, TEdge extends IEdge<TNode>> e
                                             1)) :
                             o1.getX() < o2.getX() ? -1 : 1);
         } catch(Exception ex) {
-            ex.printStackTrace();
+            Logger.log(CellGroup.class, Severity.Error, "Error sorting hull points: " + ex.getMessage());
         }
 
         if(points.isEmpty()) {
@@ -314,7 +316,7 @@ public class CellGroup<TNode extends INode<TNode>, TEdge extends IEdge<TNode>> e
             try {
                 originDrag = this.getLocalToSceneTransform().inverseTransform(event.getSceneX(), event.getSceneY());
             } catch(NonInvertibleTransformException ex) {
-                ex.printStackTrace();
+                Logger.log(this, Severity.Error, "Non-invertible transform during drag start: " + ex.getMessage());
                 originDrag = new Point2D(event.getSceneX(), event.getSceneY());
             }
             xPrev = 0.0;
@@ -329,7 +331,7 @@ public class CellGroup<TNode extends INode<TNode>, TEdge extends IEdge<TNode>> e
             try {
                 ptTemp = this.getLocalToSceneTransform().inverseTransform(ptTemp);
             } catch(NonInvertibleTransformException ex) {
-                ex.printStackTrace();
+                Logger.log(this, Severity.Error, "Non-invertible transform during drag: " + ex.getMessage());
                 //we just won't be able to account for the translation.  There may be some distortion, but it will still work.
             }
             final Point2D ptTranslated = ptTemp.subtract(originDrag);

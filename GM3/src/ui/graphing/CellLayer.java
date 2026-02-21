@@ -63,14 +63,14 @@ public class CellLayer extends Group {
             return null;
         } else if(nodes.size() == 1) {
             Node node = nodes.get(0);
-            if(node instanceof ICanHazContextMenu) {
-                return ((ICanHazContextMenu)node).getContextMenuItems();
+            if(node instanceof ICanHazContextMenu contextMenuNode) {
+                return contextMenuNode.getContextMenuItems();
             }
         } else {
             List<MenuItem> result = new ArrayList<>(nodes.size());
             for(Node node : nodes) {
-                if(node instanceof ICanHazContextMenu) {
-                    List<MenuItem> items = ((ICanHazContextMenu)node).getContextMenuItems();
+                if(node instanceof ICanHazContextMenu contextMenuNode) {
+                    List<MenuItem> items = contextMenuNode.getContextMenuItems();
                     if(items != null && !items.isEmpty()) {
                         Menu menuNode = new Menu(node.toString());
                         //Remove from old parent to suppress a warning in the following addAll

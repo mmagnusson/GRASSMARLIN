@@ -7,6 +7,8 @@ import core.document.serialization.xml.XmlElement;
 import core.exec.IEEE802154Data;
 import core.fingerprint.PacketData;
 import core.fingerprint3.Fingerprint;
+import core.logging.Logger;
+import core.logging.Severity;
 import ui.GrassMarlinFx;
 import util.Cidr;
 
@@ -119,14 +121,14 @@ public class TaskDispatcher {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
-                    // don't care
+                    Thread.currentThread().interrupt();
                 }
             }
             for(Iterator<?> iterator : logicalIterators) {
                 if (iterator.hasNext()) {
                     Object next = iterator.next();
-                    if (next instanceof PacketData) {
-                        packetData = (PacketData)next;
+                    if (next instanceof PacketData pd) {
+                        packetData = pd;
 
                         if (packetData != null) {
                             run = false;
@@ -142,13 +144,13 @@ public class TaskDispatcher {
                                     try {
                                         Thread.sleep(1);
                                     } catch (InterruptedException ie) {
-                                        // don't care
+                                        Thread.currentThread().interrupt();
                                     }
                                 }
                             }
                         }
-                    } else if (next instanceof IEEE802154Data) {
-                        meshData = (IEEE802154Data)next;
+                    } else if (next instanceof IEEE802154Data md) {
+                        meshData = md;
 
                         if (meshData != null) {
                             run = false;
@@ -164,7 +166,7 @@ public class TaskDispatcher {
                                     try {
                                         Thread.sleep(1);
                                     } catch (InterruptedException ie) {
-                                        // don't care
+                                        Thread.currentThread().interrupt();
                                     }
                                 }
                             }
@@ -192,7 +194,7 @@ public class TaskDispatcher {
                                     try {
                                         Thread.sleep(1);
                                     } catch(InterruptedException ie) {
-                                        // Ignore
+                                        Thread.currentThread().interrupt();
                                     }
                                 }
                             }
@@ -212,7 +214,7 @@ public class TaskDispatcher {
                             try {
                                 Thread.sleep(1);
                             } catch (InterruptedException ie) {
-                                // don't care
+                                Thread.currentThread().interrupt();
                             }
                         }
                     }
@@ -227,6 +229,7 @@ public class TaskDispatcher {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
             }
         }
@@ -247,7 +250,7 @@ public class TaskDispatcher {
             try {
                 proc.get().process(data);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                Logger.log(this, Severity.Error, "Error processing packet data: " + ex.getMessage());
             } finally {
                 counter.decrementAndGet();
             }
@@ -266,7 +269,7 @@ public class TaskDispatcher {
             try {
                 proc.get().process(data);
             } catch(Exception ex) {
-                ex.printStackTrace();
+                Logger.log(this, Severity.Error, "Error processing host data: " + ex.getMessage());
             }
         }
     }
@@ -287,7 +290,7 @@ public class TaskDispatcher {
             try {
                 meshProc.get().process(data);
             } catch(Exception ex) {
-                ex.printStackTrace();
+                Logger.log(this, Severity.Error, "Error processing mesh data: " + ex.getMessage());
             } finally {
                 counter.decrementAndGet();
             }
@@ -445,7 +448,7 @@ public class TaskDispatcher {
             try {
                 Thread.sleep(1);
             } catch(InterruptedException ex) {
-                //Ignore interruption; this is just to keep the thread from hogging CPU time.
+                Thread.currentThread().interrupt();
             }
 
             if(physicalIterators.isEmpty()) {

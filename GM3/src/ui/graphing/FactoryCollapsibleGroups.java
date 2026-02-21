@@ -25,8 +25,8 @@ public class FactoryCollapsibleGroups<TNode extends INode<TNode>, TEdge extends 
         contextItems.add(new ActiveMenuItem("Expand All", event -> {
             for(HashMap<String, CellGroup<TNode, TEdge>> cachedBy : cache.values()) {
                 for(CellGroup<TNode, TEdge> group : cachedBy.values()) {
-                    if(group instanceof CellGroupCollapsible) {
-                        ((CellGroupCollapsible<TNode, TEdge>)group).collapsedProperty().set(false);
+                    if(group instanceof CellGroupCollapsible<TNode, TEdge> collapsible) {
+                        collapsible.collapsedProperty().set(false);
                     }
                 }
             }
@@ -34,8 +34,8 @@ public class FactoryCollapsibleGroups<TNode extends INode<TNode>, TEdge extends 
         contextItems.add(new ActiveMenuItem("Collapse All", event -> {
             for (HashMap<String, CellGroup<TNode, TEdge>> cachedBy : cache.values()) {
                 for (CellGroup<TNode, TEdge> group : cachedBy.values()) {
-                    if(group instanceof CellGroupCollapsible) {
-                        ((CellGroupCollapsible<TNode, TEdge>)group).collapsedProperty().set(true);
+                    if(group instanceof CellGroupCollapsible<TNode, TEdge> collapsible) {
+                        collapsible.collapsedProperty().set(true);
                     }
                 }
             }

@@ -8,26 +8,19 @@ import core.importmodule.ImportItem;
 import core.logging.Logger;
 import core.logging.Severity;
 import core.protocol.IEEE_802_15_4;
+import core.protocol.PayloadBuffer;
+import core.protocol.TcpFlags;
 import core.protocol.Zep;
-import javafx.application.Platform;
-import org.jnetpcap.Pcap;
-import org.jnetpcap.PcapBpfProgram;
-import org.jnetpcap.PcapDumper;
-import org.jnetpcap.nio.JBuffer;
-import org.jnetpcap.packet.JPacket;
-import org.jnetpcap.packet.JPacketHandler;
-import org.jnetpcap.packet.PcapPacket;
-import org.jnetpcap.protocol.lan.Ethernet;
-import org.jnetpcap.protocol.network.Ip4;
-import org.jnetpcap.protocol.tcpip.Tcp;
-import org.jnetpcap.protocol.tcpip.Udp;
+import org.pcap4j.core.*;
+import org.pcap4j.packet.*;
+import org.pcap4j.packet.namednumber.DataLinkType;
 import util.Cidr;
-import util.RateLimitedTask;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -41,7 +34,6 @@ public class PcapFileParser {
 
     private long lastCheckTime;
     private int numPackets;
-    protected PcapDumper dumper = null;
 
     protected Runnable fnOnNewPacket = null;
 
@@ -66,7 +58,7 @@ public class PcapFileParser {
 
     private BlockingQueue<Object> packetQueue;
 
-
+    protected PcapHandle handle;
 
     protected PcapFileParser(ImportItem source, Path inPath) {
         this.source = source;
@@ -87,167 +79,234 @@ public class PcapFileParser {
 
     protected void parseSource() throws IllegalStateException{
         done = false;
-        Pcap pcap = getHandle();
+        PcapHandle pcapHandle = getHandle();
 
-        String txtFilter = Configuration.getPreferenceString(Configuration.Fields.PCAP_FILTER_STRING);
-        if(txtFilter != null && !txtFilter.trim().equals("")) {
-            final PcapBpfProgram filter = new PcapBpfProgram();
-            final int mask = ~((1 << (32 - Configuration.getPreferenceLong(Configuration.Fields.LOGICAL_DYNAMIC_SUBNET_BITS))) - 1);
-
-            if(pcap.compile(filter, txtFilter, 1, mask) != Pcap.OK) {
-                Logger.log(this, Severity.Warning, "Unable to initialize PCAP filter for '" + txtFilter + "' (" + pcap.getErr() + ").  Filtering will not be performed.");
-            } else {
-                Logger.log(this, Severity.Information, "Using PCAP filter: '" + txtFilter + "'");
-                pcap.setFilter(filter);
-            }
-        }
-
-        if (pcap == null) {
+        if (pcapHandle == null) {
             throw new IllegalStateException("Unable load pcap from " + this.inPath);
         }
 
+        String txtFilter = Configuration.getPreferenceString(Configuration.Fields.PCAP_FILTER_STRING);
+        if(txtFilter != null && !txtFilter.trim().equals("")) {
+            try {
+                pcapHandle.setFilter(txtFilter, BpfProgram.BpfCompileMode.OPTIMIZE);
+                Logger.log(this, Severity.Information, "Using PCAP filter: '" + txtFilter + "'");
+            } catch (PcapNativeException | NotOpenException e) {
+                Logger.log(this, Severity.Warning, "Unable to initialize PCAP filter for '" + txtFilter + "' (" + e.getMessage() + ").  Filtering will not be performed.");
+            }
+        }
+
         Runnable loop = () -> {
-            pcap.loop(Pcap.LOOP_INFINITE, new PcapPacketHandler(), this.packetQueue);
-            done = true;
+            try {
+                processPackets(pcapHandle);
+            } finally {
+                done = true;
+                try {
+                    pcapHandle.close();
+                } catch (Exception e) {
+                    // best effort
+                }
+            }
         };
         Thread loopThread = new Thread(loop, "pcap loop");
         loopThread.setDaemon(true);
         loopThread.start();
     }
 
-    /**
-     * Retrieves a new PCAP handle. May return null if JNetPCAP is not
-     * available.  This is non-static so that Live PCAP capture can override it.
-     *
-     * @return Pcap handle to the pcap file that belongs to this ImportItem.
-     */
-    protected Pcap getHandle() {
-        //We will receive error messages, but don't preserve them.
-        StringBuilder errorBuffer = new StringBuilder();
-        Pcap handle = null;
-
-        try {
-            handle = Pcap.openOffline(this.inPath.toString(), errorBuffer);
-            if( handle == null || errorBuffer.length() > 0 ) {
-                String msg = errorBuffer.toString();
-                throw new java.lang.IllegalArgumentException(msg);
-            }
-        } catch (UnsatisfiedLinkError err) {
-            Logger.log(this, Severity.Error, "Importing PCAP is disabled. " + err.getMessage());
-        } catch( IllegalArgumentException ex ) {
-            Logger.log(this, Severity.Error, "Failed to import. Reason: " + ex.getMessage());
-        }
-
-        return handle;
-    }
-
-    private class PcapPacketHandler implements JPacketHandler<BlockingQueue<Object>> {
-        protected final Ethernet eth = new Ethernet();
-        protected final Ip4 ip4 = new Ip4();
-        protected final Tcp tcp = new Tcp();
-        protected final Udp udp = new Udp();
-        protected final Zep zep = new Zep();
-        IEEE_802_15_4 ieee802154 = new IEEE_802_15_4();
-
-        protected final Tcp.MSS mssHeader = new Tcp.MSS();
-
-        @Override
-        public void nextPacket(JPacket packet, BlockingQueue<Object> queue) {
-            if(dumper != null) {
-                dumper.dump(packet);
-            }
+    private void processPackets(PcapHandle pcapHandle) {
+        long frameNumber = 0;
+        while (true) {
             try {
-                packet = new PcapPacket(packet);
+                Packet packet = pcapHandle.getNextPacketEx();
+                frameNumber++;
+
                 if (numPackets++ == PACKET_INTERVAL_PACKETS) {
                     long sleepTime = lastCheckTime + PACKET_INTERVAL_MILLIS - System.currentTimeMillis();
                     if (sleepTime >= 0) {
                         try {
                             Thread.sleep(sleepTime);
                         } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
                         }
                     }
                     lastCheckTime = System.currentTimeMillis();
                     numPackets = 0;
                 }
-                if (!packet.hasHeader(ip4) || !packet.hasHeader(eth)) {
-                    source.recordTaskProgress(packet.getCaptureHeader().caplen() + 16);
-                    return;
-                }
 
-                long srcIp = new BigInteger(1, ip4.source()).longValue();
-                long destIp = new BigInteger(1, ip4.destination()).longValue();
+                long timestampMs = pcapHandle.getTimestamp().getTime();
+                int captureLength = packet.length();
 
+                handlePacket(packet, timestampMs, frameNumber, captureLength);
 
-                //Associate the macs with the hosts
-                try {
-                    final java.util.Map<String, String> propertiesSource = new java.util.HashMap<>();
-                    propertiesSource.put("MAC", new util.Mac(eth.source()).toString());
-                    packetQueue.put(new core.importmodule.LogicalProcessor.Host(new Cidr(srcIp), propertiesSource, null));
-                    final java.util.Map<String, String> propertiesDest = new java.util.HashMap<>();
-                    propertiesDest.put("MAC", new util.Mac(eth.destination()).toString());
-                    packetQueue.put(new core.importmodule.LogicalProcessor.Host(new Cidr(destIp), propertiesDest, null));
-                } catch(InterruptedException ex) {
-                    //Ignore the error; we probably have redundant data.
-                }
-
-                PacketData data = null;
-                if (packet.hasHeader(tcp)) {
-                    JBuffer temp = new JBuffer(tcp.getPayloadLength() + 1);
-                    packet.transferTo(temp, tcp.getPayloadOffset(), tcp.getPayloadLength(), 0);
-
-                    int mss = -1;
-                    if (tcp.hasSubHeader(mssHeader)) {
-                        mss = mssHeader.mss();
-                    }
-
-                    PMetaData meta = new PMetaData(source, packet.getCaptureHeader().timestampInMillis(), packet.getFrameNumber(), tcp.source(), tcp.destination(), TCP_ID,
-                            new Cidr(srcIp), Arrays.copyOf(eth.source(), eth.source().length), new Cidr(destIp), Arrays.copyOf(eth.destination(), eth.destination().length), tcp.ack(), packet.getPacketWirelen(), 2048,
-                            mss, tcp.seq(), ip4.ttl(), tcp.windowScaled(), tcp.flagsEnum());
-                    data = new PacketData(packet.getCaptureHeader().caplen() + 16, meta, temp);
-                } else if (packet.hasHeader(udp)) {
-
-                    if (zep.hasProtocol(udp)) {
-                        ieee802154.setBuffer(zep.getNextBuffer());
-                        IEEE802154Data meshData = new IEEE802154Data();
-                        meshData.setChannel(zep.getChannelID());
-                        meshData.settDevice(zep.getDestinationDeviceID());
-                        meshData.setsDevice(zep.getSourceDeviceID());
-                        meshData.setSource(ieee802154.getSourceDeviceId());
-                        meshData.setTarget(ieee802154.getDestinationDeviceId());
-                        meshData.setTargetPan(ieee802154.getDestinationPanId());
-                        meshData.setIntraPan(ieee802154.isIntraPan());
-                        try {
-                            queue.put(meshData);
-                        } catch (InterruptedException e) {
-
-                        }
-                    }
-
-                    JBuffer temp = new JBuffer(udp.getPayloadLength() + 1);
-                    packet.transferTo(temp, udp.getPayloadOffset(), udp.getPayloadLength(), 0);
-
-                    PMetaData meta = new PMetaData(source, packet.getCaptureHeader().timestampInMillis(), packet.getFrameNumber(), udp.source(), udp.destination(), UDP_ID,
-                            new Cidr(srcIp), Arrays.copyOf(eth.source(), eth.source().length), new Cidr(destIp), Arrays.copyOf(eth.destination(), eth.destination().length), -1, packet.getCaptureHeader().caplen() + 16, 2048,
-                            -1, -1, ip4.ttl(), -1, null);
-                    data = new PacketData(packet.getCaptureHeader().caplen() + 16, meta, temp);
-                } else {
-                    PMetaData meta = new PMetaData(source, packet.getCaptureHeader().timestampInMillis(), packet.getFrameNumber(), -1, -1, UNKNOWN_ID, new Cidr(srcIp),
-                            Arrays.copyOf(eth.source(), eth.source().length), new Cidr(destIp), Arrays.copyOf(eth.destination(), eth.destination().length), -1,
-                            packet.getPacketWirelen(), 2048, -1, -1, ip4.ttl(), -1, null);
-                    data = new PacketData(packet.getCaptureHeader().caplen() + 16, meta);
-                }
-
-                if (data != null) {
-                    try {
-                        queue.put(data);
-                    } catch (InterruptedException e) {
-                        // program must be closing or something
-                    }
-                }
-            } catch(Exception ex) {
-                ex.printStackTrace();
+            } catch (java.util.concurrent.TimeoutException e) {
+                // No packet available, continue
+            } catch (java.io.EOFException e) {
+                // End of pcap file
+                break;
+            } catch (PcapNativeException | NotOpenException e) {
+                Logger.log(this, Severity.Error, "Error reading pcap: " + e.getMessage());
+                break;
             }
         }
+    }
+
+    private void handlePacket(Packet packet, long timestampMs, long frameNumber, int captureLength) {
+        try {
+            // Check for IP layer
+            IpV4Packet ipPacket = packet.get(IpV4Packet.class);
+            EthernetPacket ethPacket = packet.get(EthernetPacket.class);
+
+            if (ipPacket == null || ethPacket == null) {
+                source.recordTaskProgress(captureLength + 16);
+                return;
+            }
+
+            IpV4Packet.IpV4Header ipHeader = ipPacket.getHeader();
+            EthernetPacket.EthernetHeader ethHeader = ethPacket.getHeader();
+
+            long srcIp = new BigInteger(1, ipHeader.getSrcAddr().getAddress()).longValue();
+            long destIp = new BigInteger(1, ipHeader.getDstAddr().getAddress()).longValue();
+
+            byte[] srcMac = ethHeader.getSrcAddr().getAddress();
+            byte[] dstMac = ethHeader.getDstAddr().getAddress();
+
+            // Associate the macs with the hosts
+            try {
+                final java.util.Map<String, String> propertiesSource = new java.util.HashMap<>();
+                propertiesSource.put("MAC", new util.Mac(srcMac).toString());
+                packetQueue.put(new core.importmodule.LogicalProcessor.Host(new Cidr(srcIp), propertiesSource, null));
+                final java.util.Map<String, String> propertiesDest = new java.util.HashMap<>();
+                propertiesDest.put("MAC", new util.Mac(dstMac).toString());
+                packetQueue.put(new core.importmodule.LogicalProcessor.Host(new Cidr(destIp), propertiesDest, null));
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+
+            PacketData data = null;
+            TcpPacket tcpPacket = ipPacket.get(TcpPacket.class);
+            UdpPacket udpPacket = ipPacket.get(UdpPacket.class);
+
+            if (tcpPacket != null) {
+                TcpPacket.TcpHeader tcpHeader = tcpPacket.getHeader();
+                byte[] payloadBytes;
+                Packet tcpPayload = tcpPacket.getPayload();
+                if (tcpPayload != null) {
+                    payloadBytes = tcpPayload.getRawData();
+                } else {
+                    payloadBytes = new byte[0];
+                }
+                // Extra byte like original code: new JBuffer(tcp.getPayloadLength() + 1)
+                byte[] bufferBytes = Arrays.copyOf(payloadBytes, payloadBytes.length + 1);
+                PayloadBuffer temp = new PayloadBuffer(bufferBytes);
+
+                int mss = -1;
+                // Extract MSS from TCP options if present
+                for (TcpPacket.TcpOption option : tcpHeader.getOptions()) {
+                    if (option.getKind().value() == 2 && option.length() >= 4) { // MSS option
+                        byte[] optData = option.getRawData();
+                        if (optData.length >= 4) {
+                            mss = ((optData[2] & 0xFF) << 8) | (optData[3] & 0xFF);
+                        }
+                    }
+                }
+
+                // Extract TCP flags as Set<String>
+                int rawFlags = tcpHeader.getRawData()[13] & 0xFF;
+                Set<String> flags = TcpFlags.fromBitmask(rawFlags);
+
+                PMetaData meta = new PMetaData(source, timestampMs, frameNumber,
+                        tcpHeader.getSrcPort().valueAsInt(), tcpHeader.getDstPort().valueAsInt(), TCP_ID,
+                        new Cidr(srcIp), Arrays.copyOf(srcMac, srcMac.length),
+                        new Cidr(destIp), Arrays.copyOf(dstMac, dstMac.length),
+                        tcpHeader.getAcknowledgmentNumberAsLong(),
+                        packet.length(), 2048,
+                        mss, tcpHeader.getSequenceNumberAsLong(),
+                        ipHeader.getTtlAsInt(),
+                        tcpHeader.getWindowAsInt(), flags);
+                data = new PacketData(captureLength + 16, meta, temp);
+
+            } else if (udpPacket != null) {
+                UdpPacket.UdpHeader udpHeader = udpPacket.getHeader();
+                int srcPort = udpHeader.getSrcPort().valueAsInt();
+                int dstPort = udpHeader.getDstPort().valueAsInt();
+
+                byte[] payloadBytes;
+                Packet udpPayload = udpPacket.getPayload();
+                if (udpPayload != null) {
+                    payloadBytes = udpPayload.getRawData();
+                } else {
+                    payloadBytes = new byte[0];
+                }
+
+                if (Zep.isZEPProtocol(srcPort, dstPort)) {
+                    Zep zep = new Zep();
+                    IEEE_802_15_4 ieee802154 = new IEEE_802_15_4();
+                    zep.fromArray(Arrays.copyOf(payloadBytes, payloadBytes.length));
+                    ieee802154.setBuffer(zep.getNextBuffer());
+                    IEEE802154Data meshData = new IEEE802154Data();
+                    meshData.setChannel(zep.getChannelID());
+                    meshData.settDevice(zep.getDestinationDeviceID());
+                    meshData.setsDevice(zep.getSourceDeviceID());
+                    meshData.setSource(ieee802154.getSourceDeviceId());
+                    meshData.setTarget(ieee802154.getDestinationDeviceId());
+                    meshData.setTargetPan(ieee802154.getDestinationPanId());
+                    meshData.setIntraPan(ieee802154.isIntraPan());
+                    try {
+                        packetQueue.put(meshData);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+
+                // Extra byte like original code
+                byte[] bufferBytes = Arrays.copyOf(payloadBytes, payloadBytes.length + 1);
+                PayloadBuffer temp = new PayloadBuffer(bufferBytes);
+
+                PMetaData meta = new PMetaData(source, timestampMs, frameNumber,
+                        srcPort, dstPort, UDP_ID,
+                        new Cidr(srcIp), Arrays.copyOf(srcMac, srcMac.length),
+                        new Cidr(destIp), Arrays.copyOf(dstMac, dstMac.length),
+                        -1, captureLength + 16, 2048,
+                        -1, -1, ipHeader.getTtlAsInt(), -1, null);
+                data = new PacketData(captureLength + 16, meta, temp);
+
+            } else {
+                PMetaData meta = new PMetaData(source, timestampMs, frameNumber,
+                        -1, -1, UNKNOWN_ID,
+                        new Cidr(srcIp), Arrays.copyOf(srcMac, srcMac.length),
+                        new Cidr(destIp), Arrays.copyOf(dstMac, dstMac.length),
+                        -1, packet.length(), 2048,
+                        -1, -1, ipHeader.getTtlAsInt(), -1, null);
+                data = new PacketData(captureLength + 16, meta);
+            }
+
+            if (data != null) {
+                try {
+                    packetQueue.put(data);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        } catch (Exception ex) {
+            Logger.log(this, Severity.Error, "Error processing packet: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Retrieves a new PCAP handle. May return null if Pcap4J is not
+     * available. This is non-static so that Live PCAP capture can override it.
+     *
+     * @return PcapHandle to the pcap file that belongs to this ImportItem.
+     */
+    protected PcapHandle getHandle() {
+        PcapHandle pcapHandle = null;
+        try {
+            pcapHandle = Pcaps.openOffline(this.inPath.toString());
+        } catch (UnsatisfiedLinkError err) {
+            Logger.log(this, Severity.Error, "Importing PCAP is disabled. " + err.getMessage());
+        } catch (PcapNativeException ex) {
+            Logger.log(this, Severity.Error, "Failed to import. Reason: " + ex.getMessage());
+        }
+        return pcapHandle;
     }
 
     protected class LogicalIterator implements Iterator<Object> {

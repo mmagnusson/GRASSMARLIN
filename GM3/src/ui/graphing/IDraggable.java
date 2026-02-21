@@ -1,5 +1,7 @@
 package ui.graphing;
 
+import core.logging.Logger;
+import core.logging.Severity;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -9,15 +11,13 @@ public interface IDraggable {
     DragContext dragContext = new DragContext();
 
     default void makeDraggable() {
-        if(this instanceof Node) {
-            final Node node = (Node)this;
+        if(this instanceof Node node) {
             node.setOnMousePressed(this::Handle_MousePressed);
             node.setOnMouseDragged(this::Handle_MouseDragged);
         }
     }
     default void makeUndraggable() {
-        if(this instanceof Node) {
-            final Node node = (Node)this;
+        if(this instanceof Node node) {
             node.setOnMousePressed(this::Handle_MouseEventRedirectToParent);
             node.setOnMouseDragged(this::Handle_MouseEventRedirectToParent);
         }
@@ -35,7 +35,7 @@ public interface IDraggable {
                     //CellGroup where we can use the group's transforms, since no transforms are applied to the group.
                     dragContext.ptOrigin = ((Node)this).getParent().getLocalToSceneTransform().inverseTransform(event.getSceneX(), event.getSceneY());
                 } catch (NonInvertibleTransformException ex) {
-                    ex.printStackTrace();
+                    Logger.log(IDraggable.class, Severity.Error, "Non-invertible transform during mouse press: " + ex.getMessage());
                     dragContext.ptOrigin = new Point2D(event.getSceneX(), event.getSceneY());
                 }
                 dragContext.ptPrevious = new Point2D(0, 0);
@@ -45,10 +45,9 @@ public interface IDraggable {
     default void Handle_MouseEventRedirectToParent(MouseEvent event) {
         if(event.isPrimaryButtonDown()) {
             //Redirect to the containing group.
-            if(event.getSource() instanceof Cell) {
-                Cell cellSource = (Cell)event.getSource();
-                if(cellSource.containerProperty().get() instanceof Node) {
-                    ((Node)cellSource.containerProperty().get()).fireEvent(event);
+            if(event.getSource() instanceof Cell<?> cellSource) {
+                if(cellSource.containerProperty().get() instanceof Node containerNode) {
+                    containerNode.fireEvent(event);
                     event.consume();
                 }
             }
@@ -60,8 +59,8 @@ public interface IDraggable {
         //The drag target only has to match if we are going to process the drag; if dragging is disabled then that check will be handled elsewhere.
         if(event.isPrimaryButtonDown() && (event.getSource() == this)) {
             event.consume();
-            if(this instanceof Cell) {
-                ((Cell<?>)this).autoLayoutProperty().set(false);
+            if(this instanceof Cell<?> cell) {
+                cell.autoLayoutProperty().set(false);
             }
 
             Point2D ptTemp = new Point2D(event.getSceneX(), event.getSceneY());
@@ -69,7 +68,7 @@ public interface IDraggable {
                 ptTemp = ((Node)this).getParent().getLocalToSceneTransform().inverseTransform(ptTemp);
 
             } catch(NonInvertibleTransformException ex) {
-                ex.printStackTrace();
+                Logger.log(IDraggable.class, Severity.Error, "Non-invertible transform during mouse drag: " + ex.getMessage());
                 //we just won't be able to account for the translation.  There may be some distortion, but it will still work.
             }
             final Point2D ptTranslated = ptTemp.subtract(dragContext.ptOrigin);

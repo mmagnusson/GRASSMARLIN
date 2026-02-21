@@ -46,8 +46,8 @@ public class GroupComputer extends LayoutManagedGroup<PhysicalNode, PhysicalEdge
                 List<Cell<PhysicalNode>> tempMembers = new ArrayList<>(getMembers());
                 getMembers().clear();
                 for(Cell<PhysicalNode> member : tempMembers) {
-                    if(member instanceof CellNic) {
-                        ((CellNic)member).getNic().deviceProperty().set(result.get());
+                    if(member instanceof CellNic cellNic) {
+                        cellNic.getNic().deviceProperty().set(result.get());
                         graph.reprocessNode(member.getNode());
                     }
                 }

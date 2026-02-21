@@ -3,6 +3,8 @@ package ui.graphing.physical;
 import core.document.graph.IEdge;
 import core.document.graph.INode;
 import core.document.serialization.xml.XmlElement;
+import core.logging.Logger;
+import core.logging.Severity;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -60,7 +62,7 @@ public abstract class LayoutManagedGroup<TNode extends INode<TNode>, TEdge exten
             try {
                 ptTemp = this.getLocalToSceneTransform().inverseTransform(ptTemp);
             } catch(NonInvertibleTransformException ex) {
-                ex.printStackTrace();
+                Logger.log(this, Severity.Error, "Non-invertible transform during drag: " + ex.getMessage());
                 //we just won't be able to account for the translation.  There may be some distortion, but it will still work.
             }
             final Point2D ptTranslated = ptTemp.subtract(originDrag);

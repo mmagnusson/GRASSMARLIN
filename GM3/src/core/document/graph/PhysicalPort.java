@@ -150,8 +150,8 @@ public class PhysicalPort extends PhysicalNode {
         if(other == null) {
             return 1;
         }
-        if(other instanceof PhysicalPort) {
-            if (owner.get() != ((PhysicalPort)other).owner.get()) {
+        if(other instanceof PhysicalPort otherPort) {
+            if (owner.get() != otherPort.owner.get()) {
                 //Comparing ports that don't belong to the same device makes no sense.
                 return -1;
             }
@@ -162,11 +162,10 @@ public class PhysicalPort extends PhysicalNode {
 
     @Override
     public boolean equals(Object other) {
-        if(other == null || !(other instanceof PhysicalPort)) {
+        if(!(other instanceof PhysicalPort portOther)) {
             return false;
         }
         //Owner has to match
-        PhysicalPort portOther = (PhysicalPort)other;
         if(owner.get() != portOther.owner.get()) {
             return false;
         }

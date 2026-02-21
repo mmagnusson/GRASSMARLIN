@@ -4,24 +4,22 @@ import core.logging.Logger;
 import core.logging.Severity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jnetpcap.Pcap;
-import org.jnetpcap.PcapIf;
-import util.Mac;
-
-import java.io.IOException;
-import java.util.ArrayList;
+import org.pcap4j.core.PcapAddress;
+import org.pcap4j.core.PcapNativeException;
+import org.pcap4j.core.PcapNetworkInterface;
+import org.pcap4j.core.Pcaps;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class PcapDeviceList {
     public static class DeviceEntry {
-        private PcapIf device;
+        private PcapNetworkInterface device;
 
-        public DeviceEntry(PcapIf device) {
+        public DeviceEntry(PcapNetworkInterface device) {
             this.device = device;
         }
 
-        public PcapIf getDevice() {
+        public PcapNetworkInterface getDevice() {
             return device;
         }
 
@@ -35,10 +33,9 @@ public abstract class PcapDeviceList {
                     text = device.getName();
                 }
                 if(text == null || text.isEmpty()) {
-                    try {
-                        text = new Mac(device.getHardwareAddress()).toString();
-                    } catch(IOException ex) {
-                        text = null;
+                    List<PcapAddress> addresses = device.getAddresses();
+                    if (addresses != null && !addresses.isEmpty()) {
+                        text = addresses.get(0).getAddress().getHostAddress();
                     }
                 }
                 if(text == null || text.isEmpty()) {
@@ -52,20 +49,17 @@ public abstract class PcapDeviceList {
 
     public static ObservableList<DeviceEntry> get() {
         ObservableList<DeviceEntry> result = FXCollections.observableList(new CopyOnWriteArrayList<>());
-        // Ask the Pcap library for a list of devices.
-        List<PcapIf> devices = new ArrayList<>();
-        StringBuilder error = new StringBuilder();
         try {
-
-            if (Pcap.findAllDevs(devices, error) != Pcap.ERROR) {
-                for(PcapIf device : devices) {
-                    result.add(new DeviceEntry(device));
-                }
+            List<PcapNetworkInterface> devices = Pcaps.findAllDevs();
+            for(PcapNetworkInterface device : devices) {
+                result.add(new DeviceEntry(device));
             }
-            Pcap.freeAllDevs(devices, error);
         } catch (java.lang.UnsatisfiedLinkError ex) {
             result.clear();
-            Logger.log(PcapDeviceList.class, Severity.Error, "Live capture is unavailable do to insufficient permissions or a missing PCAP library.");
+            Logger.log(PcapDeviceList.class, Severity.Error, "Live capture is unavailable due to insufficient permissions or a missing PCAP library.");
+        } catch(PcapNativeException ex) {
+            result.clear();
+            Logger.log(PcapDeviceList.class, Severity.Error, "Live capture is unavailable: " + ex.getMessage());
         } catch(Exception ex) {
             result.clear();
             Logger.log(PcapDeviceList.class, Severity.Error, "Live capture is unavailable.");

@@ -2,9 +2,8 @@ package core.fingerprint;
 
 import core.document.graph.LogicalNode;
 import core.importmodule.ImportItem;
+import core.protocol.PayloadBuffer;
 import org.apache.commons.lang3.ArrayUtils;
-import org.jnetpcap.nio.JBuffer;
-import org.jnetpcap.protocol.tcpip.Tcp;
 import util.Cidr;
 
 import java.math.BigInteger;
@@ -22,9 +21,9 @@ public class PacketData {
 
     private final PMetaData meta;
 
-    private final JBuffer payload;
+    private final PayloadBuffer payload;
 
-    public PacketData(int completionUnits, PMetaData meta, JBuffer payload) {
+    public PacketData(int completionUnits, PMetaData meta, PayloadBuffer payload) {
         this.completionUnits = completionUnits;
         this.meta = meta;
         this.payload = payload;
@@ -253,6 +252,6 @@ public class PacketData {
         return this.meta.windowNum;
     }
 
-    public Set<Tcp.Flag> getFlags() { return this.meta.flags; }
+    public Set<String> getFlags() { return this.meta.flags; }
 
 }

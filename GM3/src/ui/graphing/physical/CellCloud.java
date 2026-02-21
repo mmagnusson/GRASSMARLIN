@@ -28,9 +28,7 @@ public class CellCloud extends ControlPointCell<PhysicalNode> {
         super.addEdge(edge);
 
         Cell<PhysicalNode> nodeOther = (edge.getTarget() == this ? edge.getSource() : edge.getTarget());
-        if(nodeOther instanceof CellCloud) {
-            CellCloud cloudOther = (CellCloud)nodeOther;
-
+        if(nodeOther instanceof CellCloud cloudOther) {
             controlPointProperty().bind(new OffsetBinding(pointCenter,
                     layoutXProperty().subtract(cloudOther.layoutXProperty()).multiply(2.0),
                     layoutYProperty().subtract(cloudOther.layoutYProperty()).multiply(2.0)));

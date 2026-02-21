@@ -48,20 +48,45 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:2.0.16'
     runtimeOnly 'ch.qos.logback:logback-classic:1.5.12'
 
-    // JNetPcap local JAR (transitional - will be removed when Pcap4J migration is complete)
-    implementation files('lib/jnetpcap.jar')
+    // Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 sourceSets {
     main {
         java {
             srcDirs = ['src', 'generated-sources']
+            exclude 'test/**'
         }
         resources {
             srcDirs = ['src']
             exclude '**/*.java'
+            exclude 'test/**'
         }
     }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    // Headless JavaFX for CI compatibility
+    jvmArgs += [
+        '-Djava.awt.headless=true',
+        '-Dtestfx.robot=glass',
+        '-Dtestfx.headless=true',
+        '-Dprism.order=sw',
+        '-Dprism.text=t2k',
+        '-Dglass.platform=Monocle',
+        '-Dmonocle.platform=Headless'
+    ]
 }
 
 application {
@@ -92,47 +117,52 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ['-Xlint:deprecation', '-Xlint:unchecked']
 }
 
-// Plugin compilation tasks
-task buildPlugins(dependsOn: jar) {
-    description = 'Build all plugin JARs'
-    group = 'build'
+// Plugin compilation — proper Gradle tasks instead of ant.javac
+def pluginNames = ['iadgov.csvimport', 'iadgov.svgexport', 'iadgov.sessioneventtest']
+def pluginJarTasks = []
 
-    doLast {
-        def pluginNames = ['iadgov.csvimport', 'iadgov.offlinepcap', 'iadgov.svgexport', 'iadgov.sessioneventtest']
-        def pluginsOutputDir = file("${buildDir}/plugins")
-        pluginsOutputDir.mkdirs()
-
-        pluginNames.each { pluginName ->
-            def pluginSrcDir = file("data/plugins/${pluginName}")
-            if (pluginSrcDir.exists()) {
-                def pluginClassesDir = file("${buildDir}/plugin-classes/${pluginName}")
-                pluginClassesDir.mkdirs()
-
-                ant.javac(
-                    srcdir: pluginSrcDir,
-                    destdir: pluginClassesDir,
-                    source: '21',
-                    target: '21',
-                    includeantruntime: false,
-                    classpath: jar.archiveFile.get().asFile.absolutePath + File.pathSeparator + configurations.runtimeClasspath.asPath
-                )
-
-                ant.jar(
-                    destfile: "${pluginsOutputDir}/${pluginName}.jar",
-                    basedir: pluginClassesDir
-                )
-            }
+pluginNames.each { pluginName ->
+    def pluginSrcDir = file("data/plugins/${pluginName}")
+    if (pluginSrcDir.exists()) {
+        def compileTask = tasks.register("compile_${pluginName.replace('.', '_')}", JavaCompile) {
+            description = "Compile plugin ${pluginName}"
+            group = 'build'
+            source = fileTree(pluginSrcDir)
+            classpath = files(jar.archiveFile) + configurations.runtimeClasspath
+            destinationDirectory = layout.buildDirectory.dir("plugin-classes/${pluginName}")
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
+            options.encoding = 'UTF-8'
+            dependsOn jar
         }
+
+        def jarTask = tasks.register("jar_${pluginName.replace('.', '_')}", Jar) {
+            description = "Package plugin ${pluginName}"
+            group = 'build'
+            archiveFileName = "${pluginName}.jar"
+            destinationDirectory = layout.buildDirectory.dir('plugins')
+            from compileTask.map { it.destinationDirectory }
+            dependsOn compileTask
+        }
+
+        pluginJarTasks.add(jarTask)
     }
 }
 
-// Distribution task matching the Ant build
-task distribution(dependsOn: [jar, buildPlugins]) {
+tasks.register('buildPlugins') {
+    description = 'Build all plugin JARs'
+    group = 'build'
+    dependsOn pluginJarTasks
+}
+
+// Distribution task — prepares app directory for packaging
+tasks.register('distribution') {
     description = 'Prepare application directory for distribution'
     group = 'distribution'
+    dependsOn jar, tasks.named('buildPlugins')
 
     doLast {
-        def appDir = file("${buildDir}/app")
+        def appDir = layout.buildDirectory.dir('app').get().asFile
         appDir.mkdirs()
 
         copy {
@@ -140,7 +170,7 @@ task distribution(dependsOn: [jar, buildPlugins]) {
             into appDir
         }
         copy {
-            from "${buildDir}/plugins"
+            from layout.buildDirectory.dir('plugins')
             into "${appDir}/plugins"
         }
         copy {
@@ -157,5 +187,32 @@ task distribution(dependsOn: [jar, buildPlugins]) {
             }
             into "${appDir}/data"
         }
+    }
+}
+
+// jpackage task — creates platform-native installer/app-image
+tasks.register('jpackage', Exec) {
+    description = 'Create a platform-native application image using jpackage'
+    group = 'distribution'
+    dependsOn tasks.named('distribution')
+
+    doFirst {
+        def appDir = layout.buildDirectory.dir('app').get().asFile
+        def outputDir = layout.buildDirectory.dir('jpackage').get().asFile
+        outputDir.mkdirs()
+
+        def jarFile = jar.archiveFile.get().asFile
+
+        commandLine 'jpackage',
+            '--type', 'app-image',
+            '--name', 'GRASSMARLIN',
+            '--app-version', project.version,
+            '--vendor', 'NSA',
+            '--input', appDir.absolutePath,
+            '--main-jar', jarFile.name,
+            '--main-class', 'util.Launcher',
+            '--dest', outputDir.absolutePath,
+            '--java-options', '--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED',
+            '--java-options', '--add-exports=javafx.graphics/com.sun.javafx.sg.prism=ALL-UNNAMED'
     }
 }

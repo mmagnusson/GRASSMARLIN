@@ -79,12 +79,12 @@ public abstract class OpRow implements ParentBox {
             }
 
             if (newValue == PayloadItem.OpType.ALWAYS) {
-                if (parent instanceof PayloadEditorPane) {
-                    ((PayloadEditorPane) parent).HasAlwaysProperty().setValue(true);
+                if (parent instanceof PayloadEditorPane editorPane) {
+                    editorPane.HasAlwaysProperty().setValue(true);
                 }
             } else if (oldValue == PayloadItem.OpType.ALWAYS) {
-                if (parent instanceof PayloadEditorPane) {
-                    ((PayloadEditorPane) parent).HasAlwaysProperty().setValue(false);
+                if (parent instanceof PayloadEditorPane editorPane) {
+                    editorPane.HasAlwaysProperty().setValue(false);
                 }
             }
         });
@@ -100,8 +100,8 @@ public abstract class OpRow implements ParentBox {
                     }
                 }
             };
-            if (parent instanceof PayloadEditorPane) {
-                cell.disableProperty().bind(((PayloadEditorPane) parent).HasAlwaysProperty().and(cell.itemProperty().isEqualTo(PayloadItem.OpType.ALWAYS)));
+            if (parent instanceof PayloadEditorPane editorPane) {
+                cell.disableProperty().bind(editorPane.HasAlwaysProperty().and(cell.itemProperty().isEqualTo(PayloadItem.OpType.ALWAYS)));
                 cell.opacityProperty().bind(Bindings.when(cell.disabledProperty()).then(0.4).otherwise(1.0));
             }
 

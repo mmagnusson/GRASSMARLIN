@@ -1252,8 +1252,8 @@ public class Grassmarlin_3_2 {
                     break;
                 case "portGroup":
                     if (inGroupFactory && inGroupBy && inGroup && inPortGroup && portGroupAttributes != null && currentGroup != null) {
-                        if (currentGroup instanceof GroupSwitch) {
-                            addPortGroup(portGroupAttributes, ((GroupSwitch) currentGroup));
+                        if (currentGroup instanceof GroupSwitch groupSwitch) {
+                            addPortGroup(portGroupAttributes, groupSwitch);
                         }
                     }
                     break;
@@ -1300,9 +1300,9 @@ public class Grassmarlin_3_2 {
 
         Edge edge = visualization.edgeFor(edgeList.get(ref));
 
-        if (edge instanceof EdgePhysicalCurved) {
-            ((EdgePhysicalCurved) edge).useDefaultColor(Boolean.parseBoolean(edgeAttributes.getValue("usedefaultcolor")));
-            ((EdgePhysicalCurved) edge).colorProperty().setValue(Color.web(edgeAttributes.getValue("color")));
+        if (edge instanceof EdgePhysicalCurved curvedEdge) {
+            curvedEdge.useDefaultColor(Boolean.parseBoolean(edgeAttributes.getValue("usedefaultcolor")));
+            curvedEdge.colorProperty().setValue(Color.web(edgeAttributes.getValue("color")));
         }
     }
 
@@ -1351,9 +1351,9 @@ public class Grassmarlin_3_2 {
         CellGroup<LogicalNode, LogicalEdge> group = factory.getGroup(groupBy, groupName);
 
         group.fillColorProperty().setValue(Color.web(groupAttributes.getValue("color")));
-        if (group instanceof CellGroupCollapsible) {
-            ((CellGroupCollapsible) group).collapsedProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("collapse")));
-            ((CellGroupCollapsible) group).showLabelProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("showlabel")));
+        if (group instanceof CellGroupCollapsible collapsible) {
+            collapsible.collapsedProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("collapse")));
+            collapsible.showLabelProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("showlabel")));
         }
     }
 
@@ -1366,9 +1366,9 @@ public class Grassmarlin_3_2 {
         CellGroup<MeshNode, MeshEdge> group = factory.getGroup(groupBy, groupName);
 
         group.fillColorProperty().setValue(Color.web(groupAttributes.getValue("color")));
-        if (group instanceof CellGroupCollapsible) {
-            ((CellGroupCollapsible) group).collapsedProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("collapse")));
-            ((CellGroupCollapsible) group).showLabelProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("showlabel")));
+        if (group instanceof CellGroupCollapsible collapsible) {
+            collapsible.collapsedProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("collapse")));
+            collapsible.showLabelProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("showlabel")));
         }
     }
 
@@ -1386,14 +1386,14 @@ public class Grassmarlin_3_2 {
 
         CellGroup<PhysicalNode, PhysicalEdge> group = factory.getGroup(groupBy, groupName);
         group.fillColorProperty().setValue(Color.web(groupAttributes.getValue("color")));
-        if (group instanceof CellGroupCollapsible) {
-            ((CellGroupCollapsible) group).collapsedProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("collapse")));
-            ((CellGroupCollapsible) group).collapsedProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("showlabel")));
+        if (group instanceof CellGroupCollapsible collapsible) {
+            collapsible.collapsedProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("collapse")));
+            collapsible.collapsedProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("showlabel")));
         }
-        if (group instanceof LayoutManagedGroup) {
-            ((LayoutManagedGroup) group).offsetXProperty().setValue(Double.parseDouble(groupAttributes.getValue("x")));
-            ((LayoutManagedGroup) group).offsetYProperty().setValue(Double.parseDouble(groupAttributes.getValue("y")));
-            ((LayoutManagedGroup) group).rectangularHullProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("rect")));
+        if (group instanceof LayoutManagedGroup layoutManaged) {
+            layoutManaged.offsetXProperty().setValue(Double.parseDouble(groupAttributes.getValue("x")));
+            layoutManaged.offsetYProperty().setValue(Double.parseDouble(groupAttributes.getValue("y")));
+            layoutManaged.rectangularHullProperty().setValue(Boolean.parseBoolean(groupAttributes.getValue("rect")));
         }
 
         return group;

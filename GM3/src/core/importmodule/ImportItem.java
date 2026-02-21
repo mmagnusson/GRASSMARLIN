@@ -158,9 +158,9 @@ public abstract class ImportItem {
         progress.setForceUpdate(1.0);
 
         /*
-        System.out.println("Edge Time = " + edgeTime.get());
-        System.out.println("FP Time = " + fpTime.get());
-        System.out.println("Other Time = " + otherTime.get());
+        Logger.log(this, Severity.Information, "Edge Time = " + edgeTime.get());
+        Logger.log(this, Severity.Information, "FP Time = " + fpTime.get());
+        Logger.log(this, Severity.Information, "Other Time = " + otherTime.get());
         */
     }
 

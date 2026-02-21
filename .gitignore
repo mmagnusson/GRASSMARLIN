@@ -1,1 +1,22 @@
 /Installers
+
+# Gradle
+GM3/build/
+GM3/.gradle/
+
+# Gradle wrapper distribution cache (wrapper itself is committed)
+GM3/gradle/wrapper/dists/
+
+# IDE metadata
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,6 +1,8 @@
 package core.svg;
 
 import core.document.serialization.xml.Escaping;
+import core.logging.Logger;
+import core.logging.Severity;
 import core.svg.svg.*;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -99,7 +101,7 @@ public class Svg {
         } else if(object instanceof javafx.scene.canvas.Canvas) {
             return new Canvas((javafx.scene.canvas.Canvas)object);
         } else {
-            System.out.println("Unable to convert Node to SVG: (" + object.getClass() + ")" + object);
+            Logger.log(Svg.class, Severity.Warning, "Unable to convert Node to SVG: (" + object.getClass() + ")" + object);
             return null;
         }
     }

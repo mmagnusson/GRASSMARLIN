@@ -39,8 +39,8 @@ public class Logger {
         public final Long tsCreated;
 
         public Message(final Object source, final Severity severity, final String message) {
-            if (source instanceof Class) {
-                this.source = (Class) source;
+            if (source instanceof Class<?> clazz) {
+                this.source = clazz;
             } else {
                 this.source = source.getClass();
             }
@@ -78,19 +78,10 @@ public class Logger {
         // Forward to SLF4J for structured logging
         String logMessage = "[" + msg.source.getSimpleName() + "] " + msg.message;
         switch (a) {
-            case Error:
-                slf4jLogger.error(logMessage);
-                break;
-            case Warning:
-                slf4jLogger.warn(logMessage);
-                break;
-            case Information:
-            case Success:
-                slf4jLogger.info(logMessage);
-                break;
-            default:
-                slf4jLogger.debug(logMessage);
-                break;
+            case Error -> slf4jLogger.error(logMessage);
+            case Warning -> slf4jLogger.warn(logMessage);
+            case Information, Success -> slf4jLogger.info(logMessage);
+            default -> slf4jLogger.debug(logMessage);
         }
 
         // Update JavaFX UI log viewer

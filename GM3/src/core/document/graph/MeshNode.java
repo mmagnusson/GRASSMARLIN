@@ -75,8 +75,7 @@ public class MeshNode implements INode<MeshNode> {
 
     @Override
     public boolean equals(Object rhs) {
-        if(rhs instanceof MeshNode) {
-            MeshNode other = (MeshNode)rhs;
+        if(rhs instanceof MeshNode other) {
             // A Network id of -1 means that we didn't know the pan Id of the MeshNode
             // because it was a source and the packets only have the destination pan
             return (this.title.get().equals(other.title.get())) && (this.idNetwork == other.idNetwork || this.idNetwork == -1 || other.idNetwork == -1);

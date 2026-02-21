@@ -85,8 +85,7 @@ public class CiscoFileIterator implements Iterator<PhysicalDevice> {
                             Logger.log(this, Severity.Warning, String.format("Command \"%s\" in \"%s\" has no useable data.", command.getDisplayName(), inPath));
                         }
                     } catch (Exception ex) {
-                        Logger.log(this, Severity.Error, "Command '" + command.getDisplayName() + "' in '" + inPath + "' failed to parse.");
-                        ex.printStackTrace();
+                        Logger.log(this, Severity.Error, "Command '" + command.getDisplayName() + "' in '" + inPath + "' failed to parse: " + ex.getMessage());
                     }
                 } else {
                     Logger.log(this, Severity.Error, String.format("Unsupported command, \"%s\".", command.getDisplayName()));

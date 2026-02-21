@@ -37,8 +37,7 @@ public abstract class Grassmarlin {
             factory.setExpandEntityReferences(false);
             builder_temp = factory.newDocumentBuilder();
         } catch(Exception ex) {
-            System.err.println("FATAL: Unable to initialize secure XML parser: " + ex.getMessage());
-            ex.printStackTrace();
+            Logger.log(Grassmarlin.class, Severity.Error, "FATAL: Unable to initialize secure XML parser: " + ex.getMessage());
         }
         builder = builder_temp;
 

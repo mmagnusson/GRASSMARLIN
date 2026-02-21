@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
@@ -124,12 +125,14 @@ public enum EmbeddedIcons {
         if(cache.containsKey(path)) {
             return cache.get(path);
         } else {
-            InputStream streamImage = getClass().getResourceAsStream(path);
             Image image;
-            if (streamImage != null) {
-                image = new Image(streamImage);
-            } else {
-                // Create a simple fallback image programmatically
+            try (InputStream streamImage = getClass().getResourceAsStream(path)) {
+                if (streamImage != null) {
+                    image = new Image(streamImage);
+                } else {
+                    image = createFallbackImage();
+                }
+            } catch (IOException e) {
                 image = createFallbackImage();
             }
             cache.put(path, image);

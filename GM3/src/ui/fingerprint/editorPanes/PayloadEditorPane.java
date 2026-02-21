@@ -127,9 +127,10 @@ public class PayloadEditorPane extends BorderPane implements ParentBox {
     @Override
     public void update() {
         this.children.forEach(child ->{
-            if (child instanceof AlwaysRow) {
-                this.gui.updateAlways(boundItem, (Fingerprint.Payload.Always)child.getOperation());
-                this.boundItem.getPayload().setAlways(((Fingerprint.Payload.Always) child.getOperation()));
+            if (child instanceof AlwaysRow alwaysRow) {
+                Fingerprint.Payload.Always always = (Fingerprint.Payload.Always) alwaysRow.getOperation();
+                this.gui.updateAlways(boundItem, always);
+                this.boundItem.getPayload().setAlways(always);
             }
         });
 
