@@ -179,3 +179,4 @@ See [LICENSE.md](./LICENSE.md).
 ## Disclaimer
 
 See [DISCLAIMER.md](./DISCLAIMER.md).
+# freeCAD-ai-tests
